@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appName "سائق العييري"><!ENTITY appNamealone "Al Eairy Taxi"><!ENTITY appNameCaps "Al Eairy Taxi"><!ENTITY ride "ride"><!ENTITY rides "rides"><!ENTITY ridescap "RIDES"><!ENTITY service "Service">]>
+<resources>
+    <string name="app_name">&appName;</string>
+
+    <string name="english">الإنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="settings">الإعدادات</string>
+    <string name="language">اللغة</string>
+
+    <string name="google_map_api" translatable="false">AIzaSyCHf1anmPC8JHLqp2_O7jtB9w0S_Wyx1Ug</string>
+
+    <string name="facebook_app_id" translatable="false">208151979746367</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN" translatable="false">f3ac17fc4d5abc0023a8ef1f59559504</string>
+
+    <string name="navigation_drawer_open">فتح مسار التنقل</string>
+    <string name="navigation_drawer_close">إغلاق مسار التنقل</string>
+    <string name="waitingForApproval">شكرا لإنضمامك معنا. ارجو منك الانتظار لحين تدقيق بياناتك وسوف يتم التواصل معك عبر فريق الدعم الفني </string>
+    <string name="action_settings">إعدادات</string>
+    <string name="close">إغلاق</string>
+
+    <string name="get_moving_with_tranxit">التنقل عبر</string>
+    <string name="enter_your_mail_id">أدخل معرف البريد</string>
+    <string name="or_connect_with_social_media">أو التواصل عبر الشبكات الاجتماعية</string>
+
+    <string name="whats_your_mail_address">ما هو عنوان بريدك الالكترونى؟</string>
+    <string name="sample_mail_id">name@example.com</string>
+
+    <string name="welcome_back">مرحبا بك مرة أخرى، سجل الدخول </string>
+    <string name="enter_your_password">كنت أدخل كلمة المرور</string>
+    <string name="i_forgot_my_password">نسيت كلمة المرور</string>
+    <string name="i_need_to_create_an_account">إنشاء حساب</string>
+
+    <string name="email">البريد الإلكتروني</string>
+    <string name="name">اسم</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="password">كلمه المرور</string>
+    <string name="first_name">الاسم الاول</string>
+    <string name="last_name">الإسم الأخير</string>
+    <string name="commision">عمولة الرحلة</string>
+    <string name="mobile_no" translatable="false">9876543210</string>
+    <string name="time_taken">الوقت المستغرق</string>
+    <string name="extra_price">إضافي</string>
+    <string name="password_txt" translatable="false">******</string>
+    <string name="mobile_number_validation">يجب أن يحتوي رقم الجوال على أرقام تتراوح بين10 إلى 20 رقما</string>
+    <string name="sample_base_price" translatable="false">-</string>
+    <string name="sample_distance" translatable="false">-</string>
+    <string name="sample_time_travel" translatable="false">-</string>
+    <string name="enter_your_details">أدخل تفاصيلك للتسجيل</string>
+
+    <string name="recover_password">أدخل بريد الالكتروني لاسترداد كلمة المرور</string>
+
+    <string name="edit_profile">تحرير الحساب</string>
+    <string name="change_password">هل تريد تغيير كلمة المرور؟</string>
+    <string name="save">حفظ</string>
+    <string name="update_success">تحديث الملف الشخصي.</string>
+
+    <string name="connect_to_network">التحقق من الاتصال</string>
+    <string name="connect_to_wifi">جاري التحقق...</string>
+    <string name="quit">غادر</string>
+    <string name="cancel_ride">إلغاء</string>
+    <string name="view_receipt">عرض الفاتورة</string>
+    <string name="cancel">إلغاء</string>
+    <string name="cencel_request">هل انت متاكد من إلغاء الطلب؟</string>
+    <string name="exit_confirm">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
+
+    <string name="something_went_wrong">عذراً حدث خطأ.</string>
+    <string name="fb_cancel">تم إلغاء تسجيل الدخول إلى فاسيبوك</string>
+    <string name="fb_error">فشل تسجيل الدخول إلى فاسيبوك</string>
+    <string name="google_login">فشل تسجيل الدخول إلى قوقل</string>
+    <string name="social_cancel">تم إلغاء تسجيل الدخول عبر الشبكات الاجتماعي</string>
+    <string name="registration_failed">تم إلغاء التسجيل</string>
+    <string name="something_went_wrong_net">عذراً حدث خطأ . يرجى التحقق من الاتصال بالإنترنت.</string>
+    <string name="oops_connect_your_internet">عذرا , حدث خطأ باتصال الانترنت.</string>
+    <string name="server_down">تعذر الوصول إلى الخادم.</string>
+    <string name="please_try_again">حاول مرة اخرى.</string>
+    <string name="email_validation">أدخل رقم التحقق من البريد الإلكتروني.</string>
+    <string name="not_valid_email">البريد الإلكتروني غير صالح.</string>
+    <string name="password_validation">لا يمكن ترك كلمة المرور فارغة.</string>
+    <string name="first_name_empty">الاسم الأول مطلوب.</string>
+    <string name="last_name_empty">اسم الاخير مطلوب.</string>
+    <string name="mobile_number_empty">رقم الجوال مطلوب.</string>
+    <string name="request_reject">تم رفض الطلب بنجاح</string>
+    <string name="request_accept">تم قبول الطلب بنجاح</string>
+    <string name="request_cancel">لقد ألغيت الطلب</string>
+    <string name="no_routes_available">ليس هناك طريق</string>
+    <string name="write_your_comment">أكتب تعليقك...</string>
+
+    <string name="approved" translatable="false">Approved</string>
+    <string name="banned" translatable="false">Banned</string>
+    <string name="waiting_for_approval">بانتظار الموافقة</string>
+
+    <string name="your_wallet_amount">رصيد محفضتك</string>
+    <string name="sample_amount" translatable="false">0</string>
+
+    <string name="go_online">Go Online</string>
+    <string name="go_offline">GO OFFLINE</string>
+
+    <string name="invalid_credentials">اسم المستخدم وكلمة المرور غير صالحين.</string>
+
+    <string name="True" translatable="false">true</string>
+    <string name="False" translatable="false">false</string>
+
+    <string name="history">التاريخ</string>
+    <string name="comments">تعليقات</string>
+    <string name="no_trips">لا تتوفر رحلة.</string>
+    <string name="no_upcoming_trips">لايوجد رحلات قادمة.</string>
+    <string name="no_rides">لم تكتمل.</string>
+    <string name="upcoming">القادمة</string>
+    <string name="past">السابق</string>
+    <string name="payment_methods">طريقة الدفع</string>
+    <string name="sample_name">-</string>
+
+    <string name="tap_when_arrived">تم الوصول للراكب</string>
+    <string name="tap_when_pickedup">بدء الرحلة</string>
+    <string name="tap_when_dropped">تم الوصول و اتمام الرحلة</string>
+    <string name="tap_when_paid">تم استلام المبلغ</string>
+    <string name="rate_user">قييم الراكب</string>
+    <string name="rate_your_trip">قييم رحلتك مع</string>
+
+    <string name="change_password_title">تغيير كلمة المرور</string>
+    <string name="current_password">كلمة المرور الحالية</string>
+    <string name="new_password">كلمة المرور الجديدة</string>
+    <string name="confirm_password">تأكيد كلمة المرور الجديدة</string>
+    <string name="please_enter_current_pass">الرجاء إدخال كلمة المرور الحالية.</string>
+    <string name="please_enter_new_pass">الرجاء إدخال كلمة مرور جديدة.</string>
+    <string name="please_enter_confirm_pass">الرجاء تأكيد كلمة مرور.</string>
+    <string name="different_passwords">كلمة المرور غير متطابقة.</string>
+
+    <string name="home">الصفحة الرئيسية</string>
+    <string name="your_trips">رحلاتك</string>
+    <string name="wallet">محفظة نقود</string>
+    <string name="help">مساعدة</string>
+    <string name="earnings">الأرباح</string>
+    <string name="share">شارك</string>
+    <string name="logout">خروج</string>
+    <string name="valid_image">لم يتم العثور على أي صورة</string>
+    <string name="user_no_mobile">ليس لدى المستخدم رقم جوال صحيح.</string>
+    <string name="incorrect_otp">غير صحيح</string>
+    <string name="otp_validation">كلمة المرور المؤقتة  مطلوب</string>
+    <string name="confirm_password_validation">كلمه المرور غير متطابقة</string>
+    <string name="confirm_validation">يجب أن يكون طول كلمة المرور أكبر من 6 خانات</string>
+    <string name="new_validation">يجب ان يزيد طول كلمة المرور عن 6</string>
+    <string name="note">ملاحظة</string>
+    <string name="secrete_code">أدخل كلمة المرور المؤقتة</string>
+    <string name="reset_password">إعادة تعيين كلمة المرور</string>
+    <string name="request_time_out">انتهى وقت الطلب</string>
+    <string name="cancel_confirm">هل انت متاكد من إلغاء الطلب؟</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="connect_with_social_media">التواصل مع الشبكات الاجتماعية</string>
+    <string name="service">الفئة</string>
+    <string name="no_services">لم يتم تعيين أية فئة</string>
+    <string name="choose_acc">اختر حساب</string>
+    <string name="facebook_name" translatable="false">Facebook</string>
+    <string name="google_name" translatable="false">Google</string>
+    <string name="commission">العمولة</string>
+    <string name="no_comments">لا تعليق</string>
+    <string name="base_price">الاجرة الاساسية</string>
+    <string name="distance_price">تكلفة مسافة الرحلة</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="services_requested">طلب</string>
+    <string name="sos_confirm">هل تريد متابعة مكالمة الطوارئ؟</string>
+    <string name="choose_type">اختر النوع</string>
+    <string name="invoice">رقم الفاتورة -</string>
+    <string name="invoice_alone">إسقاط الموقع</string>
+    <string name="pick_up">نقطة الانطلاق</string>
+    <string name="drop_at">عنوان الوصول</string>
+    <string name="reason_to_cancel">سبب الإلغاء</string>
+    <string name="booking_id_colon">رقم الرحلة:</string>
+    <string name="booking_id">رقم الرحلة</string>
+    <string name="reason">السبب</string>
+    <string name="submit">موافق</string>
+    <string name="summary">ملخص</string>
+    <string name="total_rides">مجموع عدد الرحلات</string>
+    <string name="revenue">إيرادات</string>
+    <string name="schedule_rides">عدد الرحلات المجدولة</string>
+    <string name="canceled_rides">عدد الرحلات الملغاة</string>
+    <string name="rides">الرحلات</string>
+    <string name="upcoming_rides">الطلبات القادمة</string>
+    <string name="help_msg">سوف يتصل بك احد ممثلي خدمة العملاء قريبا.</string>
+    <string name="no_address">لا يوجد اي عنوان متاح</string>
+    <string name="email_exist">البريد الإلكتروني تم أخذه</string>
+    <string name="first_name_no_number">الاسم الأول لا يقبل الأرقام</string>
+    <string name="last_name_no_number">الاسم الاخير لا يقبل الأرقام.</string>
+    <string name="password_size">يجب أن يكون طول كلمة المرور على الأقل  6 خانات</string>
+    <string name="sorry_for_inconvinent">عذراً على الخطأ</string>
+    <string name="loading">جاري تنفيذ طلبك</string>
+    <string name="sample_earnings" translatable="false">0/0</string>
+    <string name="target_completed">تم الانتهاء من الهدف</string>
+    <string name="total_earnings">الأجرة</string>
+    <string name="time">زمن</string>
+    <string name="distance">مسافة</string>
+    <string name="amount">كمية</string>
+    <string name="drop_address">عنوان نقطة الوصول</string>
+    <string name="where_to">ألى أين؟</string>
+    <string name="user">الراكب</string>
+    <string name="sample_date_time" translatable="false">0</string>
+    <string name="sample">توضيح </string>
+    <string name="call">إتصال</string>
+    <string name="distance_travelled">المسافة المقطوعة :</string>
+    <string name="sample_amt" translatable="false">0</string>
+    <string name="tax">ضريبة</string>
+    <string name="total">مجموع</string>
+    <string name="amount_to_be_paid">اجمالي قيمة الأجرة</string>
+    <string name="rate_your_trips">تقييم رحلاتك</string>
+    <string name="server">الخادم غير متاح مؤقتا. يرجى التجربة لاحقا.</string>
+    <string name="timer_start">1</string>
+    <string name="schedule">جدولة</string>
+    <string name="accept">قبول</string>
+    <string name="reject">رفض</string>
+    <string name="upcoming_trips">الرحلات القادمة</string>
+    <string name="past_trips">الرحلات السابقة</string>
+    <string name="battery">البطارية منخفضة، يرجى شحن هاتفك النقال!</string>
+    <string name="new_version_available">الإصدار الجديد متاح</string>
+    <string name="update_to_continue">من فضلك، ارجو تحديث التطبيق إلى الإصدار الجديد.</string>
+    <string name="update">تحديث</string>
+    <string name="no_thanks">لا شكرا</string>
+    <string name="help_title">مساعدة سائق العييري</string>
+    <string name="new_password_validation">يجب ألا تكون كلمة المرور الجديدة نفس كلمة المرور القديمة.</string>
+    <string name="password_validation1">يجب أن تحتوي كلمة المرور على 8 أحرف كحد أدنى، و  16 حرف بحد أقصى</string>
+    <string name="password_validation2">يجب أن تحتوي كلمة المرور على الأقل حرف واحد كبيرة، و حرف واحد صغيرة، و عدد واحد و و حرف واحد خاص</string>
+    <string name="today_completed">الهدف اليومي الكامل</string>
+
+    <string name="sign_in">الدخول</string>
+    <string name="signup">تسجل جديد</string>
+    <string name="fresh">أهلا بك</string>
+    <string name="search">بحث</string>
+    <string name="bookmark">سجل</string>
+
+    <string name="fresh_description">تقديم شركة العييري خدمات سيارات الأجرة لتوفير سيارات ذات جودة لمستخدمي تطبيق تاكسي العييري</string>
+    <string name="search_description">التحق معنا وكن احد اعضاء فريقنا.</string>
+    <string name="bookmark_description">جعل أرباحك تعتمد على الرحلة.</string>
+    <string name="version">الإصدار</string>
+
+    <string name="your_earnings">أرباحك</string>
+    <string name="discount_detection">الخصم</string>
+    <string name="selected_payment_mode">نقداً</string>
+    <string name="change">تغيير</string>
+
+    <string name="ok">OK</string>
+
+</resources>

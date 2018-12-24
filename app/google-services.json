@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "406248771214",
+    "firebase_url": "https://taxi-aleairy-android.firebaseio.com",
+    "project_id": "taxi-aleairy-android",
+    "storage_bucket": "taxi-aleairy-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406248771214:android:fd05dc21c3ae7062",
+        "android_client_info": {
+          "package_name": "com.taxialeairy.provider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406248771214-c2nvgrhbtgadbs8vu3cosaiad08s5of9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYUm7EYmTt07HftCiqqzQhP-RrAp3diT8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406248771214:android:386e7f79296d0141",
+        "android_client_info": {
+          "package_name": "com.taxialeairy.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406248771214-c2nvgrhbtgadbs8vu3cosaiad08s5of9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYUm7EYmTt07HftCiqqzQhP-RrAp3diT8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
