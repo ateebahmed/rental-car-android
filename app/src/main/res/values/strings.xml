@@ -240,5 +240,21 @@
     <string name="selected_payment_mode">Cash</string>
     <string name="change">Change</string>
 
+    <string name="text_login_1">Don\'t have an Account</string>
+    <string name="already_member">Already a member?</string>
+
+    <string name="forgot_password">Forgot Password</string>
+    <string name="otp">OTP</string>
+    <string name="user_registration">User Registration</string>
+    <string name="user_login">User Login</string>
+    <string name="name_1">Name</string>
+
+    <string name="welcome_registration">Welcome to Al Eairy User Registration</string>
+    <string name="welcome_login">Welcom to Al Eairy</string>
+    <string name="welcome_forgot">Welcom to Al Eairy</string>
+    <string name="Register">Register</string>
+    <string name="Login">Login</string>
+    <string name="Next">Next</string>
+
 
 </resources>

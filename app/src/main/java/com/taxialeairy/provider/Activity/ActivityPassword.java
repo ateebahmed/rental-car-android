@@ -1,6 +1,7 @@
 package com.taxialeairy.provider.Activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -9,7 +10,9 @@ import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.taxialeairy.provider.Helper.ConnectionHelper;
 import com.taxialeairy.provider.Helper.CustomDialog;
@@ -32,6 +37,7 @@ import com.taxialeairy.provider.Helper.SharedHelper;
 import com.taxialeairy.provider.Helper.URLHelper;
 import com.taxialeairy.provider.R;
 import com.taxialeairy.provider.TranxitApplication;
+import com.taxialeairy.provider.Utilities.MyTextView;
 import com.taxialeairy.provider.Utilities.Utilities;
 
 import org.json.JSONException;
@@ -53,11 +59,11 @@ public class ActivityPassword extends AppCompatActivity {
     ConnectionHelper helper;
     Boolean isInternet;
     ImageView backArrow;
-    EditText password;
+    EditText password,email;
     TextView register, forgetPassword;
     CustomDialog customDialog;
     String device_token, device_UDID;
-    FloatingActionButton nextICON;
+    MyTextView nextICON;
 
     Utilities utils = new Utilities();
 
@@ -66,7 +72,30 @@ public class ActivityPassword extends AppCompatActivity {
         super.attachBaseContext(LocaleUtils.onAttach(base));
     }
 
+    Dialog errorDialog;
 
+    private boolean checkPlayServices() {
+
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this);
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(resultCode)) {
+
+                if (errorDialog == null) {
+                    errorDialog = googleApiAvailability.getErrorDialog(this, resultCode, 2404);
+                    errorDialog.setCancelable(false);
+                }
+
+                if (!errorDialog.isShowing())
+                    errorDialog.show();
+
+            }
+        }
+
+        return resultCode == ConnectionResult.SUCCESS;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +106,8 @@ public class ActivityPassword extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+        checkPlayServices();
 
 
 //        if (Build.VERSION.SDK_INT >= 23) {
@@ -153,7 +184,7 @@ public class ActivityPassword extends AppCompatActivity {
                 object.put("device_type", "android");
                 object.put("device_id", device_UDID);
                 object.put("device_token", device_token);
-                object.put("email", SharedHelper.getKey(context, "email"));
+                object.put("email", email.getText().toString());
                 object.put("password", SharedHelper.getKey(context, "password"));
                 utils.print("InputToLoginAPI", "" + object);
             } catch (JSONException e) {
@@ -347,7 +378,8 @@ public class ActivityPassword extends AppCompatActivity {
         register = (TextView) findViewById(R.id.register);
         forgetPassword = (TextView) findViewById(R.id.forgetPassword);
         password = (EditText) findViewById(R.id.password);
-        nextICON = (FloatingActionButton) findViewById(R.id.nextIcon);
+        email = (EditText) findViewById(R.id.email);
+        nextICON = (MyTextView) findViewById(R.id.nextICON);
         backArrow = (ImageView) findViewById(R.id.backArrow);
         helper = new ConnectionHelper(context);
         isInternet = helper.isConnectingToInternet();

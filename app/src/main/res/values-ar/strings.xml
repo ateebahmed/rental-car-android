@@ -239,4 +239,20 @@
 
     <string name="ok">OK</string>
 
+    <string name="text_login_1">لا أملك رقم حساب</string>
+    <string name="already_member"> المستخدم موجود ؟ </string>
+
+    <string name="forgot_password">نسيت الرقم السري</string>
+    <string name="otp">رقم رسالة الجوال</string>
+    <string name="user_registration">تسجيل مستخدم</string>
+    <string name="user_login">دخول المستخدم</string>
+    <string name="name_1">الاسم</string>
+
+    <string name="welcome_registration">مرحبا بك للتسجيل في العييري</string>
+    <string name="welcome_login">مرحبا بك في العييري</string>
+    <string name="welcome_forgot">مرحبا بك في العييري</string>
+    <string name="Register">تسجيل</string>
+    <string name="Login">دخول</string>
+    <string name="Next">التالي</string>
+
 </resources>

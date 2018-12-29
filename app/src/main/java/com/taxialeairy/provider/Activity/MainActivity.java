@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedHelper.putKey(context, "current_status", "");
                 SharedHelper.putKey(activity, "loggedIn", getString(com.taxialeairy.provider.R.string.False));
                 SharedHelper.putKey(context, "email", "");
-                Intent goToLogin = new Intent(activity, WelcomeScreenActivity.class);
+                Intent goToLogin = new Intent(activity, ActivityPassword.class);
                 goToLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(goToLogin);
                 finish();
