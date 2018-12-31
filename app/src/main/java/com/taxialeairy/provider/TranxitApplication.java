@@ -78,12 +78,7 @@ public class TranxitApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-//        initCalligraphyConfig();
         FontsOverride.setDefaultFont(this, "MONOSPACE", "ClanPro-NarrBook.otf");
-//        FontsOverride.setDefaultFont(this, "DEFAULT", "ClanPro-Book.otf");
-//        FontsOverride.setDefaultFont(this, "MONOSPACE", "ClanPro-Book.otf");
-//        FontsOverride.setDefaultFont(this, "SERIF", "ClanPro-Book.otf");
-//        FontsOverride.setDefaultFont(this, "SANS_SERIF", "ClanPro-Book.otf");
     }
 
     private void initCalligraphyConfig() {

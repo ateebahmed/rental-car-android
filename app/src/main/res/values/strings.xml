@@ -256,5 +256,9 @@
     <string name="Login">Login</string>
     <string name="Next">Next</string>
 
+    <string name="identity_number">Identity Number</string>
+    <string name="action_login">Login Now</string>
+    <string name="enter_details_register">Enter your details to register</string>
+    <string name="phone_verification">Enter your phone number</string>
 
 </resources>

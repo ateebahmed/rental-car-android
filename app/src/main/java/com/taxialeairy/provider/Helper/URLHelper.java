@@ -29,4 +29,6 @@ public class URLHelper {
     public static final String LOGOUT = base + "api/provider/logout";
     public static final String SUMMARY = base + "api/provider/summary";
     public static final String HELP = base + "api/provider/help";
+
+    public static final String OTP_LOGIN = base+"api/provider/login_otp";
 }

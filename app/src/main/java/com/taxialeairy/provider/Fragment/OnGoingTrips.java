@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.taxialeairy.provider.Activity.ActivityPassword;
 import com.taxialeairy.provider.Activity.HistoryDetails;
 import com.taxialeairy.provider.Activity.WelcomeScreenActivity;
 import com.taxialeairy.provider.Helper.ConnectionHelper;
@@ -227,7 +228,7 @@ public class OnGoingTrips extends Fragment {
     }
 
     public void GoToBeginActivity() {
-        Intent mainIntent = new Intent(activity, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         activity.finish();

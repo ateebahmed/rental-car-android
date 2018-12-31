@@ -33,7 +33,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
-        android:name="com.taxialeairy.provider.TranxitApplication"
+        android:name=".TranxitApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -77,7 +77,7 @@
             android:name="com.taxialeairy.provider.Activity.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
         <activity
             android:name="com.taxialeairy.provider.Activity.SignInActivity"
             android:screenOrientation="portrait"
@@ -94,7 +94,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity
             android:name="com.taxialeairy.provider.Activity.ShowProfile"
             android:label="@string/app_name"

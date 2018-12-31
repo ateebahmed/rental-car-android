@@ -51,7 +51,7 @@ public class WaitingForApproval extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SharedHelper.putKey(WaitingForApproval.this, "loggedIn", getString(com.taxialeairy.provider.R.string.False));
-                Intent mainIntent = new Intent(WaitingForApproval.this, WelcomeScreenActivity.class);
+                Intent mainIntent = new Intent(WaitingForApproval.this, ActivityPassword.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(mainIntent);
                 WaitingForApproval.this.finish();

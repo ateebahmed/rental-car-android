@@ -90,7 +90,7 @@ public class ActivityEmail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SharedHelper.putKey(ActivityEmail.this, "email", "");
-                Intent mainIntent = new Intent(ActivityEmail.this, WelcomeScreenActivity.class);
+                Intent mainIntent = new Intent(ActivityEmail.this, ActivityPassword.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(mainIntent);
                 ActivityEmail.this.finish();
@@ -162,7 +162,7 @@ public class ActivityEmail extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         SharedHelper.putKey(ActivityEmail.this, "email", "");
-        Intent mainIntent = new Intent(ActivityEmail.this, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(ActivityEmail.this, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         ActivityEmail.this.finish();

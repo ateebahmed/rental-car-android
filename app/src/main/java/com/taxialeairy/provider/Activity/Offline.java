@@ -217,7 +217,7 @@ public class Offline extends Fragment {
 
     public void GoToBeginActivity() {
         SharedHelper.putKey(activity, "loggedIn", getString(com.taxialeairy.provider.R.string.False));
-        Intent mainIntent = new Intent(activity, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         activity.finish();

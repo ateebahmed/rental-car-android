@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.taxialeairy.provider.Helper.SharedHelper;
 import com.taxialeairy.provider.Helper.URLHelper;
 import com.taxialeairy.provider.R;
 import com.taxialeairy.provider.TranxitApplication;
+import com.taxialeairy.provider.Utilities.MyTextView;
 import com.taxialeairy.provider.Utilities.Utilities;
 
 import org.json.JSONException;
@@ -46,9 +48,9 @@ import java.util.Map;
 public class ForgetPassword extends AppCompatActivity {
 
     public Context context = ForgetPassword.this;
-    ImageView nextICON, backArrow;
+    TextView nextICON;ImageView backArrow;
     TextView titleText;
-    TextInputLayout newPasswordLayout, confirmPasswordLayout, OtpLay;
+    LinearLayout newPasswordLayout, confirmPasswordLayout, OtpLay;
     EditText newPassowrd, confirmPassword, OTP;
     EditText email;
     CustomDialog customDialog;
@@ -174,7 +176,7 @@ public class ForgetPassword extends AppCompatActivity {
                 try {
                     JSONObject object1 = new JSONObject(response.toString());
                     Toast.makeText(context, object1.optString("message"), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ForgetPassword.this, ActivityEmail.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    startActivity(new Intent(ForgetPassword.this, ActivityPassword.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -359,7 +361,7 @@ public class ForgetPassword extends AppCompatActivity {
 
     public void findViewById() {
         email = (EditText) findViewById(R.id.email);
-        nextICON = (ImageView) findViewById(R.id.nextIcon);
+        nextICON = (TextView) findViewById(R.id.nextIcon);
         backArrow = (ImageView) findViewById(R.id.backArrow);
         titleText = (TextView) findViewById(R.id.title_txt);
         note_txt = (TextView) findViewById(R.id.note);
@@ -367,13 +369,13 @@ public class ForgetPassword extends AppCompatActivity {
         OTP = (EditText) findViewById(R.id.otp);
         OTP.setFocusable(true);
         confirmPassword = (EditText) findViewById(R.id.confirm_password);
-        confirmPasswordLayout = (TextInputLayout) findViewById(R.id.confirm_password_lay);
-        OtpLay = (TextInputLayout) findViewById(R.id.otp_lay);
-        newPasswordLayout = (TextInputLayout) findViewById(R.id.new_password_lay);
+        confirmPasswordLayout = (LinearLayout) findViewById(R.id.confirm_password_lay);
+        OtpLay = (LinearLayout) findViewById(R.id.otp_lay);
+        newPasswordLayout = (LinearLayout) findViewById(R.id.new_password_lay);
         helper = new ConnectionHelper(context);
         isInternet = helper.isConnectingToInternet();
         str_email = SharedHelper.getKey(ForgetPassword.this, "email");
-        email.setText(str_email);
+       // email.setText(str_email);
 
     }
 
@@ -407,7 +409,7 @@ public class ForgetPassword extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (fromActivity) {
-            Intent mainIntent = new Intent(ForgetPassword.this, ActivityEmail.class);
+            Intent mainIntent = new Intent(ForgetPassword.this, ActivityPassword.class);
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(mainIntent);
             ForgetPassword.this.finish();

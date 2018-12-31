@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.taxialeairy.provider.Activity.ActivityPassword;
 import com.taxialeairy.provider.Activity.WelcomeScreenActivity;
 import com.taxialeairy.provider.Helper.ConnectionHelper;
 import com.taxialeairy.provider.Helper.CustomDialog;
@@ -266,7 +267,7 @@ public class EarningsFragment extends Fragment {
     }
 
     public void GoToBeginActivity() {
-        Intent mainIntent = new Intent(activity, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         activity.finish();

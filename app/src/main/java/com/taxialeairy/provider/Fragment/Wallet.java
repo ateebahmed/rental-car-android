@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.taxialeairy.provider.Activity.ActivityPassword;
 import com.taxialeairy.provider.Activity.WelcomeScreenActivity;
 import com.taxialeairy.provider.Helper.ConnectionHelper;
 import com.taxialeairy.provider.Helper.SharedHelper;
@@ -65,7 +66,7 @@ public class Wallet extends Fragment {
 
     public void GoToBeginActivity() {
         SharedHelper.putKey(activity, "loggedIn", getString(com.taxialeairy.provider.R.string.False));
-        Intent mainIntent = new Intent(activity, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         activity.finish();

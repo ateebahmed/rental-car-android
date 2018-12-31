@@ -93,6 +93,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
+import com.taxialeairy.provider.Activity.ActivityPassword;
 import com.taxialeairy.provider.Activity.MainActivity;
 import com.taxialeairy.provider.Activity.Offline;
 import com.taxialeairy.provider.Activity.ShowProfile;
@@ -2318,7 +2319,7 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
 
     public void GoToBeginActivity() {
         SharedHelper.putKey(activity, "loggedIn", context.getResources().getString(com.taxialeairy.provider.R.string.False));
-        Intent mainIntent = new Intent(activity, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         activity.finish();

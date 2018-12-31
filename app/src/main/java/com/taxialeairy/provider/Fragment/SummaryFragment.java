@@ -27,6 +27,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.daasuu.cat.CountAnimationTextView;
+import com.taxialeairy.provider.Activity.ActivityPassword;
 import com.taxialeairy.provider.Activity.WelcomeScreenActivity;
 import com.taxialeairy.provider.Helper.CustomDialog;
 import com.taxialeairy.provider.Helper.SharedHelper;
@@ -288,7 +289,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     public void GoToBeginActivity() {
         SharedHelper.putKey(getContext(), "loggedIn", getString(R.string.False));
-        Intent mainIntent = new Intent(getContext(), WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(getContext(), ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         getActivity().finish();

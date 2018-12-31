@@ -154,7 +154,7 @@ public class BeginScreen extends AppCompatActivity implements GoogleApiClient.On
         enter_ur_mailID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mainIntent = new Intent(BeginScreen.this, ActivityEmail.class);
+                Intent mainIntent = new Intent(BeginScreen.this, ActivityPassword.class);
                 //   mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
                 // BeginScreen.this.finish();
@@ -369,7 +369,7 @@ public class BeginScreen extends AppCompatActivity implements GoogleApiClient.On
     }
 
     public void GoToBeginActivity() {
-        Intent mainIntent = new Intent(context, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(context, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         finish();

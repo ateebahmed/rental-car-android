@@ -297,7 +297,7 @@ public class ActivitySocialLogin extends AppCompatActivity implements GoogleApiC
                                 SharedHelper.putKey(context, "email", "");
                                 SharedHelper.putKey(context, "login_by", "");
                                 SharedHelper.putKey(ActivitySocialLogin.this, "account_kit_token", "");
-                                Intent goToLogin = new Intent(ActivitySocialLogin.this, WelcomeScreenActivity.class);
+                                Intent goToLogin = new Intent(ActivitySocialLogin.this, ActivityPassword.class);
                                 goToLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(goToLogin);
                                 finish();
@@ -472,7 +472,7 @@ public class ActivitySocialLogin extends AppCompatActivity implements GoogleApiC
     }
 
     public void GoToBeginActivity() {
-        Intent mainIntent = new Intent(context, WelcomeScreenActivity.class);
+        Intent mainIntent = new Intent(context, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         finish();

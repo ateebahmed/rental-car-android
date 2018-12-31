@@ -145,7 +145,7 @@ public class ActivityPassword extends AppCompatActivity {
             public void onClick(View view) {
                 SharedHelper.putKey(context, "password", "");
                 Utilities.hideKeyboard(ActivityPassword.this);
-                Intent mainIntent = new Intent(activity, ActivityEmail.class);
+                Intent mainIntent = new Intent(activity, ActivityPassword.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
                 activity.finish();
@@ -386,7 +386,7 @@ public class ActivityPassword extends AppCompatActivity {
     }
 
     public void GoToBeginActivity() {
-        Intent mainIntent = new Intent(activity, ActivityEmail.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);
         activity.finish();
@@ -462,9 +462,6 @@ public class ActivityPassword extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         SharedHelper.putKey(context, "password", "");
-        Intent mainIntent = new Intent(activity, ActivityEmail.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainIntent);
         activity.finish();
     }
 }

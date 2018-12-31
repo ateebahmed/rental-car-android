@@ -187,6 +187,14 @@ public class MainActivity extends AppCompatActivity {
 //        startService(myIntent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            stopForeground(true);
+        }
+    }
+
     private void findViewById() {
         drawer = (DrawerLayout) findViewById(com.taxialeairy.provider.R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(com.taxialeairy.provider.R.id.nav_view);
@@ -522,6 +530,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedHelper.putKey(context, "email", "");
                 Intent goToLogin = new Intent(activity, ActivityPassword.class);
                 goToLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(goToLogin);
                 finish();
             }

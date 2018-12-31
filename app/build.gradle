@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.taxialeairy.provider"
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 40
         versionName "2.4"
         vectorDrawables.useSupportLibrary = true
@@ -58,14 +58,14 @@ dependencies {
     //For error logcat0'
     implementation 'com.airbnb.android:lottie:2.2.5'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.android.volley:volley:1.0.0'
-    implementation 'com.android.support:multidex:1.0.1'
-    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.1.16'
     implementation 'com.mikhaellopez:circularimageview:3.0.2'
-    implementation 'com.android.support:design:26.0.0-alpha1'
+    implementation 'com.android.support:design:28.0.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
-    implementation 'com.android.support:support-v4:26.0.0-alpha1'
+    implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
     implementation 'com.google.android.gms:play-services-gcm:16.0.0'
     implementation 'com.android.support:support-annotations:25.3.1'

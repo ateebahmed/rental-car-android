@@ -1,192 +1,424 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layoutDirection="ltr"
+    android:background="@color/text_color_white">
 
-    <ScrollView
+
+    <LinearLayout
+        android:background="#465295"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.taxialeairy.provider.Utilities.MyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_registration"
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/text_color_white"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        />
+    <com.taxialeairy.provider.Utilities.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_registration"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/header_layout"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        >
+
+        <TextView
+            android:id="@+id/title_txt"
+            android:text="@string/phone_verification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/layout_bg"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/country_image"
+                android:src="@drawable/logo_saudi"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grey"/>
+            <com.taxialeairy.provider.Utilities.MyEditText
+                android:id="@+id/country_code"
+                android:text="966"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:enabled="false"
+                android:background="@color/transparent"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/light_grey"/>
+
+            <com.taxialeairy.provider.Utilities.MyEditText
+                android:id="@+id/edtMobile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="5xxxxx"
+                android:layout_margin="1dp"
+                android:paddingStart="8dp"
+                android:background="@color/text_color_white"
+                android:inputType="number"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layoutDirection="ltr">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layout_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/backArrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:autoMirrored="true"
+                    android:visibility="gone"/>
+
+                <com.taxialeairy.provider.Utilities.MyBoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/enter_details_register"
+                    android:textColor="@color/black_text_color"
+                    android:textSize="@dimen/_14sdp"
+                    android:visibility="gone"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/layout_new"
+                    android:layout_marginBottom="8dp">
+
+                    <com.taxialeairy.provider.Utilities.MyEditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/email"
+                        android:textAlignment="viewStart"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingStart="8dp"
+
+                        android:background="@color/transparent"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@drawable/layout_new">
+
+                        <com.taxialeairy.provider.Utilities.MyEditText
+                            android:id="@+id/first_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/name"
+                            android:textAlignment="viewStart"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:paddingStart="8dp"
+
+                            android:background="@color/transparent"/>
+                    </LinearLayout>
+
+
+
+
+
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:visibility="gone">
+
+                        <com.taxialeairy.provider.Utilities.MyEditText
+                            android:id="@+id/last_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/last_name"
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapWords|textPersonName"
+                            android:maxLines="1"
+                            android:textAlignment="viewStart" />
+
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/layout_new"
+                    android:layout_marginBottom="8dp">
+
+                    <com.taxialeairy.provider.Utilities.MyEditText
+                        android:id="@+id/otp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/otp"
+                        android:textAlignment="viewStart"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingStart="8dp"
+                        android:background="@color/transparent"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/layout_new"
+                    android:layout_marginBottom="8dp">
+
+                    <com.taxialeairy.provider.Utilities.MyEditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/password"
+                        android:textAlignment="viewStart"
+                        android:inputType="textWebPassword"
+                        android:maxLines="1"
+                        android:paddingStart="8dp"
+                        android:drawableStart="@drawable/icon_password"
+                        android:background="@color/transparent"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/layout_new"
+                    android:layout_marginBottom="8dp">
+
+                    <com.taxialeairy.provider.Utilities.MyEditText
+                        android:id="@+id/confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/confirm_password"
+                        android:textAlignment="viewStart"
+                        android:inputType="textWebPassword"
+                        android:maxLines="1"
+                        android:paddingStart="8dp"
+                        android:drawableStart="@drawable/icon_password"
+                        android:background="@color/transparent"/>
+                </LinearLayout>
+
+
+
+
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/phone_number"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_14sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/mobile_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/password"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_14sdp"
+                    android:visibility="gone"/>
+
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/identity_number"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/_14sdp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/backArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/back_icon" />
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
 
             <com.taxialeairy.provider.Utilities.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/enter_your_details"
-                android:textColor="@color/black_text_color"
-                android:textSize="@dimen/_16sdp" />
-
-            <com.taxialeairy.provider.Utilities.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="@string/email"
-                android:textColor="@color/black_text_color"
-                android:textSize="@dimen/_14sdp" />
-
-            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.taxialeairy.provider.Utilities.MyEditText
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:textAlignment="viewStart"
-                    android:textSize="@dimen/_14sdp" />
-
-            </android.support.design.widget.TextInputLayout>
-
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/text_color_white"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="@string/Register"
+                android:background="#465295"
+                android:visibility="gone"
+                />
             <com.taxialeairy.provider.Utilities.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/name"
-                android:textColor="@color/black_text_color"
-                android:textSize="@dimen/_14sdp" />
-
+                android:id="@+id/nextIcon"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/text_color_white"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="@string/Next"
+                android:background="#465295"
+                android:visibility="gone"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/bottom_layout_1">
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.taxialeairy.provider.Utilities.MyEditText
-                        android:id="@+id/first_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/first_name"
-                        android:imeOptions="actionNext"
-                        android:inputType="textCapWords|textPersonName"
-                        android:maxLines="1"
-                        android:textAlignment="viewStart"
-                        android:textSize="@dimen/_14sdp" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/grey"
+                    android:textSize="14sp"
+                    android:text="@string/already_member"
+                    />
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:id="@+id/login_new_1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1">
-
-                    <com.taxialeairy.provider.Utilities.MyEditText
-                        android:id="@+id/last_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/last_name"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textCapSentences"
-                        android:maxLines="1"
-                        android:textAlignment="viewStart"
-                        android:textSize="@dimen/_14sdp" />
-
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/com_facebook_blue"
+                    android:textSize="14sp"
+                    android:text="@string/action_login"
+                    android:layout_marginStart="10dp"
+                    />
             </LinearLayout>
-
-
-            <com.taxialeairy.provider.Utilities.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/phone_number"
-                android:textColor="@color/black_text_color"
-                android:textSize="@dimen/_14sdp"
-                android:visibility="gone" />
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:ignore="RtlHardcoded">
-
-                <com.taxialeairy.provider.Utilities.MyEditText
-                    android:id="@+id/mobile_no"
-                    android:layout_width="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/bottom_layout_2"
+                android:visibility="visible">
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:id="@+id/login_new_2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="phone"
-                    android:maxLines="1" />
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/com_facebook_blue"
+                    android:textSize="14sp"
+                    android:text="@string/action_login"
 
-            </android.support.design.widget.TextInputLayout>
-
-            <com.taxialeairy.provider.Utilities.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/password"
-                android:textColor="@color/black_text_color"
-                android:textSize="@dimen/_14sdp" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
-
-                <com.taxialeairy.provider.Utilities.MyEditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
+                    />
+                <com.taxialeairy.provider.Utilities.MyTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textAlignment="viewStart"
-                    android:textSize="@dimen/_14sdp" />
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/light_grey"
+                    android:textSize="14sp"
+                    android:text="@string/already_member"
+                    android:layout_marginStart="10dp"
+                    />
 
-            </android.support.design.widget.TextInputLayout>
-
-            <com.taxialeairy.provider.Utilities.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/choose_type"
-                android:textColor="@color/black_text_color"
-                android:textSize="@dimen/_14sdp"
-                android:visibility="gone" />
-
-            <Spinner
-                android:id="@+id/service_spinner"
-                style="@style/spinner_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:visibility="gone" />
-
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/nextIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_arrow_right" />
 
 
-</android.support.design.widget.CoordinatorLayout>
+
+
+
+    </FrameLayout>
+
+
+
+</LinearLayout>

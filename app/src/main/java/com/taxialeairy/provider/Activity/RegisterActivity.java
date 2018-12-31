@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -48,6 +50,7 @@ import com.taxialeairy.provider.Helper.SharedHelper;
 import com.taxialeairy.provider.Helper.URLHelper;
 import com.taxialeairy.provider.R;
 import com.taxialeairy.provider.TranxitApplication;
+import com.taxialeairy.provider.Utilities.MyTextView;
 import com.taxialeairy.provider.Utilities.Utilities;
 
 import org.json.JSONException;
@@ -67,8 +70,15 @@ public class RegisterActivity extends AppCompatActivity {
     String TAG = "RegisterActivity";
     String device_token, device_UDID;
     ImageView backArrow;
-    FloatingActionButton nextICON;
+    TextView nextICON,register;
     EditText email, first_name, last_name, mobile_no, password;
+
+    TextView login_new_1,login_new_2;
+    LinearLayout bottom_layout_1,bottom_layout_2;
+
+    LinearLayout header_layout,layout_main;
+    EditText edtMobile,otp;
+
     CustomDialog customDialog;
     ConnectionHelper helper;
     Boolean isInternet;
@@ -132,6 +142,21 @@ public class RegisterActivity extends AppCompatActivity {
         nextICON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isInternet) {
+                    if(edtMobile.getText().toString().equals("")){
+                        displayMessage(getString(R.string.phone_verification));
+                    }else {
+                        otp_login();
+                    }
+                } else {
+                    displayMessage(getString(R.string.something_went_wrong_net));
+                }
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
                 Pattern ps = Pattern.compile(".*[0-9].*");
                 Matcher firstName = ps.matcher(first_name.getText().toString());
@@ -145,11 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
                     displayMessage(getString(R.string.first_name_empty));
                 } else if (firstName.matches()) {
                     displayMessage(getString(R.string.first_name_no_number));
-                } else if (last_name.getText().toString().equals("") || last_name.getText().toString().equalsIgnoreCase(getString(R.string.last_name))) {
-                    displayMessage(getString(R.string.last_name_empty));
-                } else if (lastName.matches()) {
-                    displayMessage(getString(R.string.last_name_no_number));
-                } else if (password.getText().toString().equals("") || password.getText().toString().equalsIgnoreCase(getString(R.string.password_txt))) {
+                }  else if (password.getText().toString().equals("") || password.getText().toString().equalsIgnoreCase(getString(R.string.password_txt))) {
                     displayMessage(getString(R.string.password_validation));
                 } else if (password.length() < 6) {
                     displayMessage(getString(R.string.password_validation1));
@@ -159,7 +180,8 @@ public class RegisterActivity extends AppCompatActivity {
 //                }
                 else {
                     if (isInternet) {
-                        checkMailAlreadyExit();
+                        registerAPI();
+//                        checkMailAlreadyExit();
                     } else {
                         displayMessage(getString(R.string.something_went_wrong_net));
                     }
@@ -178,6 +200,121 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        login_new_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this,ActivityPassword.class));
+                finish();
+            }
+        });
+        login_new_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this,ActivityPassword.class));
+                finish();
+            }
+        });
+        edtMobile.requestFocus();
+
+    }
+    private void otp_login() {
+        customDialog = new CustomDialog(RegisterActivity.this);
+        customDialog.setCancelable(false);
+        if (customDialog != null)
+            customDialog.show();
+        JSONObject object = new JSONObject();
+        try {
+
+            object.put("email", "+966"+edtMobile.getText().toString());
+            Log.e("ForgetPassword",""+object);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String otp_url = URLHelper.OTP_LOGIN;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, otp_url, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if ((customDialog != null)&& (customDialog.isShowing()))
+                    customDialog.dismiss();
+                layout_main.setVisibility(View.VISIBLE);
+                header_layout.setVisibility(View.GONE);
+                register.setVisibility(View.VISIBLE);
+                nextICON.setVisibility(View.GONE);
+                SharedHelper.putKey(RegisterActivity.this, "mobile","+966"+edtMobile.getText().toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if ((customDialog != null)&& (customDialog.isShowing()))
+                    customDialog.dismiss();
+                String json = null;
+                String Message;
+                NetworkResponse response = error.networkResponse;
+                Log.e("MyTest",""+error);
+                Log.e("MyTestError",""+error.networkResponse);
+                Log.e("MyTestError1",""+response.statusCode);
+                if(response != null && response.data != null){
+                    try {
+                        JSONObject errorObj = new JSONObject(new String(response.data));
+
+                        if(response.statusCode == 400 || response.statusCode == 405 || response.statusCode == 500){
+                            try{
+                                displayMessage("Number Already exist");
+                            }catch (Exception e){
+                                displayMessage("Something went wrong.");
+                            }
+                        }else if(response.statusCode == 401){
+                            try{
+                                if(errorObj.optString("message").equalsIgnoreCase("invalid_token")){
+                                    //refreshAccessToken("FORGOT_PASSWORD");
+                                }else{
+                                    displayMessage(errorObj.optString("message"));
+                                }
+                            }catch (Exception e){
+                                displayMessage("Something went wrong.");
+                            }
+
+                        }else if(response.statusCode == 422){
+
+                            json = TranxitApplication.trimMessage(new String(response.data));
+                            if(json !="" && json != null) {
+                                displayMessage(json);
+                            }else{
+                                displayMessage("Please try again.");
+                            }
+
+                        }else{
+                            displayMessage("Please try again.");
+                        }
+
+                    }catch (Exception e){
+                        displayMessage("Something went wrong.");
+                    }
+
+                } else {
+                    if (error instanceof NoConnectionError) {
+                        displayMessage(getString(R.string.oops_connect_your_internet));
+                    } else if (error instanceof NetworkError) {
+                        displayMessage(getString(R.string.oops_connect_your_internet));
+                    } else if (error instanceof TimeoutError) {
+                        otp_login();
+                    }
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("X-Requested-With", "XMLHttpRequest");
+                return headers;
+            }
+        };
+
+        TranxitApplication.getInstance().addToRequestQueue(jsonObjectRequest);
 
     }
 
@@ -186,14 +323,32 @@ public class RegisterActivity extends AppCompatActivity {
         first_name = (EditText) findViewById(R.id.first_name);
         last_name = (EditText) findViewById(R.id.last_name);
         mobile_no = (EditText) findViewById(R.id.mobile_no);
+        edtMobile = (EditText) findViewById(R.id.edtMobile);
         password = (EditText) findViewById(R.id.password);
-        nextICON = (FloatingActionButton) findViewById(R.id.nextIcon);
+        register = (TextView) findViewById(R.id.register);
+        login_new_1 = (TextView) findViewById(R.id.login_new_1);
+        login_new_2 = (TextView) findViewById(R.id.login_new_2);
+        bottom_layout_1 = (LinearLayout) findViewById(R.id.bottom_layout_1);
+        bottom_layout_2 = (LinearLayout) findViewById(R.id.bottom_layout_2);
+        nextICON = (TextView) findViewById(R.id.nextIcon);
+        nextICON.setVisibility(View.VISIBLE);
         backArrow = (ImageView) findViewById(R.id.backArrow);
         helper = new ConnectionHelper(context);
         isInternet = helper.isConnectingToInternet();
-        email.setText(SharedHelper.getKey(context, "email"));
+        //email.setText(SharedHelper.getKey(context, "email"));
         first_name.setFilters(new InputFilter[]{filter});
         last_name.setFilters(new InputFilter[]{filter});
+        header_layout =  (LinearLayout) findViewById(R.id.header_layout);
+        layout_main = (LinearLayout) findViewById(R.id.layout_main);
+        otp = (EditText) findViewById(R.id.otp);
+
+        if(LocaleUtils.getLanguage(context).equals("ar")){
+            bottom_layout_1.setVisibility(View.GONE);
+            bottom_layout_2.setVisibility(View.VISIBLE);
+        }else{
+            bottom_layout_1.setVisibility(View.VISIBLE);
+            bottom_layout_2.setVisibility(View.GONE);
+        }
     }
 
 
@@ -285,11 +440,12 @@ public class RegisterActivity extends AppCompatActivity {
             object.put("device_token", device_token);
             object.put("login_by", "manual");
             object.put("first_name", first_name.getText().toString());
-            object.put("last_name", last_name.getText().toString());
+            object.put("last_name", "");
             object.put("email", email.getText().toString());
             object.put("password", password.getText().toString());
             object.put("password_confirmation", password.getText().toString());
-            object.put("mobile", SharedHelper.getKey(RegisterActivity.this, "mobile"));
+            object.put("mobile", "+966"+edtMobile.getText().toString());
+            object.put("otp",otp.getText().toString());
 //            object.put("picture","");
 //            object.put("social_unique_id","");
             utils.print("InputToRegisterAPI", "" + object);
@@ -611,7 +767,7 @@ public class RegisterActivity extends AppCompatActivity {
                             SharedHelper.putKey(context, "email", "");
                             SharedHelper.putKey(context, "login_by", "");
                             SharedHelper.putKey(RegisterActivity.this, "account_kit_token", "");
-                            Intent goToLogin = new Intent(RegisterActivity.this, WelcomeScreenActivity.class);
+                            Intent goToLogin = new Intent(RegisterActivity.this, ActivityPassword.class);
                             goToLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(goToLogin);
                             finish();
@@ -699,7 +855,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void GoToBeginActivity() {
         SharedHelper.putKey(activity, "loggedIn", getString(R.string.False));
-        Intent mainIntent = new Intent(activity, ActivityEmail.class);
+        Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);
         activity.finish();
@@ -726,7 +882,7 @@ public class RegisterActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             if (fromActivity) {
-                Intent mainIntent = new Intent(RegisterActivity.this, ActivityEmail.class);
+                Intent mainIntent = new Intent(RegisterActivity.this, ActivityPassword.class);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(mainIntent);
                 RegisterActivity.this.finish();
