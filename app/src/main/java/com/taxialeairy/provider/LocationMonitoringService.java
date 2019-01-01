@@ -44,6 +44,16 @@ public class LocationMonitoringService extends Service {
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
     };
+
+//    @Override
+//    public void onTaskRemoved(Intent rootIntent) {
+//        System.out.println("onTaskRemoved called");
+//        super.onTaskRemoved(rootIntent);
+//        //do something you want
+//        //stop service
+//        this.stopSelf();
+//    }
+
     private LocationManager mLocationManager = null;
 
     @Override

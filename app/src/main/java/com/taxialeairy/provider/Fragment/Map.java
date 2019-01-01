@@ -140,6 +140,7 @@ import retrofit2.Callback;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.taxialeairy.provider.Utilities.LocationTracking.TWO_MINUTES;
+import static java.security.AccessController.getContext;
 
 public class Map extends Fragment implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMapClickListener {
@@ -1089,22 +1090,12 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                     mMarker.setPosition(newPos);
                     mMarker.setAnchor(0.5f, 0.5f);
 
-//                    if(!Float.isNaN(getBearing(startPosition, newPos))) {
-//                        CameraPosition cameraPosition1 = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).bearing(getBearing(startPosition, newPos)).build();
-//                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
-//                    }
-
-
                     mMarker.setRotation(getBearing(startPosition, newPos));
                 }
 
                 Log.e(TAG, "request id " + request_id + " " +
                         (request_id != null && request_id.isEmpty() && statusResponses != null));
 
-
-
-//                if (!isMapCLicked)
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newPos, 18f));
 
             }
 

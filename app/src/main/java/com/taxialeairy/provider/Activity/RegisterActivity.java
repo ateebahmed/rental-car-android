@@ -254,9 +254,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String json = null;
                 String Message;
                 NetworkResponse response = error.networkResponse;
-                Log.e("MyTest",""+error);
-                Log.e("MyTestError",""+error.networkResponse);
-                Log.e("MyTestError1",""+response.statusCode);
                 if(response != null && response.data != null){
                     try {
                         JSONObject errorObj = new JSONObject(new String(response.data));

@@ -168,7 +168,7 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:paddingStart="8dp"
-
+                        android:drawableStart="@drawable/icon_username"
                         android:background="@color/transparent"/>
                 </LinearLayout>
                 <LinearLayout
@@ -193,7 +193,7 @@
                             android:inputType="text"
                             android:maxLines="1"
                             android:paddingStart="8dp"
-
+                            android:drawableStart="@drawable/icon_username"
                             android:background="@color/transparent"/>
                     </LinearLayout>
 
@@ -238,6 +238,7 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:paddingStart="8dp"
+                        android:drawableStart="@drawable/icon_otp"
                         android:background="@color/transparent"/>
                 </LinearLayout>
                 <LinearLayout

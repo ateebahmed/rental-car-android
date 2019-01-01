@@ -389,7 +389,8 @@ public class ActivityPassword extends AppCompatActivity {
         Intent mainIntent = new Intent(activity, ActivityPassword.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);
-        activity.finish();
+//        activity.finish();
+        activity.finishAffinity();
     }
 
     public void displayMessage(String toastString) {

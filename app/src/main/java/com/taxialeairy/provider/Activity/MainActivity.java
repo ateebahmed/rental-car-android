@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            stopForeground(true);
+           // stopForeground(true);
         }
     }
 

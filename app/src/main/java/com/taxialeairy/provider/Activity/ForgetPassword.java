@@ -379,10 +379,18 @@ public class ForgetPassword extends AppCompatActivity {
 
     }
 
-    public void displayMessage(String toastString) {
-        Log.e("displayMessage", "" + toastString);
-        Snackbar.make(getCurrentFocus(), toastString, Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show();
+    public void displayMessage(String toastString){
+        Log.e("displayMessage",""+toastString);
+        try {
+            Snackbar.make(getCurrentFocus(), toastString, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }catch (Exception e){
+            try{
+                Toast.makeText(context,""+toastString,Toast.LENGTH_SHORT).show();
+            }catch (Exception ee){
+                ee.printStackTrace();
+            }
+        }
     }
 
 

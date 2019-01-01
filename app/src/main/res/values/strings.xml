@@ -245,11 +245,11 @@
 
     <string name="forgot_password">Forgot Password</string>
     <string name="otp">OTP</string>
-    <string name="user_registration">User Registration</string>
-    <string name="user_login">User Login</string>
+    <string name="user_registration">Driver Registration</string>
+    <string name="user_login">Driver Login</string>
     <string name="name_1">Name</string>
 
-    <string name="welcome_registration">Welcome to Al Eairy User Registration</string>
+    <string name="welcome_registration">Welcome to Al Eairy Driver Registration</string>
     <string name="welcome_login">Welcom to Al Eairy</string>
     <string name="welcome_forgot">Welcom to Al Eairy</string>
     <string name="Register">Register</string>
