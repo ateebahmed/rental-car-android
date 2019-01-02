@@ -296,7 +296,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         if (activity == null) {
             activity = getActivity();
         }
@@ -941,6 +940,7 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
 
     @SuppressWarnings("MissingPermission")
     private void setupMap() {
+
         mMap.setMyLocationEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.setBuildingsEnabled(true);
@@ -1118,9 +1118,14 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                         //CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,200);
                         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,150);
                         if (finalLatLng.equals(destLatLng)) {
-                            LatLng location = new LatLng(sourceLatLng.latitude, sourceLatLng.longitude);
-                            CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(15).build();
-                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                            if(!CurrentStatus.equals("STARTED")&&!CurrentStatus.equals("ACCEPTED")&&!CurrentStatus.equals("ARRIVED")) {
+                                LatLng location = new LatLng(sourceLatLng.latitude, sourceLatLng.longitude);
+                                CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(15).build();
+                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                            }{
+                                mMap.moveCamera(cu);
+                                mMap.getUiSettings().setMapToolbarEnabled(false);
+                            }
                         } else {
                             mMap.animateCamera(cu);
                             mMap.getUiSettings().setMapToolbarEnabled(false);

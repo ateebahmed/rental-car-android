@@ -4,30 +4,29 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.AudioAttributes;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
-import com.taxialeairy.provider.Fragment.Map;
 import com.taxialeairy.provider.Helper.SharedHelper;
 import com.taxialeairy.provider.Retrofit.ApiClient;
 import com.taxialeairy.provider.Retrofit.ApiInterface;
-import com.taxialeairy.provider.Utilities.LocationTracking;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,21 +37,20 @@ import retrofit2.Response;
 public class LocationMonitoringService extends Service {
 
     private static final String TAG = "BOOMBOOMTESTGPS";
-    private static final int LOCATION_INTERVAL = 20 * 1000;
+    private static final int LOCATION_INTERVAL = 5 * 1000;
     private static final float LOCATION_DISTANCE = 0f;
     LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
     };
 
-//    @Override
-//    public void onTaskRemoved(Intent rootIntent) {
-//        System.out.println("onTaskRemoved called");
-//        super.onTaskRemoved(rootIntent);
-//        //do something you want
-//        //stop service
-//        this.stopSelf();
-//    }
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        System.out.println("onTaskRemoved called");
+        super.onTaskRemoved(rootIntent);
+
+        this.stopSelf();
+    }
 
     private LocationManager mLocationManager = null;
 
@@ -154,15 +152,60 @@ public class LocationMonitoringService extends Service {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
+    public void snapData(Location location){
 
-    public void update_location(Location location) {
+        JSONObject object = new JSONObject();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, snapToRoad(location.getLatitude(),location.getLongitude()),
+                object, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+                Log.v("PayNowRequestResponse", response.toString());
+                Log.v("PayNowRequestResponse", response.toString());
+
+                try {
+                    JSONObject responseObject = new JSONObject(response.toString());
+                    JSONArray snapArray = responseObject.getJSONArray("snappedPoints");
+
+                    JSONObject snapObject = snapArray.getJSONObject(0);
+                    JSONObject location  = snapObject.getJSONObject("location");
+                    Double lat = Double.valueOf(location.getString("latitude"));
+                    Double lng = Double.valueOf(location.getString("longitude"));
+
+                    update_location(lat,lng);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("PayNowRequestResponse", error.toString());
+            }
+        });
+        TranxitApplication.getInstance().addToRequestQueue(jsonObjectRequest);
+    }
+    public String snapToRoad(double latitude, double longitude){
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("https://roads.googleapis.com/v1/snapToRoads");
+        urlString.append("?path=");
+        urlString.append(""+ latitude + "," + longitude);
+        urlString.append("&key=" + getResources().getString(R.string.google_map_api));
+        return urlString.toString();
+
+    }
+
+    public void update_location(Double lat, Double lng) {
         Log.d("LocationTest","tututu");
         String token = SharedHelper.getKey(this, "access_token");
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
         Call<String> call = apiService.updatelocation("XMLHttpRequest", "Bearer " + token,
-                String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                String.valueOf(lat), String.valueOf(lng));
 
 
         call.enqueue(new Callback<String>() {
@@ -201,7 +244,8 @@ public class LocationMonitoringService extends Service {
         public void onLocationChanged(Location location) {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
-            update_location(location);
+
+            snapData(location);
         }
 
         @Override
