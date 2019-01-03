@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
+import com.taxialeairy.provider.Helper.ConnectionHelper;
 import com.taxialeairy.provider.Helper.SharedHelper;
 import com.taxialeairy.provider.Retrofit.ApiClient;
 import com.taxialeairy.provider.Retrofit.ApiInterface;
@@ -37,7 +38,7 @@ import retrofit2.Response;
 public class LocationMonitoringService extends Service {
 
     private static final String TAG = "BOOMBOOMTESTGPS";
-    private static final int LOCATION_INTERVAL = 5 * 1000;
+    private static final int LOCATION_INTERVAL = 3 * 1000;
     private static final float LOCATION_DISTANCE = 0f;
     LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
@@ -244,8 +245,10 @@ public class LocationMonitoringService extends Service {
         public void onLocationChanged(Location location) {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
-
-            snapData(location);
+            //update_location(location.getLatitude(),location.getLongitude());
+            ConnectionHelper helper = new ConnectionHelper(getApplicationContext());
+            if(helper.isConnectingToInternet())
+                snapData(location);
         }
 
         @Override

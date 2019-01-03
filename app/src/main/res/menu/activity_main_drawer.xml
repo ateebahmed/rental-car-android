@@ -71,6 +71,6 @@
     <group
         android:id="@+id/group8"
         android:checkableBehavior="single">
-        <item android:title="Version 2.5" />
+        <item android:title="Version 2.8" />
     </group>
 </menu>

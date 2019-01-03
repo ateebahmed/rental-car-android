@@ -1239,41 +1239,33 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
             crt_lat = SharedHelper.getKey(context, "current_lat");
             crt_lng = SharedHelper.getKey(context, "current_lng");
 
-
             if (marker5 != null) {
 
                 if (!crt_lat.equals("") && crt_lat != null) {
-                    float bearing = 0.0f;
-                    bearing = getBearing(new LatLng(
-                                    location.getLatitude()
-                                    , location.getLongitude()),
-                            new LatLng(
-                                    Double.parseDouble(crt_lat),
-                                    Double.parseDouble(crt_lng)));
+//                    float bearing = 0.0f;
+//                    bearing = getBearing(new LatLng(
+//                                    location.getLatitude()
+//                                    , location.getLongitude()),
+//                            new LatLng(
+//                                    Double.parseDouble(crt_lat),
+//                                    Double.parseDouble(crt_lng)));
 
-                    bearing -= 90f;
-                    CameraPosition cameraPosition = new CameraPosition
-                            .Builder()
-                            .target(new LatLng(
-                                    Double.parseDouble(crt_lat),
-                                    Double.parseDouble(crt_lng)))
-                            .zoom(14).build();
+//                    bearing -= 90f;
+//                    CameraPosition cameraPosition = new CameraPosition
+//                            .Builder()
+//                            .target(new LatLng(
+//                                    Double.parseDouble(crt_lat),
+//                                    Double.parseDouble(crt_lng)))
+//                            .zoom(14).build();
                     Location temp = new Location(LocationManager.GPS_PROVIDER);
                     temp.setLatitude(Double.parseDouble(crt_lat));
                     temp.setLongitude(Double.parseDouble(crt_lng));
 
-//                    animatedMarker(new LatLng(
-//                            Double.parseDouble(crt_lat),
-//                            Double.parseDouble(crt_lng)), new LatLng(location.getLatitude(), location.getLongitude()), marker5);
                     animatedMarker(new LatLng(
                             Double.parseDouble(crt_lat),
                             Double.parseDouble(crt_lng)), new LatLng(location.getLatitude(), location.getLongitude()), marker5);
 
-
-
                 }
-
-
                 }
 
             if (value == 0) {
@@ -1943,24 +1935,29 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
 
         //totalRideAmount = payment.optInt("payable");
         //walletAmountDetected = payment.optInt("wallet");
-        couponAmountDetected = payment.optInt("discount");
-        //paymentMode = statusResponse.optString("payment_mode");
-        lblDistanceCovered.setText(statusResponse.optString("paid") + " KM");
-        lblBasePrice.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("fixed"));
-        lblTaxPrice.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("tax"));
-        lblDistancePrice.setText(SharedHelper.getKey(context, "currency")
-                + "" + payment.optString("distance"));
-        lblTimeTaken.setText(statusResponse.optString("travel_time") + " mins");
-        lblDiscountPrice.setText(SharedHelper.getKey(context, "currency") + "" + couponAmountDetected);
-        lblTotalPrice.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("payable"));
-        your_earning.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("payable"));
+        try {
+            couponAmountDetected = payment.optInt("discount");
+            //paymentMode = statusResponse.optString("payment_mode");
+            lblDistanceCovered.setText(statusResponse.optString("paid") + " KM");
+            lblBasePrice.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("fixed"));
+            lblTaxPrice.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("tax"));
+            lblDistancePrice.setText(SharedHelper.getKey(context, "currency")
+                    + "" + payment.optString("distance"));
+            lblTimeTaken.setText(statusResponse.optString("travel_time") + " mins");
 
-        if (statusResponse.optString("booking_id") != null &&
-                !statusResponse.optString("booking_id").equalsIgnoreCase("")) {
-            String booki = statusResponse.optString("booking_id");
-            booking_id.setText(booki);
-        } else {
-            booking_id.setVisibility(View.GONE);
+            lblTotalPrice.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("payable"));
+            your_earning.setText(SharedHelper.getKey(context, "currency") + "" + payment.optString("payable"));
+
+            if (statusResponse.optString("booking_id") != null &&
+                    !statusResponse.optString("booking_id").equalsIgnoreCase("")) {
+                String booki = statusResponse.optString("booking_id");
+                booking_id.setText(booki);
+            } else {
+                booking_id.setVisibility(View.GONE);
+            }
+            lblDiscountPrice.setText(SharedHelper.getKey(context, "currency") + "" + couponAmountDetected);
+        }catch (NullPointerException ex){
+            lblDiscountPrice.setText(SharedHelper.getKey(context, "currency") + "0" );
         }
 
 

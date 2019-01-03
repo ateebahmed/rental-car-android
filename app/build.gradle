@@ -7,8 +7,8 @@ android {
         applicationId "com.taxialeairy.provider"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 41
-        versionName "2.5"
+        versionCode 44
+        versionName "2.8"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
