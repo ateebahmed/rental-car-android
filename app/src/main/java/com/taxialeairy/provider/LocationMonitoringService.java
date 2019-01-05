@@ -153,51 +153,51 @@ public class LocationMonitoringService extends Service {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
-    public void snapData(Location location){
-
-        JSONObject object = new JSONObject();
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, snapToRoad(location.getLatitude(),location.getLongitude()),
-                object, new com.android.volley.Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-
-                Log.v("PayNowRequestResponse", response.toString());
-                Log.v("PayNowRequestResponse", response.toString());
-
-                try {
-                    JSONObject responseObject = new JSONObject(response.toString());
-                    JSONArray snapArray = responseObject.getJSONArray("snappedPoints");
-
-                    JSONObject snapObject = snapArray.getJSONObject(0);
-                    JSONObject location  = snapObject.getJSONObject("location");
-                    Double lat = Double.valueOf(location.getString("latitude"));
-                    Double lng = Double.valueOf(location.getString("longitude"));
-
-                    update_location(lat,lng);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v("PayNowRequestResponse", error.toString());
-            }
-        });
-        TranxitApplication.getInstance().addToRequestQueue(jsonObjectRequest);
-    }
-    public String snapToRoad(double latitude, double longitude){
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("https://roads.googleapis.com/v1/snapToRoads");
-        urlString.append("?path=");
-        urlString.append(""+ latitude + "," + longitude);
-        urlString.append("&key=" + getResources().getString(R.string.google_map_api));
-        return urlString.toString();
-
-    }
+//    public void snapData(Location location){
+//
+//        JSONObject object = new JSONObject();
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, snapToRoad(location.getLatitude(),location.getLongitude()),
+//                object, new com.android.volley.Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//
+//
+//                Log.v("PayNowRequestResponse", response.toString());
+//                Log.v("PayNowRequestResponse", response.toString());
+//
+//                try {
+//                    JSONObject responseObject = new JSONObject(response.toString());
+//                    JSONArray snapArray = responseObject.getJSONArray("snappedPoints");
+//
+//                    JSONObject snapObject = snapArray.getJSONObject(0);
+//                    JSONObject location  = snapObject.getJSONObject("location");
+//                    Double lat = Double.valueOf(location.getString("latitude"));
+//                    Double lng = Double.valueOf(location.getString("longitude"));
+//
+//                    update_location(lat,lng);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.v("PayNowRequestResponse", error.toString());
+//            }
+//        });
+//        TranxitApplication.getInstance().addToRequestQueue(jsonObjectRequest);
+//    }
+//    public String snapToRoad(double latitude, double longitude){
+//        StringBuilder urlString = new StringBuilder();
+//        urlString.append("https://roads.googleapis.com/v1/snapToRoads");
+//        urlString.append("?path=");
+//        urlString.append(""+ latitude + "," + longitude);
+//        urlString.append("&key=" + getResources().getString(R.string.google_map_api));
+//        return urlString.toString();
+//
+//    }
 
     public void update_location(Double lat, Double lng) {
         Log.d("LocationTest","tututu");
@@ -248,7 +248,7 @@ public class LocationMonitoringService extends Service {
             //update_location(location.getLatitude(),location.getLongitude());
             ConnectionHelper helper = new ConnectionHelper(getApplicationContext());
             if(helper.isConnectingToInternet())
-                snapData(location);
+                update_location(location.getLatitude(),location.getLongitude());
         }
 
         @Override

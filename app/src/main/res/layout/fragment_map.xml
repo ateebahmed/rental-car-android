@@ -1367,7 +1367,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center">
 
                         <ImageView
                             android:id="@+id/imgPaymentTypeInvoice"
@@ -1384,6 +1385,17 @@
                             android:text="@string/selected_payment_mode"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/_13sdp" />
+                        <EditText
+                            android:id="@+id/edtWallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_60sdp"
+                            android:text="0"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/_13sdp"
+                            android:textAlignment="center"
+                            android:inputType="number" />
 
                         <com.taxialeairy.provider.Utilities.MyBoldTextView
                             android:id="@+id/lblPaymentChangeInvoice"
@@ -1395,6 +1407,7 @@
                             android:visibility="gone" />
 
                     </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -1426,7 +1439,7 @@
             android:background="@android:color/white"
             android:orientation="vertical"
             android:visibility="gone"
-            tools:visibility="visible">
+            tools:visibility="invisible">
 
             <LinearLayout
                 android:layout_width="match_parent"

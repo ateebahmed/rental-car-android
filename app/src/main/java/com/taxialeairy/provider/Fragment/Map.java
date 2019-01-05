@@ -212,6 +212,7 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
     EditText edt05Comment;
     //Button layer 01
     Button btn_01_status, btn_confirm_payment, btn_rate_submit;
+    EditText edtWallet;
     Button btn_go_offline;
     LinearLayout lnrGoOffline;
     //Button layer 02
@@ -629,6 +630,7 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
         btn_01_status = (Button) view.findViewById(com.taxialeairy.provider.R.id.btn_01_status);
         btn_rate_submit = (Button) view.findViewById(com.taxialeairy.provider.R.id.btn_rate_submit);
         btn_confirm_payment = (Button) view.findViewById(com.taxialeairy.provider.R.id.btn_confirm_payment);
+        edtWallet = (EditText) view.findViewById(R.id.edtWallet);
 
         //Button layer 02
         btn_02_accept = (Button) view.findViewById(R.id.btn_02_accept);
@@ -2071,6 +2073,9 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                 try {
                     param.put("_method", "PATCH");
                     param.put("status", status);
+                    if(status.equals("COMPLETED")){
+                        param.put("wallet",edtWallet.getText().toString());
+                    }
                     param.put("latitude", crt_lat);
                     param.put("longitude", crt_lng);
 
@@ -2662,7 +2667,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
 
     private class ParserTask1 extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -2674,7 +2678,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
 
-                // Starts parsing data
                 routes = parser.parse(jObject);
 
             } catch (Exception e) {
@@ -2684,7 +2687,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
@@ -2693,15 +2695,12 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                 polyline.remove();
             }
 
-            // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList<>();
+                points = new ArrayList<LatLng>();
                 lineOptions = new PolylineOptions();
 
-                // Fetching i-th route
                 List<HashMap<String, String>> path = result.get(i);
 
-                // Fetching all the points in i-th route
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
@@ -2715,15 +2714,12 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                     mMap.clear();
                 }
 
-
-                // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(10);
                 lineOptions.color(Color.parseColor(context.getResources().getString(0 + com.taxialeairy.provider.R.color.colorAccent)));
 
             }
 
-            // Drawing polyline in the Google Map for the i-th route
             if (lineOptions != null && points != null) {
                 polyline = mMap.addPolyline(lineOptions);
             } else {
@@ -2738,7 +2734,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
         @Override
         protected String doInBackground(String... url) {
 
-            // For storing data from web service
             String data = "";
 
             try {
@@ -2756,8 +2751,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
-
-            // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
 
         }
@@ -2793,7 +2786,6 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
@@ -2802,15 +2794,12 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                 polyline.remove();
             }
 
-            // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList<>();
+                points = new ArrayList<LatLng>();
                 lineOptions = new PolylineOptions();
 
-                // Fetching i-th route
                 List<HashMap<String, String>> path = result.get(i);
 
-                // Fetching all the points in i-th route
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
@@ -2836,14 +2825,12 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                 } else {
                     MarkerOptions markerOptions = new MarkerOptions().title("Source")
                             .position(sourceLatLng).icon(BitmapDescriptorFactory.fromResource(com.taxialeairy.provider.R.drawable.user_marker));
-                    //mMap.addMarker(markerOptions);
                     marker5.remove();
                     MarkerOptions markerOptions2 = new MarkerOptions().title("provider")
                             .position(sourceLatLng).icon(BitmapDescriptorFactory.fromResource(com.taxialeairy.provider.R.drawable.car));
                     marker5 = mMap.addMarker(markerOptions2);
                     MarkerOptions markerOptions1 = new MarkerOptions()
                             .position(destLatLng).icon(BitmapDescriptorFactory.fromResource(com.taxialeairy.provider.R.drawable.provider_marker));
-                    //mMap.addMarker(markerOptions);
                     mMap.addMarker(markerOptions1);
                 }
 
