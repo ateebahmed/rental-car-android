@@ -89,6 +89,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // app is in background, show the notification in notification tray
             if (messageBody.equalsIgnoreCase("New Incoming Ride")) {
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

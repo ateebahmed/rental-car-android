@@ -1087,7 +1087,7 @@ public class Map extends Fragment implements OnMapReadyCallback, LocationListene
                 double lat = v * nextPosition.latitude + (1 - v)
                         * startPosition.latitude;
                 LatLng newPos = new LatLng(lat, lng);
-                Log.e(TAG, "newPos " + newPos);
+                //Log.e(TAG, "newPos " + newPos);
                 if(!nextPosition.equals(startPosition)) {
                     mMarker.setPosition(newPos);
                     mMarker.setAnchor(0.5f, 0.5f);

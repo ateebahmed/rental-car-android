@@ -1,58 +1,27 @@
 {
   "project_info": {
-    "project_number": "406248771214",
-    "firebase_url": "https://taxi-aleairy-android.firebaseio.com",
-    "project_id": "taxi-aleairy-android",
-    "storage_bucket": "taxi-aleairy-android.appspot.com"
+    "project_number": "328794274577",
+    "firebase_url": "https://taxi-ac7d1.firebaseio.com",
+    "project_id": "taxi-ac7d1",
+    "storage_bucket": "taxi-ac7d1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:406248771214:android:fd05dc21c3ae7062",
+        "mobilesdk_app_id": "1:328794274577:android:fd05dc21c3ae7062",
         "android_client_info": {
           "package_name": "com.taxialeairy.provider"
         }
       },
       "oauth_client": [
         {
-          "client_id": "406248771214-c2nvgrhbtgadbs8vu3cosaiad08s5of9.apps.googleusercontent.com",
+          "client_id": "328794274577-9avrr1hsn0m6fc1ufe46gvvvvnl7ae8i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAYUm7EYmTt07HftCiqqzQhP-RrAp3diT8"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:406248771214:android:386e7f79296d0141",
-        "android_client_info": {
-          "package_name": "com.taxialeairy.user"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "406248771214-c2nvgrhbtgadbs8vu3cosaiad08s5of9.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAYUm7EYmTt07HftCiqqzQhP-RrAp3diT8"
+          "current_key": "AIzaSyCW83eqNfOi-pgmJYVOppSLi2cxqsyVbew"
         }
       ],
       "services": {

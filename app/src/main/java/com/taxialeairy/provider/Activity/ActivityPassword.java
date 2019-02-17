@@ -197,6 +197,7 @@ public class ActivityPassword extends AppCompatActivity {
                     customDialog.dismiss();
                     utils.print("SignUpResponse", response.toString());
                     SharedHelper.putKey(context, "access_token", response.optString("access_token"));
+                    SharedHelper.putKey(context,"driver_id",response.optString("id"));
                     if (!response.optString("currency").equalsIgnoreCase("") && response.optString("currency") != null)
                         SharedHelper.putKey(context, "currency", response.optString("currency"));
                     else

@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.taxialeairy.provider.Helper.ConnectionHelper;
 import com.taxialeairy.provider.Helper.SharedHelper;
@@ -39,7 +41,10 @@ public class LocationMonitoringService extends Service {
 
     private static final String TAG = "BOOMBOOMTESTGPS";
     private static final int LOCATION_INTERVAL = 3 * 1000;
-    private static final float LOCATION_DISTANCE = 0f;
+    private static final float LOCATION_DISTANCE = 10f;
+
+    DatabaseReference dataBaseLocation;
+
     LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
@@ -92,6 +97,8 @@ public class LocationMonitoringService extends Service {
         Log.e(TAG, "onCreate");
         initializeLocationManager();
 
+        dataBaseLocation = FirebaseDatabase.getInstance().getReference("aleairy");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp1";
             String channelName = "My Background Service";
@@ -125,6 +132,7 @@ public class LocationMonitoringService extends Service {
             mLocationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
                     mLocationListeners[0]);
+
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
@@ -247,8 +255,11 @@ public class LocationMonitoringService extends Service {
             mLastLocation.set(location);
             //update_location(location.getLatitude(),location.getLongitude());
             ConnectionHelper helper = new ConnectionHelper(getApplicationContext());
-            if(helper.isConnectingToInternet())
-                update_location(location.getLatitude(),location.getLongitude());
+            if(helper.isConnectingToInternet()) {
+                update_location(location.getLatitude(), location.getLongitude());
+                UserModel userModel = new UserModel("1",String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()));
+                dataBaseLocation.child(SharedHelper.getKey(LocationMonitoringService.this,"driver_id")).setValue(userModel);
+            }
         }
 
         @Override
