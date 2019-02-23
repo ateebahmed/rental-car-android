@@ -99,15 +99,6 @@ public class WelcomeScreenActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        social_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(WelcomeScreenActivity.this, ActivitySocialLogin.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                finish();
-            }
-        });
         overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
 //        skipBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override

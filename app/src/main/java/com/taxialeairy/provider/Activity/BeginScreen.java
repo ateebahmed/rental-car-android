@@ -161,15 +161,6 @@ public class BeginScreen extends AppCompatActivity implements GoogleApiClient.On
             }
         });
 
-        connectSocial = (TextView) findViewById(R.id.connect_social);
-        connectSocial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mainIntent = new Intent(BeginScreen.this, ActivitySocialLogin.class);
-                startActivity(mainIntent);
-            }
-        });
-
         try {
             @SuppressLint("PackageManagerGetSignatures") PackageInfo info = getPackageManager().getPackageInfo(
                     "com.tranxitpro.provider",
