@@ -97,17 +97,6 @@ public class ActivityEmail extends AppCompatActivity {
             }
         });
 
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utilities.hideKeyboard(ActivityEmail.this);
-                SharedHelper.putKey(ActivityEmail.this, "password", "");
-                Intent mainIntent = new Intent(ActivityEmail.this, RegisterActivity.class);
-                mainIntent.putExtra("isFromMailActivity", true);
-                startActivity(mainIntent);
-            }
-        });
-
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

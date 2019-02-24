@@ -152,16 +152,6 @@ public class ActivityPassword extends AppCompatActivity {
             }
         });
 
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utilities.hideKeyboard(ActivityPassword.this);
-                SharedHelper.putKey(context, "password", "");
-                Intent mainIntent = new Intent(activity, RegisterActivity.class);
-                startActivity(mainIntent);
-            }
-        });
-
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -74,11 +74,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.taxialeairy.provider.Activity.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustResize"/>
-        <activity
             android:name="com.taxialeairy.provider.Activity.SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
