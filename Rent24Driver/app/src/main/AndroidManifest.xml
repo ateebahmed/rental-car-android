@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".components.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".SplashActivity">
             <meta-data

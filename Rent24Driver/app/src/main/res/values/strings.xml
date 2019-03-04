@@ -20,4 +20,5 @@
     <string name="snaps">Snaps</string>
     <string name="invoice">Invoice</string>
     <string name="profile">Profile</string>
+    <string name="input_password">********</string>
 </resources>

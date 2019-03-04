@@ -1,4 +1,4 @@
-package com.rent24.driver
+package com.rent24.driver.components.login
 
 import android.Manifest.permission.READ_CONTACTS
 import android.animation.Animator
@@ -17,6 +17,8 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
@@ -33,11 +35,21 @@ class LoginActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>
      */
     private var mAuthTask: UserLoginTask? = null
 
-    private var binding: ActivityLoginBinding? = null
+    private lateinit var binding: ActivityLoginBinding
+
+    private lateinit var model: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        binding.lifecycleOwner = this
+
+        model = ViewModelProvider.AndroidViewModelFactory
+            .getInstance(application)
+            .create(LoginViewModel::class.java)
+
+        setupModel(model)
+
         setupActionBar()
         // Set up the login form.
         populateAutoComplete()
@@ -50,6 +62,28 @@ class LoginActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>
         })
 
         email_sign_in_button.setOnClickListener { attemptLogin() }
+    }
+
+    private fun setupModel(model: LoginViewModel) {
+        model.getEmail().observe(this, Observer<String> { newEmail ->
+            binding.email
+                .setText(newEmail)
+        })
+
+        model.getPassword().observe(this, Observer<String> { newPassword ->
+            binding.password
+                .setText(newPassword)
+        })
+
+        binding.emailSignInButton
+            .setOnClickListener {
+                model.setEmail(binding.email
+                    .text
+                    .toString())
+                model.setPassword(binding.password
+                    .text
+                    .toString())
+            }
     }
 
     private fun populateAutoComplete() {
@@ -70,9 +104,13 @@ class LoginActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok,
-                    { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
+                    { requestPermissions(arrayOf(READ_CONTACTS),
+                        REQUEST_READ_CONTACTS
+                    ) })
         } else {
-            requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
+            requestPermissions(arrayOf(READ_CONTACTS),
+                REQUEST_READ_CONTACTS
+            )
         }
         return false
     }
