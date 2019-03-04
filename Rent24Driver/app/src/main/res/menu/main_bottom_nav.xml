@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/job_map"
+        android:enabled="true"
+        android:title="@string/map"
+        android:icon="@drawable/ic_map_white_24dp"
+        android:checked="true"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/snaps"
+        android:enabled="true"
+        android:title="@string/snaps"
+        android:icon="@drawable/ic_add_a_photo_white_24dp"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/invoice"
+        android:enabled="true"
+        android:title="@string/invoice"
+        android:icon="@drawable/ic_format_list_bulleted_white_24dp"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_account_circle_white_24dp"
+        app:showAsAction="ifRoom"/>
+</menu>
