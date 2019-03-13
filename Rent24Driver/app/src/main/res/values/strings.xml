@@ -21,4 +21,9 @@
     <string name="invoice">Invoice</string>
     <string name="profile">Profile</string>
     <string name="input_password">********</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="base_api_url">http://www.technidersolutions.com/realestate/public/api</string>
 </resources>

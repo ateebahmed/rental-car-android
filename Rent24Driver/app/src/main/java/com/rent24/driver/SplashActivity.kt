@@ -6,6 +6,8 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.rent24.driver.components.login.LoginActivity
+import com.rent24.driver.components.mainapp.HomeActivity
 import com.rent24.driver.databinding.ActivitySplashBinding
 import kotlinx.android.synthetic.main.activity_splash.*
 /**
@@ -50,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
-        startActivity(Intent(applicationContext, MainMapsActivity::class.java))
+        startActivity(Intent(applicationContext, LoginActivity::class.java))
     }
 
     private fun hide() {

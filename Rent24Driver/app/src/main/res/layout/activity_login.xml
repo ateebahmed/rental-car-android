@@ -8,6 +8,7 @@
             type="com.rent24.driver.components.login.LoginViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -49,7 +50,6 @@
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{model.email}"
                         android:hint="@string/prompt_email"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
@@ -65,7 +65,6 @@
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{model.password}"
                         android:hint="@string/input_password"
                         android:imeActionId="6"
                         android:imeActionLabel="@string/action_sign_in_short"
