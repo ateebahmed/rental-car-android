@@ -1,25 +1,31 @@
-package com.rent24.driver
+package com.rent24.driver.components.mainapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
 import android.view.View
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.rent24.driver.databinding.ActivityMainMapsBinding
+import com.rent24.driver.R
+import com.rent24.driver.components.mainapp.fragments.ui.invoice.InvoiceFragment
+import com.rent24.driver.components.mainapp.fragments.ui.profile.ProfileFragment
+import com.rent24.driver.components.mainapp.fragments.ui.snaps.SnapsFragment
+import com.rent24.driver.databinding.ActivityHomeBinding
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_splash.*
 
-class MainMapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private lateinit var binding: ActivityHomeBinding
     private lateinit var mMap: GoogleMap
-    private var binding: ActivityMainMapsBinding? = null
     private val mHidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
 
@@ -35,18 +41,38 @@ class MainMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
     private val mHideHandler = Handler()
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        val fragment: Fragment
+        when (item.itemId) {
+            R.id.job_map -> {
+                fragment = onMapFragmentSelection()
+                return@OnNavigationItemSelectedListener replaceFragment(fragment)
+            }
+            R.id.snaps -> {
+                fragment = onSnapsFragmentSelection()
+                return@OnNavigationItemSelectedListener replaceFragment(fragment)
+            }
+            R.id.invoice -> {
+                fragment = onInvoiceFragmentSelection()
+                return@OnNavigationItemSelectedListener replaceFragment(fragment)
+            }
+            R.id.profile -> {
+                fragment = onProfileFragmentSelection()
+                return@OnNavigationItemSelectedListener replaceFragment(fragment)
+            }
+        }
+        false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main_maps)
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+        binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 //        startActivityForResult(Intent(applicationContext, LoginActivity::class.java), 1)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     /**
@@ -72,5 +98,31 @@ class MainMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         supportActionBar?.hide()
         mHideHandler.postDelayed(mHidePart2Runnable, 300.toLong())
+    }
+
+    private fun onMapFragmentSelection(): SupportMapFragment {
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment = SupportMapFragment()
+        mapFragment.getMapAsync(this)
+        return mapFragment
+    }
+
+    private fun onSnapsFragmentSelection(): Fragment {
+        return SnapsFragment.newInstance()
+    }
+
+    private fun onInvoiceFragmentSelection(): Fragment {
+        return InvoiceFragment.newInstance()
+    }
+
+    private fun onProfileFragmentSelection(): Fragment {
+        return ProfileFragment.newInstance()
+    }
+
+    private fun replaceFragment(fragment: Fragment): Boolean {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+        return true
     }
 }
