@@ -26,4 +26,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="base_api_url">http://www.technidersolutions.com/realestate/public/api</string>
+    <string name="go_online">Go Online</string>
 </resources>

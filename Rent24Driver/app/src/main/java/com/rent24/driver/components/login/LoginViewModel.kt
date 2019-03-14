@@ -25,18 +25,18 @@ class LoginViewModel : ViewModel() {
     }
 
     fun callLoginApi(email: String, password: String, deviceToken: String) {
-        val res = Transformations.switchMap(response) {
-            val data = MutableLiveData<LoginResponse>()
-            data.value = LoginResponse(LoginSuccess("token"), LoginError("error"))
-            if (null == data.value) {
-                return@switchMap response
-            }
+        Transformations.switchMap(response) {
+            val data = LoginRepository().login(LoginRequest(email, password, deviceToken))
+            updateResponse(data.value!!)
             return@switchMap data
         }
-        response.value = res.value
     }
 
     fun getToken(): LiveData<LoginResponse> {
         return response
+    }
+
+    private fun updateResponse(value: LoginResponse) {
+        response.value = value
     }
 }

@@ -52,7 +52,8 @@ class SplashActivity : AppCompatActivity() {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
-        startActivity(Intent(applicationContext, LoginActivity::class.java))
+        startActivity(Intent(applicationContext, HomeActivity::class.java))
+        finish()
     }
 
     private fun hide() {
