@@ -1,4 +1,4 @@
-package com.rent24.driver.components.mainapp.fragments.ui.profile
+package com.rent24.driver.components.profile
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle

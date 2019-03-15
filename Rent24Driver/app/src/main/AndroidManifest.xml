@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".components.mainapp.HomeActivity"
+            android:name=".components.HomeActivity"
             android:label="@string/title_activity_home"
             android:parentActivityName=".SplashActivity"
             android:theme="@style/NoActionBarTheme">

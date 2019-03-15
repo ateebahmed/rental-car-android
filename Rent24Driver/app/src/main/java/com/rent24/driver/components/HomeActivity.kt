@@ -1,12 +1,10 @@
-package com.rent24.driver.components.mainapp
+package com.rent24.driver.components
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
 import android.view.Menu
 import android.view.View
-import android.widget.CompoundButton
-import android.widget.RelativeLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -19,10 +17,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
 import com.rent24.driver.R
-import com.rent24.driver.components.mainapp.fragments.ui.invoice.InvoiceFragment
-import com.rent24.driver.components.mainapp.fragments.ui.profile.ProfileFragment
-import com.rent24.driver.components.mainapp.fragments.ui.snaps.SnapsFragment
+import com.rent24.driver.components.invoice.InvoiceFragment
+import com.rent24.driver.components.job.JobFragment
+import com.rent24.driver.components.profile.ProfileFragment
+import com.rent24.driver.components.snaps.SnapsFragment
 import com.rent24.driver.databinding.ActivityHomeBinding
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -65,8 +66,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                 fragment = onInvoiceFragmentSelection()
                 return@OnNavigationItemSelectedListener replaceFragment(fragment)
             }
-            R.id.profile -> {
-                fragment = onProfileFragmentSelection()
+            R.id.job -> {
+                fragment = onJobFragmentSelection()
                 return@OnNavigationItemSelectedListener replaceFragment(fragment)
             }
         }
@@ -83,6 +84,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 //        startActivityForResult(Intent(applicationContext, LoginActivity::class.java), 1)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        replaceFragment(JobFragment.newInstance())
     }
 
     /**
@@ -112,8 +114,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_toolbar, menu)
+
         val item = menu?.findItem(R.id.job_status)!!
         item.setActionView(R.layout.switch_toolbar_layout)
+
         val switch = item.actionView
             .findViewById<SwitchCompat>(R.id.switch_toolbar)
         switch.setOnCheckedChangeListener { _, isChecked ->
@@ -141,6 +145,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun onProfileFragmentSelection(): Fragment {
         return ProfileFragment.newInstance()
+    }
+
+    private fun onJobFragmentSelection(): Fragment {
+        return JobFragment.newInstance()
     }
 
     private fun replaceFragment(fragment: Fragment): Boolean {

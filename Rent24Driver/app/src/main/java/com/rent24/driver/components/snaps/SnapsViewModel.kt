@@ -1,4 +1,4 @@
-package com.rent24.driver.components.mainapp.fragments.ui.snaps
+package com.rent24.driver.components.snaps
 
 import androidx.lifecycle.ViewModel
 

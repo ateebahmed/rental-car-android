@@ -1,4 +1,4 @@
-package com.rent24.driver.components.mainapp.fragments.ui.invoice
+package com.rent24.driver.components.invoice
 
 import androidx.lifecycle.ViewModel;
 
