@@ -1,20 +1,18 @@
 package com.rent24.driver.components.login
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import com.rent24.driver.api.login.request.LoginRequest
-import com.rent24.driver.api.login.response.LoginError
 import com.rent24.driver.api.login.response.LoginResponse
-import com.rent24.driver.api.login.response.LoginSuccess
 import com.rent24.driver.repository.LoginRepository
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val email: MutableLiveData<String> by lazy { MutableLiveData<String>() }
     private val password: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private val response = MutableLiveData<LoginResponse>()
 
     fun getEmail(): LiveData<String> {
         return email
@@ -24,19 +22,23 @@ class LoginViewModel : ViewModel() {
         return password
     }
 
-    fun callLoginApi(email: String, password: String, deviceToken: String) {
-        Transformations.switchMap(response) {
-            val data = LoginRepository().login(LoginRequest(email, password, deviceToken))
-            updateResponse(data.value!!)
-            return@switchMap data
+    fun callLoginApi(email: String, password: String) {
+        LoginRepository().login(LoginRequest(email, password), this)
+    }
+
+    fun saveToken(response: LoginResponse) {
+        val preferences = getApplication<Application>().getSharedPreferences("session", Context.MODE_PRIVATE)
+        with(preferences.edit()) {
+            if (response.success
+                    .token
+                    .isNotEmpty()) {
+                putString("token", response.success
+                    .token)
+            } else {
+                putString("error", response.error
+                    .error)
+            }
+            apply()
         }
-    }
-
-    fun getToken(): LiveData<LoginResponse> {
-        return response
-    }
-
-    private fun updateResponse(value: LoginResponse) {
-        response.value = value
     }
 }
