@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.rent24.driver.components.HomeActivity
+import com.rent24.driver.components.login.LoginActivity
 import com.rent24.driver.databinding.ActivitySplashBinding
 import kotlinx.android.synthetic.main.activity_splash.*
 /**

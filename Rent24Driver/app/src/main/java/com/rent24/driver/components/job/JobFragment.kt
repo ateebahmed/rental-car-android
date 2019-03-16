@@ -26,32 +26,41 @@ class JobFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val tabLayout = inflater.inflate(R.layout.job_fragment, container, false) as ConstraintLayout
-        binding = JobFragmentBinding.inflate(inflater, container, false)
+        binding = JobFragmentBinding.bind(tabLayout)
+        return tabLayout
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        replaceFragment()
         binding.tabs
             .addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(p0: TabLayout.Tab?) {}
+                override fun onTabReselected(p0: TabLayout.Tab?) {}
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+                override fun onTabUnselected(p0: TabLayout.Tab?) {}
 
-            override fun onTabSelected(p0: TabLayout.Tab?) {
-                Log.d(TAG, "position ${p0?.position}")
-                when(p0?.position) {
-                    0 -> {
-                        fragmentManager?.beginTransaction()!!
-                            .replace(R.id.job_tab_content, JobListFragment.newInstance())
-                            .commitNow()
+                override fun onTabSelected(p0: TabLayout.Tab?) {
+                    Log.d(TAG, "position ${p0?.position}")
+                    when(p0?.position) {
+                        0 -> replaceFragment()
+                        1 -> replaceFragment()
                     }
                 }
-            }
 
-        })
-        return tabLayout
+            })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(JobViewModel::class.java)
+
         // TODO: Use the ViewModel
     }
 
+    private fun replaceFragment(): Boolean {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.job_tab_content, JobListFragment.newInstance())
+            .commitNow()
+        return true
+    }
 }

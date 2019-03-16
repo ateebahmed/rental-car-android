@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,8 +18,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabItem
-import com.google.android.material.tabs.TabLayout
 import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
@@ -115,17 +114,24 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_toolbar, menu)
 
-        val item = menu?.findItem(R.id.job_status)!!
-        item.setActionView(R.layout.switch_toolbar_layout)
+        val switchItem = menu?.findItem(R.id.job_status)!!
+        switchItem.setActionView(R.layout.switch_toolbar_layout)
 
-        val switch = item.actionView
+        val switch = switchItem.actionView
             .findViewById<SwitchCompat>(R.id.switch_toolbar)
         switch.setOnCheckedChangeListener { _, isChecked ->
-            Snackbar.make(findViewById(R.id.container), "checked$isChecked", Snackbar.LENGTH_SHORT)
+            Snackbar.make(findViewById(R.id.container), "checked $isChecked", Snackbar.LENGTH_SHORT)
                 .show()
         }
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.profile -> replaceFragment(onProfileFragmentSelection())
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun onMapFragmentSelection(): SupportMapFragment {
