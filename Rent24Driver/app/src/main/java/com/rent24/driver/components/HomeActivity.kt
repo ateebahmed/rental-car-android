@@ -28,30 +28,32 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var mMap: GoogleMap
     private var currentItem = 0
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        if (currentItem == item.itemId) {
-            return@OnNavigationItemSelectedListener false
+    private val onNavigationItemSelectedListener: BottomNavigationView.OnNavigationItemSelectedListener by lazy {
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            if (currentItem == item.itemId) {
+                return@OnNavigationItemSelectedListener false
+            }
+            val fragment: Fragment
+            when (item.itemId) {
+                R.id.job_map -> {
+                    fragment = onMapFragmentSelection()
+                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
+                }
+                R.id.snaps -> {
+                    fragment = onSnapsFragmentSelection()
+                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
+                }
+                R.id.invoice -> {
+                    fragment = onInvoiceFragmentSelection()
+                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
+                }
+                R.id.job -> {
+                    fragment = onJobFragmentSelection()
+                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
+                }
+            }
+            false
         }
-        val fragment: Fragment
-        when (item.itemId) {
-            R.id.job_map -> {
-                fragment = onMapFragmentSelection()
-                return@OnNavigationItemSelectedListener replaceFragment(fragment)
-            }
-            R.id.snaps -> {
-                fragment = onSnapsFragmentSelection()
-                return@OnNavigationItemSelectedListener replaceFragment(fragment)
-            }
-            R.id.invoice -> {
-                fragment = onInvoiceFragmentSelection()
-                return@OnNavigationItemSelectedListener replaceFragment(fragment)
-            }
-            R.id.job -> {
-                fragment = onJobFragmentSelection()
-                return@OnNavigationItemSelectedListener replaceFragment(fragment)
-            }
-        }
-        false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         binding.navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        replaceFragment(onJobFragmentSelection())
     }
 
     /**

@@ -2,11 +2,11 @@ package com.rent24.driver.components.login
 
 import android.Manifest.permission.READ_CONTACTS
 import android.app.Activity
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -22,34 +22,56 @@ import kotlinx.android.synthetic.main.activity_login.*
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var model: LoginViewModel
     private val TAG = LoginActivity::class.java.name
-    private val signInButtonClickListener = View.OnClickListener {
-        if (binding.email
-                .text
-                .isNotEmpty() && binding.password
-                .text.isNotEmpty()) {
+    private val signInButtonClickListener: View.OnClickListener by lazy {
+        View.OnClickListener {
+            if (binding.email
+                    .text
+                    .isNotEmpty() && binding.password
+                    .text.isNotEmpty()
+            ) {
+                binding.loginProgress
+                    .show()
+                model.callLoginApi(
+                    binding.email
+                        .text
+                        .toString(), binding.password
+                        .text
+                        .toString()
+                )
+            } else {
+                Snackbar.make(binding.container, "One or more inputs are empty", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+    private val onSharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener by lazy {
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences?, key: String? ->
             binding.loginProgress
-                .show()
-            model.callLoginApi(binding.email
-                    .text
-                    .toString(), binding.password
-                    .text
-                    .toString())
-        } else {
-            Snackbar.make(binding.container, "One or more inputs are empty", Snackbar.LENGTH_SHORT)
-                .show()
+                .hide()
+            key ?: return@OnSharedPreferenceChangeListener
+            when (key) {
+                "token" -> {
+                    Log.i(TAG, "login successful")
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                }
+                "error" -> Snackbar.make(binding.container, sharedPreferences?.getString(key,
+                    "Error occured while processing")!!, Snackbar.LENGTH_SHORT)
+                    .show()
+                else -> Snackbar.make(binding.container, "Wrong credentials, Try again", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Starting LoginActivity.onCreate")
-        getSharedPreferences("session", Context.MODE_PRIVATE)
-            .registerOnSharedPreferenceChangeListener(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
 
@@ -62,18 +84,10 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
         setupActionBar()
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        binding.loginProgress
-            .hide()
-        key?: return
-        if (key == "token") {
-            Log.i(TAG, "login successful")
-            setResult(Activity.RESULT_OK)
-            finish()
-        } else {
-            Snackbar.make(binding.container, "Wrong credentials, Try again", Snackbar.LENGTH_SHORT)
-                .show()
-        }
+    override fun onStart() {
+        super.onStart()
+        PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            .registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
     }
 
     /**
@@ -96,25 +110,25 @@ class LoginActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceC
         super.onBackPressed()
     }
 
-    override fun onDestroy() {
-        getSharedPreferences("session", Context.MODE_PRIVATE)
-            .registerOnSharedPreferenceChangeListener(this)
-        super.onDestroy()
+    override fun onStop() {
+        PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            .unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+        super.onStop()
     }
 
     private fun setupModel(model: LoginViewModel) {
         Log.d(TAG, "Starting LoginActivity.setupModel")
         model.getEmail()
             .observe(this, Observer<String> { newEmail ->
-            binding.email
-                .setText(newEmail)
-        })
+                binding.email
+                    .setText(newEmail)
+            })
 
         model.getPassword()
             .observe(this, Observer<String> { newPassword ->
-            binding.password
-                .setText(newPassword)
-        })
+                binding.password
+                    .setText(newPassword)
+            })
 
         binding.emailSignInButton
             .setOnClickListener(signInButtonClickListener)

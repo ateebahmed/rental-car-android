@@ -1,7 +1,7 @@
 package com.rent24.driver.components.login
 
 import android.app.Application
-import android.content.Context
+import android.preference.PreferenceManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,7 +27,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveToken(response: LoginResponse) {
-        val preferences = getApplication<Application>().getSharedPreferences("session", Context.MODE_PRIVATE)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
         with(preferences.edit()) {
             if (response.success
                     .token
