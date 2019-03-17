@@ -7,10 +7,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.rent24.driver.components.HomeActivity
 import com.rent24.driver.components.login.LoginActivity
+import java.io.IOException
 
 const val LOGIN_REQUEST_CODE = 200
 
@@ -19,6 +21,8 @@ const val LOGIN_REQUEST_CODE = 200
  * status bar and navigation/system bar) with user interaction.
  */
 class SplashActivity : AppCompatActivity() {
+
+    private val TAG = SplashActivity::class.java.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +41,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkSession() {
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable() && canConnectToInternet()) {
             val token = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 .getString("token", "")
             if (token?.isEmpty()!!) {
@@ -60,5 +64,18 @@ class SplashActivity : AppCompatActivity() {
         val service = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val info: NetworkInfo? = service.activeNetworkInfo
         return (null != info) && info.isConnectedOrConnecting
+    }
+
+    private fun canConnectToInternet(): Boolean {
+        val runtime = Runtime.getRuntime()
+        try {
+            val process = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            return process.waitFor() == 0
+        } catch (e: IOException) {
+            Log.e(TAG, e.message, e)
+        } catch (e: InterruptedException) {
+            Log.e(TAG, e.message, e)
+        }
+        return false
     }
 }
