@@ -2,12 +2,25 @@ package com.rent24.driver.service
 
 import com.rent24.driver.api.login.request.LoginRequest
 import com.rent24.driver.api.login.response.LoginResponse
+import com.rent24.driver.api.login.response.StatusResponse
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface RestService {
 
-    @POST("login")
-    fun login(@Body request: LoginRequest) : Call<LoginResponse>
+    interface AuthApis {
+
+        @GET("user/status")
+        fun status(@Query("status") status: String): Call<StatusResponse>
+    }
+
+    interface NonAuthApis {
+
+        @POST("login")
+        fun login(@Body request: LoginRequest): Call<LoginResponse>
+    }
+
 }

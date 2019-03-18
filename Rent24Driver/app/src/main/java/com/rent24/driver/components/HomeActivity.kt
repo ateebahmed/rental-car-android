@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -55,14 +59,31 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             false
         }
     }
+    private var status: Boolean = false
+    private val onStatusCheckedChangeListener: CompoundButton.OnCheckedChangeListener by lazy {
+        CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            binding.apiProgress
+                .show()
+            binding.model
+                ?.callStatusApi(isChecked)
+        }
+    }
+    private lateinit var switch: SwitchCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        binding.navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        binding.lifecycleOwner = this
+
+        binding.navigation
+            .setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        binding.model = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory(application))
+            .get(HomeViewModel::class.java)
+
         setSupportActionBar(binding.toolbar)
 
+        setupModel(binding.model!!)
         replaceFragment(onJobFragmentSelection())
     }
 
@@ -96,12 +117,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         val switchItem = menu?.findItem(R.id.job_status)!!
         switchItem.setActionView(R.layout.switch_toolbar_layout)
 
-        val switch = switchItem.actionView
-            .findViewById<SwitchCompat>(R.id.switch_toolbar)
-        switch.setOnCheckedChangeListener { _, isChecked ->
-            Snackbar.make(findViewById(R.id.container), "checked $isChecked", Snackbar.LENGTH_SHORT)
-                .show()
-        }
+        switch = switchItem.actionView
+            .findViewById(R.id.switch_toolbar)
+        switch.setOnCheckedChangeListener(onStatusCheckedChangeListener)
 
         return true
     }
@@ -141,5 +159,28 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             .replace(R.id.fragment_container, fragment)
             .commitNow()
         return true
+    }
+
+    private fun setupModel(model: HomeViewModel) {
+        model.getStatus()
+            .observe(this, Observer {
+                status = it
+                if (binding.apiProgress
+                        .isShown) {
+                    binding.apiProgress
+                        .hide()
+                }
+                if (!status) {
+                    switch.isChecked = false
+                    Snackbar.make(binding.container, "Error occured, please try again", Snackbar.LENGTH_LONG)
+                        .show()
+                } else if (!switch.isChecked) {
+                    Snackbar.make(binding.container, "You are offline", Snackbar.LENGTH_LONG)
+                        .show()
+                } else {
+                    Snackbar.make(binding.container, "You are online", Snackbar.LENGTH_LONG)
+                        .show()
+                }
+            })
     }
 }

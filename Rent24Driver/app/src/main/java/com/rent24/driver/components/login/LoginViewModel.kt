@@ -13,7 +13,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val email: MutableLiveData<String> by lazy { MutableLiveData<String>() }
     private val password: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private val apiManager: ApiManager by lazy { ApiManager.getInstance() }
+    private val apiManager: ApiManager by lazy { ApiManager.getInstance(token) }
+    private val token: String by lazy {
+        PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
+            .getString("token", "")
+    }
 
     fun getEmail(): LiveData<String> {
         return email

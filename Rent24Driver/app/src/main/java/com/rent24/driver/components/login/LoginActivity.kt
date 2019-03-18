@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var model: LoginViewModel
     private val TAG = LoginActivity::class.java.name
     private val signInButtonClickListener: View.OnClickListener by lazy {
         View.OnClickListener {
@@ -36,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
             ) {
                 binding.loginProgress
                     .show()
-                model.callLoginApi(
+                binding.model?.callLoginApi(
                     binding.email
                         .text
                         .toString(), binding.password
@@ -75,12 +74,10 @@ class LoginActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
 
-        model = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory
+        binding.model = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory
             .getInstance(application))
             .get(LoginViewModel::class.java)
-
-        binding.model = model
-        setupModel(model)
+        setupModel(binding.model!!)
         setupActionBar()
     }
 
