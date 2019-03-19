@@ -13,7 +13,7 @@ class JobListAdapter : RecyclerView.Adapter<JobListAdapter.ViewHolder>() {
     private var trips: List<JobTrip>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.schedule_job_item,
+        return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.job_list_item,
             parent, false))
     }
 
