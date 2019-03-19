@@ -2,6 +2,7 @@ package com.rent24.driver.repository
 
 import com.rent24.driver.api.login.request.LoginRequest
 import com.rent24.driver.components.HomeViewModel
+import com.rent24.driver.components.job.list.JobListViewModel
 import com.rent24.driver.components.login.LoginViewModel
 import com.rent24.driver.service.RestService
 import okhttp3.Interceptor
@@ -22,6 +23,18 @@ class ApiManager private constructor() {
         retrofit.create(RestService.AuthApis::class.java)
             .status(status)
             .enqueue(repository.statusCallback(viewModel))
+    }
+
+    fun scheduledTrips(viewModel: JobListViewModel) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .schedule()
+            .enqueue(repository.jobListCallback(viewModel, 0))
+    }
+
+    fun completedTrips(viewModel: JobListViewModel) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .history()
+            .enqueue(repository.jobListCallback(viewModel, 1))
     }
 
     companion object {

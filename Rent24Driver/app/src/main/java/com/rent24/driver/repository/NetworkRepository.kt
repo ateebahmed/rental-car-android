@@ -1,15 +1,14 @@
 package com.rent24.driver.repository
 
 import android.util.Log
-import com.rent24.driver.api.login.response.LoginError
-import com.rent24.driver.api.login.response.LoginResponse
-import com.rent24.driver.api.login.response.LoginSuccess
-import com.rent24.driver.api.login.response.StatusResponse
+import com.rent24.driver.api.login.response.*
 import com.rent24.driver.components.HomeViewModel
+import com.rent24.driver.components.job.list.JobListViewModel
 import com.rent24.driver.components.login.LoginViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Collections
 
 class NetworkRepository {
 
@@ -37,6 +36,20 @@ class NetworkRepository {
             override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
                 Log.d(TAG, "${response.code()} ${response.message()}")
                 viewModel.status(response.body() ?: StatusResponse(-1))
+            }
+        }
+    }
+
+    fun jobListCallback(viewModel: JobListViewModel, api: Int): Callback<JobResponse> {
+        return object: Callback<JobResponse> {
+            override fun onFailure(call: Call<JobResponse>, t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+
+            override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
+                Log.d(TAG, "${response.code()} ${response.message()}")
+                val data = response.body() ?: JobResponse(Collections.emptyList())
+                if (api == 0) viewModel.updateScheduledTrips(data) else viewModel.updateCompletedTrips(data)
             }
         }
     }

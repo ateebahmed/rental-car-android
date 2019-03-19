@@ -52,6 +52,8 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             android:background="@android:color/background_dark"
+            app:itemTextColor="@color/colorAshWhite"
+            app:itemIconTint="@color/colorAshWhite"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

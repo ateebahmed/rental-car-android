@@ -30,4 +30,8 @@
     <string name="scheduled">Scheduled</string>
     <string name="completed">Completed</string>
     <string name="job">Job</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="when">When:</string>
+    <string name="type">Type:</string>
 </resources>
