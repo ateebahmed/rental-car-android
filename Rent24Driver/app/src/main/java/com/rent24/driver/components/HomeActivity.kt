@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -23,6 +24,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
+import com.rent24.driver.components.job.list.JobListFragment
+import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.components.profile.ProfileFragment
 import com.rent24.driver.components.snaps.SnapsFragment
 import com.rent24.driver.databinding.ActivityHomeBinding
@@ -69,6 +72,21 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
     private lateinit var switch: SwitchCompat
+    private val onClickListener by lazy {
+        object: JobListFragment.OnClickListener {
+            override fun showDetailFragment(id: Int) {
+                val fragment = JobItemFragment.newInstance()
+                val bundle = Bundle()
+                bundle.putInt("id", id)
+                fragment.arguments = bundle
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack("detail")
+                    .commit()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +100,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             .get(HomeViewModel::class.java)
 
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupModel(binding.model!!)
         replaceFragment(onJobFragmentSelection())
@@ -131,6 +150,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0 &&
+            supportFragmentManager.fragments
+                .last() is JobItemFragment) {
+            supportFragmentManager.popBackStack()
+        } else super.onBackPressed()
+    }
+
     private fun onMapFragmentSelection(): SupportMapFragment {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = SupportMapFragment()
@@ -151,7 +178,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun onJobFragmentSelection(): Fragment {
-        return JobFragment.newInstance()
+        return JobFragment.newInstance(onClickListener)
     }
 
     private fun replaceFragment(fragment: Fragment): Boolean {

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.rent24.driver.components.invoice.InvoiceViewModel" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/invoice_coordinator_layout"
         android:layout_width="match_parent"
@@ -11,15 +15,44 @@
             android:id="@+id/invoice_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.invoice.InvoiceFragment">
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:minHeight="?attr/listPreferredItemHeight"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingStart="?attr/listPreferredItemPaddingLeft"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:paddingEnd="?attr/listPreferredItemPaddingRight">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/invoice_recycler_view"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/invoice_recycler_view" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/entry_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:layout_constraintStart_toStartOf="parent" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

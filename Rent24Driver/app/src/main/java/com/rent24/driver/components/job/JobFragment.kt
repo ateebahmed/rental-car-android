@@ -1,29 +1,25 @@
 package com.rent24.driver.components.job
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
-
 import com.rent24.driver.R
 import com.rent24.driver.components.job.list.JobListFragment
 import com.rent24.driver.databinding.JobFragmentBinding
 
 class JobFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = JobFragment()
-    }
-
     private lateinit var viewModel: JobViewModel
+
     private lateinit var binding: JobFragmentBinding
     private val TAG = JobFragment::class.java.name
-    private val onTabSelectedListener: TabLayout.OnTabSelectedListener by lazy {
+    private val onTabSelectedListener by lazy {
         object: TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {}
 
@@ -41,6 +37,7 @@ class JobFragment : Fragment() {
     }
     private val scheduledFragment by lazy { createFragment(0) }
     private val completedFragment by lazy { createFragment(1) }
+    private lateinit var onClickListener: JobListFragment.OnClickListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val tabLayout = inflater.inflate(R.layout.job_fragment, container, false) as ConstraintLayout
@@ -70,10 +67,18 @@ class JobFragment : Fragment() {
     }
 
     private fun createFragment(tab: Int): Fragment {
-        val fragment = JobListFragment.newInstance()
+        val fragment = JobListFragment.newInstance(onClickListener)
         val bundle = Bundle()
         bundle.putInt("tab", tab)
         fragment.arguments = bundle
         return fragment
+    }
+
+    companion object {
+        fun newInstance(listener: JobListFragment.OnClickListener): JobFragment {
+            val fragment = JobFragment()
+            fragment.onClickListener = listener
+            return fragment
+        }
     }
 }

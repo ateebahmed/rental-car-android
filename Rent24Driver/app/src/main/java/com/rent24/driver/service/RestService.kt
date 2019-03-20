@@ -22,6 +22,9 @@ interface RestService {
 
         @GET("job/history")
         fun history(): Call<JobResponse>
+
+        @GET("job/detail")
+        fun detail(@Query("jobid") id: Int): Call<JobResponse>
     }
 
     interface NonAuthApis {

@@ -4,6 +4,7 @@ import android.util.Log
 import com.rent24.driver.api.login.response.*
 import com.rent24.driver.components.HomeViewModel
 import com.rent24.driver.components.job.list.JobListViewModel
+import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,6 +52,20 @@ class NetworkRepository {
                 val data = response.body() ?: JobResponse(Collections.emptyList())
                 if (api == 0) viewModel.updateScheduledTrips(data) else viewModel.updateCompletedTrips(data)
             }
+        }
+    }
+
+    fun jobDetailCallback(viewModel: JobItemViewModel): Callback<JobResponse> {
+        return object: Callback<JobResponse> {
+            override fun onFailure(call: Call<JobResponse>, t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+
+            override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
+                Log.d(TAG, "${response.code()} ${response.message()}")
+                viewModel.updateModel(response.body() ?: JobResponse(Collections.emptyList()))
+            }
+
         }
     }
 

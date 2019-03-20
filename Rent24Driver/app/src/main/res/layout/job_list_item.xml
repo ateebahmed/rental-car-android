@@ -8,6 +8,7 @@
             type="com.rent24.driver.api.login.response.JobTrip" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/job_item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/listPreferredItemHeight"
