@@ -1,6 +1,7 @@
 package com.rent24.driver.service
 
 import com.rent24.driver.api.login.request.LoginRequest
+import com.rent24.driver.api.login.response.InvoiceResponse
 import com.rent24.driver.api.login.response.LoginResponse
 import com.rent24.driver.api.login.response.JobResponse
 import com.rent24.driver.api.login.response.StatusResponse
@@ -25,6 +26,9 @@ interface RestService {
 
         @GET("job/detail")
         fun detail(@Query("jobid") id: Int): Call<JobResponse>
+
+        @GET("job/getinvoice")
+        fun invoice(@Query("jobid") id: Int): Call<InvoiceResponse>
     }
 
     interface NonAuthApis {

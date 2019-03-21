@@ -3,6 +3,7 @@ package com.rent24.driver.repository
 import android.util.Log
 import com.rent24.driver.api.login.response.*
 import com.rent24.driver.components.HomeViewModel
+import com.rent24.driver.components.invoice.InvoiceViewModel
 import com.rent24.driver.components.job.list.JobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
@@ -64,6 +65,20 @@ class NetworkRepository {
             override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
                 Log.d(TAG, "${response.code()} ${response.message()}")
                 viewModel.updateModel(response.body() ?: JobResponse(Collections.emptyList()))
+            }
+
+        }
+    }
+
+    fun invoiceCallback(viewModel: InvoiceViewModel): Callback<InvoiceResponse> {
+        return object: Callback<InvoiceResponse> {
+            override fun onFailure(call: Call<InvoiceResponse>, t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+
+            override fun onResponse(call: Call<InvoiceResponse>, response: Response<InvoiceResponse>) {
+                Log.d(TAG, "${response.code()} ${response.message()}")
+                viewModel.updateInvoice(response.body() ?: InvoiceResponse(Collections.emptyList()))
             }
 
         }

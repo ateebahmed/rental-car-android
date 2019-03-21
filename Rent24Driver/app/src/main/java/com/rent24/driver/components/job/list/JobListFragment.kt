@@ -33,9 +33,11 @@ class JobListFragment : Fragment() {
         }
     }
     private lateinit var listener: OnClickListener
-    private val onClickListener: JobListAdapter.OnClickListener = object: JobListAdapter.OnClickListener {
-        override fun onClick(view: View, position: Int) {
-            openDetailFragment(position)
+    private val onClickListener: JobListAdapter.OnClickListener by lazy {
+        object: JobListAdapter.OnClickListener {
+            override fun onClick(view: View, position: Int) {
+                openDetailFragment(position)
+            }
         }
     }
 

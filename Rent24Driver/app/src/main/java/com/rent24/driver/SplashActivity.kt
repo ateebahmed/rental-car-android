@@ -63,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
     private fun isNetworkAvailable(): Boolean {
         val service = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val info: NetworkInfo? = service.activeNetworkInfo
-        return (null != info) && info.isConnectedOrConnecting
+        return (null != info) && info.isConnected
     }
 
     private fun canConnectToInternet(): Boolean {
