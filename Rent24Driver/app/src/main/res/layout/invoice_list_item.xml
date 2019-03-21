@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <data>
+        <variable
+            name="model"
+            type="com.rent24.driver.api.login.response.InvoiceEntry" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/listPreferredItemHeight"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight">
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/invoice_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{model.description}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -16,6 +26,7 @@
             android:id="@+id/entry_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{model.amountString}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

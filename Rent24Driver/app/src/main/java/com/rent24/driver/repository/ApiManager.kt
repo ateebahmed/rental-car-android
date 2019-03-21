@@ -2,6 +2,7 @@ package com.rent24.driver.repository
 
 import com.rent24.driver.api.login.request.LoginRequest
 import com.rent24.driver.components.HomeViewModel
+import com.rent24.driver.components.invoice.InvoiceViewModel
 import com.rent24.driver.components.job.list.JobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
@@ -42,6 +43,12 @@ class ApiManager private constructor() {
         retrofit.create(RestService.AuthApis::class.java)
             .detail(id)
             .enqueue(repository.jobDetailCallback(viewModel))
+    }
+
+    fun invoiceDetail(viewModel: InvoiceViewModel, id: Int) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .invoice(id)
+            .enqueue(repository.invoiceCallback(viewModel))
     }
 
     companion object {

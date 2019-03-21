@@ -170,7 +170,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun onInvoiceFragmentSelection(): Fragment {
-        return InvoiceFragment.newInstance()
+        val fragment = InvoiceFragment.newInstance()
+        // TODO: send scheduled job id
+        val bundle = Bundle()
+        bundle.putInt("jobId", 6)
+        fragment.arguments = bundle
+        return fragment
     }
 
     private fun onProfileFragmentSelection(): Fragment {

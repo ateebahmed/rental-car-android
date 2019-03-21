@@ -1,27 +1,42 @@
 package com.rent24.driver.components.invoice.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.rent24.driver.R
+import com.rent24.driver.api.login.response.InvoiceEntry
 import com.rent24.driver.databinding.InvoiceListItemBinding
 
 class InvoiceAdapter : RecyclerView.Adapter<InvoiceAdapter.ViewHolder>() {
+
+    private var entries: List<InvoiceEntry>? = null
+    private lateinit var binding: InvoiceListItemBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.invoice_list_item, parent,
+            false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return entries?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        holder.bind(entries?.get(position)!!)
+    }
+
+    fun setEntries(entries: List<InvoiceEntry>) {
+        this.entries = entries
+        notifyDataSetChanged()
     }
 
     class ViewHolder(private val binding: InvoiceListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-//        fun bind(trip: ) {
-//            binding.model = trip
-//            binding.executePendingBindings()
-//        }
+        fun bind(entry: InvoiceEntry) {
+            binding.model = entry
+            binding.executePendingBindings()
+        }
     }
 }

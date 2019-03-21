@@ -17,6 +17,17 @@ import com.rent24.driver.databinding.InvoiceFragmentBinding
 class InvoiceFragment : Fragment() {
 
     private lateinit var binding: InvoiceFragmentBinding
+    private val viewModel: InvoiceViewModel by lazy {
+        ViewModelProviders.of(this)
+            .get(InvoiceViewModel::class.java)
+    }
+    private var jobId: Int = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        jobId = arguments?.getInt("jobId") ?: jobId
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = inflater.inflate(R.layout.invoice_fragment, container, false)
@@ -27,18 +38,24 @@ class InvoiceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.model = ViewModelProviders.of(this)
-            .get(InvoiceViewModel::class.java)
-
-        binding.model
-            ?.getTotalAmount()!!
-            .observe(this, Observer {})
 
         binding.invoiceRecyclerView
             .adapter = InvoiceAdapter()
 
         binding.invoiceRecyclerView
             .layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        viewModel.callInvoiceApi(jobId)
+
+        viewModel.getTotalAmount()
+            .observe(this, Observer { binding.totalAmount.text = it.toString() })
+
+        viewModel.getEntries()
+            .observe(this, Observer {
+                (binding.invoiceRecyclerView
+                    .adapter as InvoiceAdapter)
+                    .setEntries(it)
+            })
     }
 
     companion object {
