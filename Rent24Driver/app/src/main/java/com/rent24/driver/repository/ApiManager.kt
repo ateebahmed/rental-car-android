@@ -51,6 +51,12 @@ class ApiManager private constructor() {
             .enqueue(repository.invoiceCallback(viewModel))
     }
 
+    fun firebaseToken(deviceType: String, token: String) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .token(deviceType, token)
+            .enqueue(repository.tokenCallback())
+    }
+
     companion object {
 
         private const val baseUrl = "http://www.technidersolutions.com/sandbox/rmc/public/api/"

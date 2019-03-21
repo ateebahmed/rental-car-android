@@ -10,11 +10,14 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import com.rent24.driver.components.HomeActivity
 import com.rent24.driver.components.login.LoginActivity
 import java.io.IOException
 
-const val LOGIN_REQUEST_CODE = 200
+private const val LOGIN_REQUEST_CODE = 200
+
+private val TAG = SplashActivity::class.java.name
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -22,7 +25,7 @@ const val LOGIN_REQUEST_CODE = 200
  */
 class SplashActivity : AppCompatActivity() {
 
-    private val TAG = SplashActivity::class.java.name
+    private val viewModel by lazy { SplashViewModel(application) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,13 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkSession() {
         if (isNetworkAvailable() && canConnectToInternet()) {
+            viewModel.updateFirebaseToken(OnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "firebase token ${task.result?.token}")
+                } else {
+                    Log.e(TAG, "Error occured", task.exception)
+                }
+            })
             val token = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                 .getString("token", "")
             if (token?.isEmpty()!!) {

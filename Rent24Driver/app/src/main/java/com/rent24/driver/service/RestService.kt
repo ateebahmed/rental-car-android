@@ -29,6 +29,10 @@ interface RestService {
 
         @GET("job/getinvoice")
         fun invoice(@Query("jobid") id: Int): Call<InvoiceResponse>
+
+        @GET("user/token")
+        fun token(@Query("device_type") deviceType: String, @Query("device_token") deviceToken: String):
+                Call<StatusResponse>
     }
 
     interface NonAuthApis {

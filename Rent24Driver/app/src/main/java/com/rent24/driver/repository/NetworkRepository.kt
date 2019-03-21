@@ -84,6 +84,19 @@ class NetworkRepository {
         }
     }
 
+    fun tokenCallback(): Callback<StatusResponse> {
+        return object: Callback<StatusResponse> {
+            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+
+            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+                Log.d(TAG, "${response.code()} ${response.message()}")
+            }
+
+        }
+    }
+
     companion object {
 
         @Volatile private var instance: NetworkRepository? = null
