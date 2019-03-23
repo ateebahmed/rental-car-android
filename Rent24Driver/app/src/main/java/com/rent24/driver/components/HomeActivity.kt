@@ -1,12 +1,17 @@
 package com.rent24.driver.components
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -30,12 +35,15 @@ import com.rent24.driver.components.profile.ProfileFragment
 import com.rent24.driver.components.snaps.SnapsFragment
 import com.rent24.driver.databinding.ActivityHomeBinding
 
-class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
+private val TAG = HomeActivity::class.java.name
+private const val COARSE_LOCATION_REQUEST_CODE = 2
+
+class HomeActivity : AppCompatActivity(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var mMap: GoogleMap
     private var currentItem = 0
-    private val onNavigationItemSelectedListener: BottomNavigationView.OnNavigationItemSelectedListener by lazy {
+    private val onNavigationItemSelectedListener by lazy {
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             if (currentItem == item.itemId) {
                 return@OnNavigationItemSelectedListener false
@@ -44,6 +52,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             when (item.itemId) {
                 R.id.job_map -> {
                     fragment = onMapFragmentSelection()
+                    getLastLocation()
                     return@OnNavigationItemSelectedListener replaceFragment(fragment)
                 }
                 R.id.snaps -> {
@@ -63,12 +72,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
     private var status: Boolean = false
-    private val onStatusCheckedChangeListener: CompoundButton.OnCheckedChangeListener by lazy {
+    private val onStatusCheckedChangeListener by lazy {
         CompoundButton.OnCheckedChangeListener { _, isChecked ->
             binding.apiProgress
                 .show()
-            binding.model
-                ?.callStatusApi(isChecked)
+            viewModel.callStatusApi(isChecked)
         }
     }
     private lateinit var switch: SwitchCompat
@@ -87,6 +95,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory(application))
+            .get(HomeViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,13 +108,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.navigation
             .setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-        binding.model = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory(application))
-            .get(HomeViewModel::class.java)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setupModel(binding.model!!)
+        setupModel(viewModel)
         replaceFragment(onJobFragmentSelection())
     }
 
@@ -156,6 +166,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                 .last() is JobItemFragment) {
             supportFragmentManager.popBackStack()
         } else super.onBackPressed()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            COARSE_LOCATION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getLastLocation()
+                } else {
+                    Snackbar.make(binding.container, "Location detection permission denied", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
     }
 
     private fun onMapFragmentSelection(): SupportMapFragment {
@@ -214,5 +237,34 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                         .show()
                 }
             })
+    }
+
+    private fun getLastLocation() {
+        //        check for permission
+        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED) {
+            // request already granted
+            viewModel.getLastLocation()
+                .lastLocation
+                .addOnCompleteListener { t ->
+                    if (t.isSuccessful) {
+                        Log.d(TAG, "location detected ${t.result?.latitude} : ${t.result?.longitude}")
+                    } else {
+                        Log.e(TAG, "error occured in detecting location", t.exception)
+                    }
+                }
+        } else {
+            //            if we need to show user addiditonal information
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                val snackbar = Snackbar.make(binding.container, "Location permission needed to show location on map", Snackbar.LENGTH_INDEFINITE)
+                snackbar.setAction(android.R.string.ok) { snackbar.dismiss() }
+                snackbar.show()
+                Log.d(TAG, "showing extra information Location permission needed to show location on map")
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), COARSE_LOCATION_REQUEST_CODE)
+            } else {
+                Log.d(TAG, "no need to show anything, just show the dialog")
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), COARSE_LOCATION_REQUEST_CODE)
+            }
+        }
     }
 }

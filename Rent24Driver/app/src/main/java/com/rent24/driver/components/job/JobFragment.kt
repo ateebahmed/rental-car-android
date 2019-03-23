@@ -1,6 +1,7 @@
 package com.rent24.driver.components.job
 
 import android.os.Bundle
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,12 @@ import com.rent24.driver.R
 import com.rent24.driver.components.job.list.JobListFragment
 import com.rent24.driver.databinding.JobFragmentBinding
 
+private val TAG = JobFragment::class.java.name
+
 class JobFragment : Fragment() {
 
     private lateinit var viewModel: JobViewModel
-
     private lateinit var binding: JobFragmentBinding
-    private val TAG = JobFragment::class.java.name
     private val onTabSelectedListener by lazy {
         object: TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {}
