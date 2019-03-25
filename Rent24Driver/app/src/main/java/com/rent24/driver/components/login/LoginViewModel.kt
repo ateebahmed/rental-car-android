@@ -6,8 +6,6 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,13 +17,9 @@ private val TAG = LoginViewModel::class.java.name
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val email: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private val password: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private val apiManager: ApiManager by lazy { ApiManager.getInstance(token) }
-    private val token: String by lazy {
-        PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-            .getString("token", "")
-    }
+    val email by lazy { MutableLiveData<String>() }
+    val password by lazy { MutableLiveData<String>() }
+    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
     val signInButtonClickListener by lazy {
         View.OnClickListener {
             if (validateFields()) {
@@ -33,22 +27,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 callLoginApi(email.value ?: "", password.value ?: "")
             } else {
                 snackbarMessage.value = "One or more inputs are empty"
-            }
-        }
-    }
-    val onEmailFocusChangeListener by lazy {
-        View.OnFocusChangeListener { v, focus ->
-            val editText = (v as AppCompatAutoCompleteTextView)
-            if (!focus && editText.text?.isNotEmpty() == true) {
-                email.value = editText.text.toString()
-            }
-        }
-    }
-    val onPasswordFocusChangeListener by lazy {
-        View.OnFocusChangeListener { v, focus ->
-            val editText = (v as AppCompatEditText)
-            if (!focus && editText.text?.isNotEmpty() == true) {
-                password.value = editText.text.toString()
             }
         }
     }
@@ -76,25 +54,29 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveToken(response: LoginResponse) {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-        with(preferences.edit()) {
-            if (response.success
-                    .token
-                    .isNotEmpty()) {
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
+        if (response.success
+                .token
+                .isNotBlank()) {
+            with(sharedPreferences.edit()) {
                 putString("token", response.success
                     .token)
-            } else {
+                apply()
+            }
+        } else {
+            with(sharedPreferences.edit()) {
                 putString("error", response.error
                     .error)
+                apply()
             }
-            apply()
         }
     }
 
     private fun validateFields(): Boolean {
         return (email.value
-                ?.isNotEmpty() == true && password.value
-                ?.isNotEmpty() == true)
+                ?.isNotBlank() == true && password.value
+                ?.isNotBlank() == true)
     }
 
     fun shouldShowLoadingProgressBar(): LiveData<Boolean> {

@@ -1,8 +1,9 @@
 package com.rent24.driver.service
 
+import android.preference.PreferenceManager
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
-import com.rent24.driver.components.HomeViewModel
+import com.rent24.driver.repository.ApiManager
 
 private val TAG = JobNotificationService::class.java.name
 
@@ -13,6 +14,12 @@ class JobNotificationService : FirebaseMessagingService() {
 
         Log.d(TAG, "firebase token: $p0")
 
-        HomeViewModel(application).updateNewToken(p0 ?: "")
+        with(PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            .edit()) {
+            putString("token", p0)
+            apply()
+        }
+        ApiManager.getInstance(applicationContext)
+            .firebaseToken("android", p0 ?: "")
     }
 }

@@ -57,10 +57,6 @@ class LoginActivity : AppCompatActivity() {
     private fun setupModelObservers(model: LoginViewModel) {
         Log.d(TAG, "Starting LoginActivity.setupModelObservers")
 
-        binding.email
-            .onFocusChangeListener = model.onEmailFocusChangeListener
-        binding.password
-            .onFocusChangeListener = model.onPasswordFocusChangeListener
         binding.emailSignInButton
             .setOnClickListener(model.signInButtonClickListener)
         binding.model

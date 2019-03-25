@@ -244,7 +244,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, ActivityCompat.OnR
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED) {
             // request already granted
-            viewModel.getLastLocation()
+            viewModel.locationClient
                 .lastLocation
                 .addOnCompleteListener { t ->
                     if (t.isSuccessful) {
