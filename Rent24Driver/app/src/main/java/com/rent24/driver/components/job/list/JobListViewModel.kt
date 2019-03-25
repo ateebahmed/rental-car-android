@@ -17,11 +17,7 @@ class JobListViewModel(application: Application) : AndroidViewModel(application)
     private val completedTrips: MutableLiveData<List<JobTrip>> by lazy {
         MutableLiveData<List<JobTrip>>()
     }
-    private val apiManager: ApiManager by lazy { ApiManager.getInstance(token) }
-    private val token: String by lazy {
-        PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-            .getString("token", "")
-    }
+    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
 
     fun getScheduledTrips(): LiveData<List<JobTrip>> {
         return scheduledTrips

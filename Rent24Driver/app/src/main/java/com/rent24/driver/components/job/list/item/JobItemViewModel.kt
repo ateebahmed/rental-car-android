@@ -12,11 +12,7 @@ import com.rent24.driver.repository.ApiManager
 class JobItemViewModel(application: Application) : AndroidViewModel(application) {
 
     private val liveModel: MutableLiveData<JobTrip> by lazy { MutableLiveData<JobTrip>() }
-    private val apiManager: ApiManager by lazy { ApiManager.getInstance(token) }
-    private val token: String by lazy {
-        PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-            .getString("token", "")
-    }
+    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
 
     fun updateModel(id: Int) {
         apiManager.getJobDetail(this, id)

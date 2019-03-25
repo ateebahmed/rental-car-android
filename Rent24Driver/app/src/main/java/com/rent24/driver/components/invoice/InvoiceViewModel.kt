@@ -13,11 +13,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
 
     private val totalAmount: MutableLiveData<Double> by lazy { MutableLiveData<Double>() }
     private val entries: MutableLiveData<List<InvoiceEntry>> by lazy { MutableLiveData<List<InvoiceEntry>>() }
-    private val apiManager: ApiManager by lazy { ApiManager.getInstance(token) }
-    private val token: String by lazy {
-        PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-            .getString("token", "")
-    }
+    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
 
     fun getTotalAmount(): LiveData<Double> {
         return totalAmount

@@ -1,71 +1,59 @@
 package com.rent24.driver.components
 
+import android.Manifest
 import android.app.Application
-import android.content.Context
-import android.preference.PreferenceManager
+import android.content.pm.PackageManager
+import android.location.Location
 import android.util.Log
+import android.widget.CompoundButton
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdate
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.iid.InstanceIdResult
 import com.rent24.driver.api.login.response.StatusResponse
 import com.rent24.driver.repository.ApiManager
-import com.rent24.driver.service.LocationService
 
 private val TAG = HomeViewModel::class.java.name
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val status: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
-    private val apiManager: ApiManager by lazy { ApiManager.getInstance(apiToken) }
-    private val apiToken: String by lazy {
-        PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-            .getString("token", "")
+    private val status by lazy { MutableLiveData<Boolean>() }
+    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
+    val statusOnCheckedChangeListener by lazy {
+        CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            switchState = isChecked
+            callStatusApi(isChecked)
+        }
     }
-    private val firebaseToken: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    private lateinit var locationService: LocationService
-
-
-    fun callStatusApi(status: Boolean) {
-        apiManager.status(if (status) "online" else "offline", this)
-    }
+    private var switchState = false
+    private val snackbarMessage by lazy { MutableLiveData<String>() }
 
     fun status(response: StatusResponse) {
         status.value = response.success > 0
+        updateSnackbarMessage(status.value ?: false)
     }
 
-    fun getStatus(): LiveData<Boolean> {
-        return status
+    fun getStatus(): LiveData<Boolean> = status
+
+    fun getSnackbarMessage(): LiveData<String> = snackbarMessage
+
+    private fun callStatusApi(status: Boolean) {
+        apiManager.status(if (status) "online" else "offline", this)
     }
 
-    fun updateNewToken(firebaseToken: String) {
-        this.firebaseToken.value = firebaseToken
-        apiManager.firebaseToken("android", this.firebaseToken.value!!)
-    }
-
-    fun updateFirebaseToken(completeListener: OnCompleteListener<InstanceIdResult>) {
-        FirebaseInstanceId.getInstance()
-            .instanceId
-            .addOnCompleteListener(completeListener)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    updateNewToken(task.result?.token ?: "")
-                    Log.d(TAG, "firebase token ${task.result?.token}")
-                }
-            }
-    }
-
-    fun getFirebaseToken(): LiveData<String> {
-        return firebaseToken
-    }
-
-    fun getLastLocation(): FusedLocationProviderClient {
-        if (!::locationService.isInitialized) {
-            locationService = LocationService.getInstance(getApplication<Application>().applicationContext)
+    private fun updateSnackbarMessage(status: Boolean) {
+        if (status && switchState) {
+            snackbarMessage.value = "You are online"
+        } else if(status && !switchState) {
+            snackbarMessage.value = "You are offline"
+        } else {
+            snackbarMessage.value = "Error occurred, please try again"
         }
-        return locationService.getLocationClient()
     }
 }
