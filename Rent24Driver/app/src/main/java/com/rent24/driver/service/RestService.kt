@@ -1,6 +1,7 @@
 package com.rent24.driver.service
 
 import com.rent24.driver.api.login.request.LoginRequest
+import com.rent24.driver.api.login.request.PositionRequest
 import com.rent24.driver.api.login.response.InvoiceResponse
 import com.rent24.driver.api.login.response.LoginResponse
 import com.rent24.driver.api.login.response.JobResponse
@@ -33,6 +34,9 @@ interface RestService {
         @GET("user/token")
         fun token(@Query("device_type") deviceType: String, @Query("device_token") deviceToken: String):
                 Call<StatusResponse>
+
+        @POST("user/position")
+        fun position(@Body position: PositionRequest): Call<StatusResponse>
     }
 
     interface NonAuthApis {

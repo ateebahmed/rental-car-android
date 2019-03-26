@@ -4,6 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import com.rent24.driver.api.login.request.LoginRequest
+import com.rent24.driver.api.login.request.PositionRequest
 import com.rent24.driver.api.login.response.*
 import com.rent24.driver.components.HomeViewModel
 import com.rent24.driver.components.invoice.InvoiceViewModel
@@ -88,6 +89,12 @@ class ApiManager private constructor(context: Context) {
             .enqueue(tokenCallback())
     }
 
+    fun updatePosition(positionRequest: PositionRequest) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .position(positionRequest)
+            .enqueue(positionCallback())
+    }
+
     private fun getToken(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
             ?.getString("token", "") ?: ""
@@ -161,6 +168,18 @@ class ApiManager private constructor(context: Context) {
     }
 
     private fun tokenCallback(): Callback<StatusResponse> {
+        return object: Callback<StatusResponse> {
+            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+
+            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+                Log.d(TAG, "${response.code()} ${response.message()}")
+            }
+        }
+    }
+
+    private fun positionCallback(): Callback<StatusResponse> {
         return object: Callback<StatusResponse> {
             override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
                 Log.e(TAG, t.message, t)

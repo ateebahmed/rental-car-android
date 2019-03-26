@@ -20,6 +20,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnCompleteListener
+import com.rent24.driver.api.login.request.PositionRequest
+import com.rent24.driver.repository.ApiManager
 
 private val TAG = ParentMapViewModel::class.java.name
 
@@ -70,10 +72,12 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                     updateMarker(latLng)
                     updateCamera(latLng)
                 }
+                apiManager.updatePosition(PositionRequest(latLng.latitude, latLng.longitude))
             }
         }
     }
     private var detectLocation = false
+    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
 
     fun getLastLocationMarker(): LiveData<MarkerOptions> = lastLocationMarker
 
