@@ -1,6 +1,7 @@
 package com.rent24.driver.components.map
 
 import android.Manifest
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -17,10 +21,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.databinding.ParentMapFragmentBinding
 
-private const val COARSE_LOCATION_REQUEST_CODE = 2
+private const val LOCATION_REQUEST_CODE = 2
 private val TAG = ParentMapFragment::class.java.name
+private const val LOCATION_SETTINGS_REQUEST_CODE = 3
+private const val FINE_LOCATION_REQUEST_CODE = 4
 
-class ParentMapFragment : Fragment(), OnMapReadyCallback {
+class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private lateinit var viewModel: ParentMapViewModel
     private lateinit var mMap: GoogleMap
@@ -36,7 +42,6 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ParentMapViewModel::class.java)
         setupModelObservers(viewModel)
-        getLastLocation()
         val map = SupportMapFragment()
         childFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, map)
@@ -55,11 +60,25 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        viewModel.onMapReady()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        viewModel.onRequestPermissionsResult(requestCode, grantResults, COARSE_LOCATION_REQUEST_CODE)
+        viewModel.onRequestPermissionsResult(requestCode, grantResults, LOCATION_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "result code $resultCode, request code $requestCode")
+        viewModel.onActivityResult(requestCode, resultCode, LOCATION_SETTINGS_REQUEST_CODE)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateLastLocation()
+    }
+
+    override fun onPause() {
+        viewModel.stopLocationUpdates()
+        super.onPause()
     }
 
     private fun setupModelObservers(model: ParentMapViewModel) {
@@ -79,7 +98,7 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback {
         model.askForLocationPermission()
             .observe(this, Observer {
                 if (it) {
-                    askForPermission()
+                    askForLocationPermission()
                 }
             })
         model.getSnackbarMessage()
@@ -87,30 +106,49 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback {
                 Snackbar.make(binding.container, it, Snackbar.LENGTH_SHORT)
                     .show()
             })
+        model.locationSettingsRequest()
+            .observe(this, Observer {
+                requestLocationSettings(it)
+            })
     }
 
-    private fun getLastLocation() {
-        viewModel.updateLastLocation()
-    }
-
-    private fun askForPermission() {
+    private fun askForLocationPermission() {
         //            if we need to show user additional information
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this.activity!!,
-                Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) ||
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
             val snackbar = Snackbar.make(binding.container, "Location permission needed to show location on map",
                 Snackbar.LENGTH_INDEFINITE)
             snackbar.setAction(android.R.string.ok) {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
                 snackbar.dismiss()
-                ActivityCompat.requestPermissions(this.activity!!, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                    COARSE_LOCATION_REQUEST_CODE)
             }
             snackbar.show()
             Log.d(TAG, "showing extra information Location permission needed to show location on map")
         } else {
             Log.d(TAG, "no need to show anything, just show the dialog")
-            ActivityCompat.requestPermissions(this.activity!!, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                COARSE_LOCATION_REQUEST_CODE)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
         }
+    }
+
+    private fun requestLocationSettings(builder: LocationSettingsRequest.Builder) {
+        LocationServices.getSettingsClient(this.activity!!)
+            .checkLocationSettings(builder.build())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d(TAG, "settings are complete")
+                    viewModel.updateLocationRequest()
+                } else {
+                    val exception = it.exception
+                    Log.d(TAG, "exception occurred", exception)
+                    if (exception is ResolvableApiException) {
+                        Log.d(TAG, "exception resoultion starting", exception)
+                        startIntentSenderForResult(exception.resolution.intentSender, LOCATION_SETTINGS_REQUEST_CODE,
+                            Intent(), 0, 0, 0, Bundle())
+                    }
+                }
+            }
     }
 
     companion object {
