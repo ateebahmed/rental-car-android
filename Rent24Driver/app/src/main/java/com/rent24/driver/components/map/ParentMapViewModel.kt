@@ -72,12 +72,10 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                     updateMarker(latLng)
                     updateCamera(latLng)
                 }
-                apiManager.updatePosition(PositionRequest(latLng.latitude, latLng.longitude))
             }
         }
     }
     private var detectLocation = false
-    private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
 
     fun getLastLocationMarker(): LiveData<MarkerOptions> = lastLocationMarker
 

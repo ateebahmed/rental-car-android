@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.rent24.driver.components.HomeActivity
+import com.rent24.driver.components.home.HomeActivity
 import com.rent24.driver.components.login.LoginActivity
 
 private const val LOGIN_REQUEST_CODE = 200

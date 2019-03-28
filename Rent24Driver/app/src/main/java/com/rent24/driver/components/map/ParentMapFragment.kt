@@ -24,7 +24,6 @@ import com.rent24.driver.databinding.ParentMapFragmentBinding
 private const val LOCATION_REQUEST_CODE = 2
 private val TAG = ParentMapFragment::class.java.name
 private const val LOCATION_SETTINGS_REQUEST_CODE = 3
-private const val FINE_LOCATION_REQUEST_CODE = 4
 
 class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 

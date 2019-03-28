@@ -9,12 +9,13 @@
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality. 
+         location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
@@ -26,6 +27,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
+            android:name=".service.LocationDetectionService"
+            android:enabled="true"
+            android:exported="false"></service>
+        <service
             android:name=".service.JobNotificationService"
             android:enabled="false"
             android:exported="false">
@@ -35,7 +40,7 @@
         </service>
 
         <activity
-            android:name=".components.HomeActivity"
+            android:name=".components.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:parentActivityName=".SplashActivity"
             android:theme="@style/NoActionBarTheme">
@@ -62,7 +67,7 @@
         <activity
             android:name=".components.login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".SplashActivity"></activity>
+            android:parentActivityName=".SplashActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

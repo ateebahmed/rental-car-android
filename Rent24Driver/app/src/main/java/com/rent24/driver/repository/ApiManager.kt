@@ -5,8 +5,13 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.rent24.driver.api.login.request.LoginRequest
 import com.rent24.driver.api.login.request.PositionRequest
-import com.rent24.driver.api.login.response.*
-import com.rent24.driver.components.HomeViewModel
+import com.rent24.driver.api.login.response.LoginError
+import com.rent24.driver.api.login.response.LoginResponse
+import com.rent24.driver.api.login.response.LoginSuccess
+import com.rent24.driver.api.login.response.StatusResponse
+import com.rent24.driver.api.login.response.JobResponse
+import com.rent24.driver.api.login.response.InvoiceResponse
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.invoice.InvoiceViewModel
 import com.rent24.driver.components.job.list.JobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel

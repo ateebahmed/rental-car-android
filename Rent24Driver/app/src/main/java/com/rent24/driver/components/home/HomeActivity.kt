@@ -1,5 +1,6 @@
-package com.rent24.driver.components
+package com.rent24.driver.components.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.Menu
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.rent24.driver.service.LocationDetectionService
 import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
@@ -182,6 +184,14 @@ class HomeActivity : AppCompatActivity() {
             .observe(this, Observer {
                 Snackbar.make(binding.container, it, Snackbar.LENGTH_SHORT)
                     .show()
+            })
+        model.getStartBackgroundService()
+            .observe(this, Observer {
+                if (it) {
+                    startService(Intent(this, LocationDetectionService::class.java))
+                } else {
+                    stopService(Intent(this, LocationDetectionService::class.java))
+                }
             })
     }
 }
