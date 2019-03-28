@@ -20,8 +20,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnCompleteListener
-import com.rent24.driver.api.login.request.PositionRequest
-import com.rent24.driver.repository.ApiManager
 
 private val TAG = ParentMapViewModel::class.java.name
 

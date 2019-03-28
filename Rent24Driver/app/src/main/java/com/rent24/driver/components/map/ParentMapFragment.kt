@@ -32,7 +32,7 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
     private lateinit var binding: ParentMapFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val layout = inflater.inflate(R.layout.parent_map_fragment, container, false)
+        val layout = inflater.inflate(R.layout.parent_fragment, container, false)
         binding = ParentMapFragmentBinding.bind(layout)
         return layout
     }
@@ -112,22 +112,21 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
     }
 
     private fun askForLocationPermission() {
+        val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
         //            if we need to show user additional information
         if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) ||
             shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
             val snackbar = Snackbar.make(binding.container, "Location permission needed to show location on map",
                 Snackbar.LENGTH_INDEFINITE)
             snackbar.setAction(android.R.string.ok) {
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+                requestPermissions(permissions, LOCATION_REQUEST_CODE)
                 snackbar.dismiss()
             }
             snackbar.show()
             Log.d(TAG, "showing extra information Location permission needed to show location on map")
         } else {
             Log.d(TAG, "no need to show anything, just show the dialog")
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+            requestPermissions(permissions, LOCATION_REQUEST_CODE)
         }
     }
 

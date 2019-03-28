@@ -3,7 +3,6 @@ package com.rent24.driver.service
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +17,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleService
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -30,7 +30,8 @@ import com.rent24.driver.repository.ApiManager
 private const val CHANNEL_ID = "Service"
 private val TAG = LocationDetectionService::class.java.name
 
-class LocationDetectionService : Service() {
+class LocationDetectionService : LifecycleService() {
+
     private var looper: Looper? = null
     private var handler: ServiceHandler? = null
     private val locationCallback by lazy {
@@ -52,10 +53,12 @@ class LocationDetectionService : Service() {
     private val apiManager by lazy { ApiManager.getInstance(application.applicationContext) }
 
     override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
         return null
     }
 
     override fun onCreate() {
+        super.onCreate()
         Log.d(TAG, "Service onCreate")
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
             start()
@@ -64,8 +67,9 @@ class LocationDetectionService : Service() {
             this@LocationDetectionService.handler = ServiceHandler(looper)
         }
     }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
         Log.d(TAG, "Background service starting")
 
         handler?.obtainMessage()?.also {
@@ -82,12 +86,14 @@ class LocationDetectionService : Service() {
         stopForeground(true)
         super.onDestroy()
     }
+
     /*
     * This is handler class for service tasks
     * Responsible for handling background tasks
     * We use it to detect location of device
     */
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
+
         private val locationRequest by lazy {
             LocationRequest.create()
                 .apply {
@@ -114,9 +120,7 @@ class LocationDetectionService : Service() {
 
             Log.d(TAG, "Notification creating")
 
-            val builder = NotificationCompat.Builder(this@LocationDetectionService,
-                CHANNEL_ID
-            )
+            val builder = NotificationCompat.Builder(this@LocationDetectionService, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Location Detection Service")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
