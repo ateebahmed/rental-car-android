@@ -18,7 +18,10 @@ private val TAG = JobFragment::class.java.name
 
 class JobFragment : Fragment() {
 
-    private lateinit var viewModel: JobViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this)
+            .get(JobViewModel::class.java)
+    }
     private lateinit var binding: JobFragmentBinding
     private val onTabSelectedListener by lazy {
         object: TabLayout.OnTabSelectedListener {
@@ -51,11 +54,6 @@ class JobFragment : Fragment() {
         replaceFragment(0)
         binding.tabs
             .addOnTabSelectedListener(onTabSelectedListener)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(JobViewModel::class.java)
     }
 
     private fun replaceFragment(tab: Int): Boolean {

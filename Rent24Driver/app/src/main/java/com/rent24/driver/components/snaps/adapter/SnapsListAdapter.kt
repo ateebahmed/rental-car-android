@@ -3,14 +3,12 @@ package com.rent24.driver.components.snaps.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rent24.driver.R
 import com.rent24.driver.databinding.SnapItemBinding
-import kotlinx.android.synthetic.main.snap_item.view.snap_image
+import kotlinx.android.synthetic.main.snap_item.view.*
 
 class SnapsListAdapter : RecyclerView.Adapter<SnapsListAdapter.ViewHolder>() {
 
@@ -22,18 +20,14 @@ class SnapsListAdapter : RecyclerView.Adapter<SnapsListAdapter.ViewHolder>() {
         binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.snap_item, parent,
             false)
         context = parent.context
-        binding.root.layoutParams = RecyclerView.LayoutParams(200, 300)
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return imageCount
-    }
+    override fun getItemCount(): Int = imageCount
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context)
-            .load("https://picsum.photos/200/300/?random")
-            .fitCenter()
+            .load("https://picsum.photos/1080/?random")
             .into(holder.itemView.snap_image)
         holder.bind()
     }
@@ -41,10 +35,6 @@ class SnapsListAdapter : RecyclerView.Adapter<SnapsListAdapter.ViewHolder>() {
     class ViewHolder(private val binding: SnapItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
-            binding.snapImage.setOnClickListener {
-                binding.snapImage.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
-                binding.snapImage.scaleType = ImageView.ScaleType.FIT_XY
-            }
             binding.executePendingBindings()
         }
     }

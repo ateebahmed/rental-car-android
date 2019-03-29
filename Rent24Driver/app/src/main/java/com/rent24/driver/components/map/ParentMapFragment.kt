@@ -19,7 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
-import com.rent24.driver.databinding.ParentMapFragmentBinding
+import com.rent24.driver.databinding.ParentFragmentBinding
 
 private const val LOCATION_REQUEST_CODE = 2
 private val TAG = ParentMapFragment::class.java.name
@@ -29,11 +29,11 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
 
     private lateinit var viewModel: ParentMapViewModel
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: ParentMapFragmentBinding
+    private lateinit var binding: ParentFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = inflater.inflate(R.layout.parent_fragment, container, false)
-        binding = ParentMapFragmentBinding.bind(layout)
+        binding = ParentFragmentBinding.bind(layout)
         return layout
     }
 

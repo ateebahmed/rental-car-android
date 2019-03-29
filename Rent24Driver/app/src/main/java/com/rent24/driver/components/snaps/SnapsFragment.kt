@@ -1,21 +1,22 @@
 package com.rent24.driver.components.snaps
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.rent24.driver.components.snaps.dialog.CategoryListDialogFragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.rent24.driver.R
-import com.rent24.driver.components.snaps.adapter.SnapsListAdapter
+import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
+import com.rent24.driver.components.snaps.dialog.CategoryListDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
 
 class SnapsFragment : Fragment() {
 
-    private lateinit var viewModel: SnapsViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this)
+            .get(SnapsViewModel::class.java)
+    }
     private lateinit var binding: SnapsFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -26,25 +27,9 @@ class SnapsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this)
-            .get(SnapsViewModel::class.java)
 
-        val startLayout = binding.snapStartLayout
-        val endLayout = binding.snapEndLayout
-        val receiptLayout = binding.snapReceiptLayout
-
-        startLayout.headerTextview.text = "Start Snaps"
-        startLayout.snapRecyclerview.adapter = SnapsListAdapter()
-        startLayout.snapRecyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-
-        endLayout.headerTextview.text = "End Snaps"
-        endLayout.snapRecyclerview.adapter = SnapsListAdapter()
-        endLayout.snapRecyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-
-        receiptLayout.headerTextview.text = "Receipt Snaps"
-        receiptLayout.snapRecyclerview.adapter = SnapsListAdapter()
-        receiptLayout.snapRecyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-
+        binding.snapsViewPager.adapter = SnapsFragmentPagerAdapter(childFragmentManager)
+        binding.snapsTabLayout.setupWithViewPager(binding.snapsViewPager)
         binding.snapsAddButton
             .setOnClickListener {
                 CategoryListDialogFragment.newInstance()

@@ -23,7 +23,7 @@ import com.rent24.driver.components.job.list.JobListFragment
 import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.components.map.ParentMapFragment
 import com.rent24.driver.components.profile.ProfileFragment
-import com.rent24.driver.components.snaps.SnapsFragment
+import com.rent24.driver.components.snaps.ParentSnapsFragment
 import com.rent24.driver.databinding.ActivityHomeBinding
 
 private val TAG = HomeActivity::class.java.name
@@ -137,7 +137,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun onSnapsFragmentSelection(): Fragment {
-        return SnapsFragment.newInstance()
+        return ParentSnapsFragment.newInstance()
     }
 
     private fun onInvoiceFragmentSelection(): Fragment {

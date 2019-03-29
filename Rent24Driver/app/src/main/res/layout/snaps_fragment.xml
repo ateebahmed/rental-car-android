@@ -6,36 +6,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/snaps_constraint_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:paddingRight="?attr/listPreferredItemPaddingRight"
-            android:paddingEnd="?attr/listPreferredItemPaddingRight">
-            <include
-                layout="@layout/snap_layout"
-                android:id="@+id/snap_start_layout"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/snaps_tab_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <include
-                layout="@layout/snap_layout"
-                android:id="@+id/snap_end_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/snap_start_layout"
-                app:layout_constraintStart_toStartOf="parent" />
-            <include
-                layout="@layout/snap_layout"
-                android:id="@+id/snap_receipt_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/snap_end_layout"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/snaps_view_pager" />
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/snaps_view_pager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/snaps_tab_layout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/snaps_add_button"
@@ -44,7 +33,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/activity_horizontal_margin"
             app:srcCompat="@drawable/ic_add_a_photo_white_24dp"
-            app:layout_anchor="@id/snaps_constraint_layout"
+            app:layout_anchor="@id/snaps_view_pager"
             app:layout_anchorGravity="bottom|right|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
