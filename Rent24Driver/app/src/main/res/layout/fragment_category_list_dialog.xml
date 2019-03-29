@@ -2,52 +2,69 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/choices_container"
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/list_item_spacing"
-        android:paddingTop="@dimen/list_item_spacing"
-        android:paddingRight="@dimen/list_item_spacing"
-        android:paddingBottom="@dimen/list_item_spacing">
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:text="@string/snap_for"
+        android:padding="@dimen/activity_vertical_margin">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/preview_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/black"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/choices_group"
-            app:layout_constraintStart_toStartOf="parent" />
-        <RadioGroup
-            android:id="@+id/choices_group"
+            app:layout_constraintBottom_toTopOf="@id/invoice_entry_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/invoice_entry_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:layout_constraintTop_toBottomOf="@id/preview_image"
+            app:layout_constraintBottom_toTopOf="@id/entry_amount_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone">
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/entry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/receipt"
+                android:inputType="textAutoCorrect"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/entry_amount_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/invoice_entry_layout"
+            app:layout_constraintBottom_toTopOf="@id/snaps_upload_button"
+            android:visibility="gone">
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/amount"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/snaps_upload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/list_item_spacing_half"
-            android:paddingBottom="@dimen/list_item_spacing_half"
-            app:layout_constraintTop_toBottomOf="@id/text"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/choice_start"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/start"
-                android:background="?attr/selectableItemBackground"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/choice_end"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/end"
-                android:background="?attr/selectableItemBackground"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/choice_receipt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/receipt"
-                android:background="?attr/selectableItemBackground"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-        </RadioGroup>
+            android:layout_gravity="bottom|center"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/entry_amount_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_file_upload_white_24dp"
+            app:layout_anchor="@id/container"
+            app:layout_anchorGravity="bottom|center" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

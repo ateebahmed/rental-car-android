@@ -43,4 +43,5 @@
     <string name="start">Start</string>
     <string name="end">End</string>
     <string name="receipt">Receipt</string>
+    <string name="amount">0.00</string>
 </resources>
