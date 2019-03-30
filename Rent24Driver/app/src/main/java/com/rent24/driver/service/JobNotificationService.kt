@@ -3,6 +3,7 @@ package com.rent24.driver.service
 import android.preference.PreferenceManager
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 import com.rent24.driver.repository.ApiManager
 
 private val TAG = JobNotificationService::class.java.name
@@ -21,5 +22,11 @@ class JobNotificationService : FirebaseMessagingService() {
         }
         ApiManager.getInstance(applicationContext)
             .firebaseToken("android", p0 ?: "")
+    }
+
+    override fun onMessageReceived(p0: RemoteMessage?) {
+        super.onMessageReceived(p0)
+
+        Log.d(TAG, p0?.from)
     }
 }

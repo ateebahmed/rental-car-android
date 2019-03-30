@@ -17,6 +17,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val statusOnCheckedChangeListener by lazy {
         CompoundButton.OnCheckedChangeListener { _, isChecked ->
             switchState = isChecked
+            showLoadingProgressBar.value = true
             status.value = true
             callStatusApi(isChecked)
         }
@@ -24,9 +25,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private var switchState = false
     private val snackbarMessage by lazy { MutableLiveData<String>() }
     private val startBackgroundService by lazy { MutableLiveData<Boolean>() }
+    private val showLoadingProgressBar by lazy { MutableLiveData<Boolean>() }
 
     fun status(response: StatusResponse) {
         status.value = response.success > 0
+        showLoadingProgressBar.value = false
         updateSnackbarMessage(status.value ?: false)
         manageBackgroundService(status.value ?: false)
     }
@@ -36,6 +39,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getSnackbarMessage(): LiveData<String> = snackbarMessage
 
     fun getStartBackgroundService(): LiveData<Boolean> = startBackgroundService
+
+    fun getShowLoadingProgressBar(): LiveData<Boolean> = showLoadingProgressBar
 
     private fun manageBackgroundService(value: Boolean) {
         startBackgroundService.value = value && switchState

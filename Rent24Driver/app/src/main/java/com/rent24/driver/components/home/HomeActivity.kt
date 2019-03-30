@@ -170,15 +170,6 @@ class HomeActivity : AppCompatActivity() {
                 if (!it) {
                     switch.isChecked = false
                 }
-                if (!binding.apiProgress
-                        .isShown) {
-                    binding.apiProgress
-                        .show()
-                } else if (binding.apiProgress
-                        .isShown) {
-                    binding.apiProgress
-                        .hide()
-                }
             })
         model.getSnackbarMessage()
             .observe(this, Observer {
@@ -191,6 +182,18 @@ class HomeActivity : AppCompatActivity() {
                     startService(Intent(this, LocationDetectionService::class.java))
                 } else {
                     stopService(Intent(this, LocationDetectionService::class.java))
+                }
+            })
+        model.getShowLoadingProgressBar()
+            .observe(this, Observer {
+                if (!binding.apiProgress
+                        .isShown) {
+                    binding.apiProgress
+                        .show()
+                } else if (binding.apiProgress
+                        .isShown) {
+                    binding.apiProgress
+                        .hide()
                 }
             })
     }

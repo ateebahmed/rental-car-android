@@ -12,8 +12,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            android:background="@android:color/background_dark"
             app:titleTextColor="@color/colorPrimary"
+            android:background="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -52,6 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_container"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/main_bottom_nav"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
