@@ -6,7 +6,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/invoice_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invoice"
+            android:textAppearance="?attr/textAppearanceOverline"
+            android:textColor="@color/colorAccent"
+            android:textSize="36sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/invoice_recycler_view"
             android:layout_width="0dp"
@@ -15,7 +30,7 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/invoice_heading" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/entry_total"
@@ -23,6 +38,8 @@
             android:layout_height="wrap_content"
             android:text="@string/total"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/colorAccent"
+            android:textAppearance="?attr/textAppearanceBody1"
             android:minHeight="?attr/listPreferredItemHeight"
             android:paddingLeft="?attr/listPreferredItemPaddingLeft"
             android:paddingStart="?attr/listPreferredItemPaddingLeft"
@@ -36,6 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:minHeight="?attr/listPreferredItemHeight"
+            android:textColor="@color/colorAccent"
+            android:textAppearance="?attr/textAppearanceBody1"
             android:paddingLeft="?attr/listPreferredItemPaddingLeft"
             android:paddingStart="?attr/listPreferredItemPaddingLeft"
             android:paddingRight="?attr/listPreferredItemPaddingRight"

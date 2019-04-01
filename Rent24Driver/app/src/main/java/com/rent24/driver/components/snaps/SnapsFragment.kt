@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.rent24.driver.R
 import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
-import com.rent24.driver.components.snaps.dialog.CategoryListDialogFragment
+import com.rent24.driver.components.snaps.dialog.SnapUploadDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
 
 private const val PICK_IMAGE_REQUEST_CODE = 5
@@ -63,7 +63,7 @@ class SnapsFragment : Fragment() {
 
         bundle.putParcelable("uri", uri)
         bundle.putInt("tab", tab)
-        val dialog = CategoryListDialogFragment.newInstance()
+        val dialog = SnapUploadDialogFragment.newInstance()
         dialog.arguments = bundle
         dialog.show(childFragmentManager, "imageUpload")
     }

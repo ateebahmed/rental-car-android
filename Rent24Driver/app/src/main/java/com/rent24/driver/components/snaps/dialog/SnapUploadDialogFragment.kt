@@ -2,13 +2,12 @@ package com.rent24.driver.components.snaps.dialog
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rent24.driver.R
-import com.rent24.driver.databinding.FragmentCategoryListDialogBinding
+import com.rent24.driver.databinding.SnapUploadDialogFragmentBinding
 
 /**
  *
@@ -16,14 +15,14 @@ import com.rent24.driver.databinding.FragmentCategoryListDialogBinding
  *
  * You can show this modal bottom sheet from your activity like this:
  * <pre>
- *    CategoryListDialogFragment.newInstance(30).show(supportFragmentManager, "dialog")
+ *    SnapUploadDialogFragment.newInstance(30).show(supportFragmentManager, "dialog")
  * </pre>
  *
- * You activity (or fragment) needs to implement [CategoryListDialogFragment.Listener].
+ * You activity (or fragment) needs to implement [SnapUploadDialogFragment.Listener].
  */
-class CategoryListDialogFragment : BottomSheetDialogFragment() {
+class SnapUploadDialogFragment : BottomSheetDialogFragment() {
 
-    private lateinit var binding: FragmentCategoryListDialogBinding
+    private lateinit var binding: SnapUploadDialogFragmentBinding
     private lateinit var imageUri: Uri
     private var tab = 0
 
@@ -34,11 +33,11 @@ class CategoryListDialogFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val layout = inflater.inflate(R.layout.fragment_category_list_dialog, container, false)
-        binding = FragmentCategoryListDialogBinding.bind(layout)
+        val layout = inflater.inflate(R.layout.snap_upload_dialog_fragment, container, false)
+        binding = SnapUploadDialogFragmentBinding.bind(layout)
         binding.lifecycleOwner = this
         binding.previewImage
-            .setImageBitmap(MediaStore.Images.Media.getBitmap(activity?.contentResolver, imageUri))
+            .setImageURI(imageUri)
         if (tab == 2) {
             binding.entryAmountLayout.visibility = View.VISIBLE
             binding.invoiceEntryLayout.visibility = View.VISIBLE
@@ -52,6 +51,6 @@ class CategoryListDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
 
-        fun newInstance() = CategoryListDialogFragment()
+        fun newInstance() = SnapUploadDialogFragment()
     }
 }

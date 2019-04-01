@@ -40,9 +40,9 @@
     <string name="client">Client:</string>
     <string name="contact">Contact:</string>
     <string name="task">Task:</string>
-    <string name="snap_for">Snap For ...</string>
     <string name="start">Start</string>
     <string name="end">End</string>
     <string name="receipt">Receipt</string>
-    <string name="amount">0.00</string>
+    <string name="amount">Amount</string>
+    <string name="password">Password</string>
 </resources>

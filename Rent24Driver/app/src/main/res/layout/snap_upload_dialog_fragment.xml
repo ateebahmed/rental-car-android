@@ -24,14 +24,21 @@
             app:layout_constraintBottom_toTopOf="@id/entry_amount_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:textColorHint="@color/colorAccent"
+            app:boxBackgroundColor="@color/colorAccent"
+            app:boxStrokeColor="@color/colorAccent"
             android:visibility="gone">
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/entry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/receipt"
                 android:inputType="textAutoCorrect"
                 android:maxLines="1"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
+                android:textColorHighlight="@color/colorAccent"
+                android:textColorLink="@color/colorAccent"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -43,14 +50,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/invoice_entry_layout"
             app:layout_constraintBottom_toTopOf="@id/snaps_upload_button"
+            android:textColorHint="@color/colorAccent"
+            app:boxBackgroundColor="@color/colorAccent"
+            app:boxStrokeColor="@color/colorAccent"
             android:visibility="gone">
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/amount"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
+                android:textColorHighlight="@color/colorAccent"
+                android:textColorLink="@color/colorAccent"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -64,6 +78,7 @@
             app:layout_constraintTop_toBottomOf="@id/entry_amount_layout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:srcCompat="@drawable/ic_file_upload_white_24dp"
+            android:theme="@style/AppTheme.FloatingActionButton"
             app:layout_anchor="@id/container"
             app:layout_anchorGravity="bottom|center" />
     </androidx.constraintlayout.widget.ConstraintLayout>

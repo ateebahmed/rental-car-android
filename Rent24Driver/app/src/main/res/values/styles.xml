@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -11,20 +11,18 @@
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
 
-    <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-    </style>
-
-    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
+    <style name="FullscreenActionBarStyle" parent="Widget.Design.AppBarLayout">
+        <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/black_overlay</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.FloatingActionButton" parent="Widget.Design.FloatingActionButton">
+    <style name="AppTheme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
     </style>

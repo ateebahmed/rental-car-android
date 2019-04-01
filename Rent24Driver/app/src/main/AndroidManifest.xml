@@ -55,8 +55,7 @@
 
         <activity
             android:name=".SplashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/FullscreenTheme">
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

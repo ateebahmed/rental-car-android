@@ -17,7 +17,7 @@ class JobNotificationService : FirebaseMessagingService() {
 
         with(PreferenceManager.getDefaultSharedPreferences(applicationContext)
             .edit()) {
-            putString("token", p0)
+            putString("firebase-token", p0)
             apply()
         }
         ApiManager.getInstance(applicationContext)
