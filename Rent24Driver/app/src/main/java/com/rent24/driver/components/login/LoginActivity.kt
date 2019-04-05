@@ -59,8 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.emailSignInButton
             .setOnClickListener(model.signInButtonClickListener)
-        binding.model
-            ?.shouldShowLoadingProgressBar()!!
+        model.shouldShowLoadingProgressBar()
             .observe(this, Observer {
                 if (it && !binding.loginProgress
                         .isShown) {
@@ -72,14 +71,12 @@ class LoginActivity : AppCompatActivity() {
                         .hide()
                 }
             })
-        binding.model
-            ?.getSnackbarMessage()!!
+        model.getSnackbarMessage()
             .observe(this, Observer {
                 Snackbar.make(binding.container, it, Snackbar.LENGTH_SHORT)
                     .show()
             })
-        binding.model
-            ?.getActivityResult()!!
+        model.getActivityResult()
             .observe(this, Observer {
                 setResult(it)
                 finish()

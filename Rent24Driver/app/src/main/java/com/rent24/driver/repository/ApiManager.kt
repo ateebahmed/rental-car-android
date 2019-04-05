@@ -5,20 +5,18 @@ import android.preference.PreferenceManager
 import android.util.Log
 import com.rent24.driver.api.login.request.LoginRequest
 import com.rent24.driver.api.login.request.PositionRequest
-import com.rent24.driver.api.login.response.LoginError
-import com.rent24.driver.api.login.response.LoginResponse
-import com.rent24.driver.api.login.response.LoginSuccess
-import com.rent24.driver.api.login.response.StatusResponse
-import com.rent24.driver.api.login.response.JobResponse
-import com.rent24.driver.api.login.response.InvoiceResponse
+import com.rent24.driver.api.login.response.*
 import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.invoice.InvoiceViewModel
 import com.rent24.driver.components.job.list.JobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
+import com.rent24.driver.components.snaps.dialog.SnapUploadViewModel
 import com.rent24.driver.service.RestService
 import okhttp3.Interceptor
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -98,6 +96,19 @@ class ApiManager private constructor(context: Context) {
         retrofit.create(RestService.AuthApis::class.java)
             .position(positionRequest)
             .enqueue(positionCallback())
+    }
+
+    fun uploadInvoiceEntry(image: MultipartBody.Part, status: RequestBody, title: RequestBody, amount: RequestBody,
+                           viewModel: SnapUploadViewModel) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .uploadInvoiceEntry(image, status, title, amount)
+            .enqueue(uploadInvoiceEntryCallback(viewModel))
+    }
+
+    fun uploadInvoiceEntry(image: MultipartBody.Part, status: RequestBody, viewModel: SnapUploadViewModel) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .uploadInvoiceEntry(image, status)
+            .enqueue(uploadInvoiceEntryCallback(viewModel))
     }
 
     private fun getToken(context: Context): String {
@@ -192,6 +203,19 @@ class ApiManager private constructor(context: Context) {
 
             override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
                 Log.d(TAG, "${response.code()} ${response.message()}")
+            }
+        }
+    }
+
+    private fun uploadInvoiceEntryCallback(viewModel: SnapUploadViewModel): Callback<StatusBooleanResponse> {
+        return object: Callback<StatusBooleanResponse> {
+            override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
+                Log.e(TAG, t.message, t)
+            }
+
+            override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
+                Log.d(TAG, "${response.code()} ${response.message()}")
+                viewModel.snapUploadResult(response.body() ?: StatusBooleanResponse(false))
             }
         }
     }
