@@ -49,6 +49,9 @@ interface RestService {
         @POST("job/status")
         fun uploadInvoiceEntry(@Part image: MultipartBody.Part, @Part("status") status: RequestBody):
                 Call<StatusBooleanResponse>
+
+        @GET("job/snaps")
+        fun snaps(): Call<SnapsResponse>
     }
 
     interface NonAuthApis {

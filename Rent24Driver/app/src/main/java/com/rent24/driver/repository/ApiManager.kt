@@ -29,18 +29,18 @@ private var TAG = ApiManager::class.java.name
 
 class ApiManager private constructor(context: Context) {
 
-    private val builder: Retrofit.Builder by lazy {
+    private val builder by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
     }
-    private val retrofit: Retrofit by lazy {
+    private val retrofit by lazy {
         builder.client(OkHttpClient.Builder()
             .addInterceptor(authenticationInterceptor)
             .build())
             .build()
     }
-    private val authenticationInterceptor: Interceptor by lazy {
+    private val authenticationInterceptor by lazy {
         Interceptor {
             it.proceed(it.request()
                 .newBuilder()
@@ -111,122 +111,120 @@ class ApiManager private constructor(context: Context) {
             .enqueue(uploadInvoiceEntryCallback(viewModel))
     }
 
-    private fun getToken(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-            ?.getString("token", "") ?: ""
+    fun getSnaps(repository: SnapsRepository) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .snaps()
+            .enqueue(snapsCallback(repository))
     }
 
-    private fun loginCallback(viewModel: LoginViewModel): Callback<LoginResponse> {
-        return object: Callback<LoginResponse> {
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-                viewModel.saveToken(LoginResponse(LoginSuccess(""), LoginError("No network available")))
-            }
+    private fun getToken(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
+        ?.getString("token", "") ?: ""
 
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                viewModel.saveToken(response.body() ?: LoginResponse(LoginSuccess(""),
-                    LoginError("Invalid credentials")))
-            }
+    private fun loginCallback(viewModel: LoginViewModel) = object: Callback<LoginResponse> {
+        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+            viewModel.saveToken(LoginResponse(LoginSuccess(""), LoginError("No network available")))
+        }
+
+        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            viewModel.saveToken(response.body() ?: LoginResponse(LoginSuccess(""),
+                LoginError("Invalid credentials")))
         }
     }
 
-    private fun statusCallback(viewModel: HomeViewModel): Callback<StatusResponse> {
-        return object: Callback<StatusResponse> {
-            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun statusCallback(viewModel: HomeViewModel) = object: Callback<StatusResponse> {
+        override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-                viewModel.status(response.body() ?: StatusResponse(-1))
-            }
+        override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
+            viewModel.status(response.body() ?: StatusResponse(-1))
         }
     }
 
-    private fun jobListCallback(viewModel: JobListViewModel, api: Int): Callback<JobResponse> {
-        return object: Callback<JobResponse> {
-            override fun onFailure(call: Call<JobResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun jobListCallback(viewModel: JobListViewModel, api: Int) = object: Callback<JobResponse> {
+        override fun onFailure(call: Call<JobResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-                val data = response.body() ?: JobResponse(Collections.emptyList())
-                if (api == 0) viewModel.updateScheduledTrips(data) else viewModel.updateCompletedTrips(data)
-            }
+        override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
+            val data = response.body() ?: JobResponse(Collections.emptyList())
+            if (api == 0) viewModel.updateScheduledTrips(data) else viewModel.updateCompletedTrips(data)
         }
     }
 
-    private fun jobDetailCallback(viewModel: JobItemViewModel): Callback<JobResponse> {
-        return object: Callback<JobResponse> {
-            override fun onFailure(call: Call<JobResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun jobDetailCallback(viewModel: JobItemViewModel) = object: Callback<JobResponse> {
+        override fun onFailure(call: Call<JobResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-                viewModel.updateModel(response.body() ?: JobResponse(Collections.emptyList()))
-            }
+        override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
+            viewModel.updateModel(response.body() ?: JobResponse(Collections.emptyList()))
         }
     }
 
-    private fun invoiceCallback(viewModel: InvoiceViewModel): Callback<InvoiceResponse> {
-        return object: Callback<InvoiceResponse> {
-            override fun onFailure(call: Call<InvoiceResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun invoiceCallback(viewModel: InvoiceViewModel) = object: Callback<InvoiceResponse> {
+        override fun onFailure(call: Call<InvoiceResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<InvoiceResponse>, response: Response<InvoiceResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-                viewModel.updateInvoice(response.body() ?: InvoiceResponse(Collections.emptyList()))
-            }
+        override fun onResponse(call: Call<InvoiceResponse>, response: Response<InvoiceResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
+            viewModel.updateInvoice(response.body() ?: InvoiceResponse(Collections.emptyList()))
         }
     }
 
-    private fun tokenCallback(): Callback<StatusResponse> {
-        return object: Callback<StatusResponse> {
-            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun tokenCallback() = object: Callback<StatusResponse> {
+        override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-            }
+        override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
         }
     }
 
-    private fun positionCallback(): Callback<StatusResponse> {
-        return object: Callback<StatusResponse> {
-            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun positionCallback() = object: Callback<StatusResponse> {
+        override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-            }
+        override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
         }
     }
 
-    private fun uploadInvoiceEntryCallback(viewModel: SnapUploadViewModel): Callback<StatusBooleanResponse> {
-        return object: Callback<StatusBooleanResponse> {
-            override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-            }
+    private fun uploadInvoiceEntryCallback(viewModel: SnapUploadViewModel) = object: Callback<StatusBooleanResponse> {
+        override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
 
-            override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
-                Log.d(TAG, "${response.code()} ${response.message()}")
-                viewModel.snapUploadResult(response.body() ?: StatusBooleanResponse(false))
-            }
+        override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
+            viewModel.snapUploadResult(response.body() ?: StatusBooleanResponse(false))
+        }
+    }
+
+    private fun snapsCallback(repository: SnapsRepository) = object: Callback<SnapsResponse> {
+        override fun onFailure(call: Call<SnapsResponse>, t: Throwable) {
+            Log.e(TAG, t.message, t)
+        }
+
+        override fun onResponse(call: Call<SnapsResponse>, response: Response<SnapsResponse>) {
+            Log.d(TAG, "${response.code()} ${response.message()}")
+            repository.updateSnaps(response.body() ?: SnapsResponse(SnapsSucess(Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList())))
         }
     }
 
     companion object {
         @Volatile private var instance: ApiManager? = null
 
-        fun getInstance(context: Context): ApiManager {
-            return instance ?: synchronized(this) {
-                instance ?: ApiManager(context)
-            }
+        fun getInstance(context: Context) = instance ?: synchronized(this) {
+            instance ?: ApiManager(context)
         }
     }
 }

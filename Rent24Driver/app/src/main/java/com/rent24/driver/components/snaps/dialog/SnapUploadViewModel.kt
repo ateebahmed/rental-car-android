@@ -127,12 +127,7 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
             getApplication<Application>().contentResolver?.openInputStream(imageUri)
                 .use {input ->
                     FileOutputStream(uploadFile).use {
-                        val bytes = byteArrayOf(Byte.MIN_VALUE)
-                        var b = -1
-                        do {
-                            b = input?.read(bytes) ?: b
-                            it.write(bytes)
-                        } while (-1 != b)
+                        input?.copyTo(it)
                     }
                 }
             return uploadFile
