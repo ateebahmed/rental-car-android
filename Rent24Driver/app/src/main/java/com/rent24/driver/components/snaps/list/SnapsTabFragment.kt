@@ -17,6 +17,10 @@ class SnapsTabFragment : Fragment() {
 
     private lateinit var binding: SnapLayoutBinding
     private lateinit var key: String
+    private val viewModel by lazy {
+        ViewModelProviders.of(this)
+            .get(SnapsTabViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +37,6 @@ class SnapsTabFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this)
-            .get(SnapsTabViewModel::class.java)
         binding.snapRecyclerview.adapter = SnapsListAdapter()
         viewModel.getSnaps(key)
             .observe(this, Observer {
@@ -42,6 +44,10 @@ class SnapsTabFragment : Fragment() {
             })
         binding.snapRecyclerview.layoutManager =
             GridLayoutManager(activity, 2, RecyclerView.VERTICAL, false)
+    }
+
+    fun updateSnaps() {
+        viewModel.updateSnaps(key)
     }
 
     companion object {

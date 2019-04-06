@@ -36,36 +36,7 @@ class SnapsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getStartCameraActivity()
-            .observe(this, Observer {
-                if (it) {
-                    startActivityForResult(Intent.createChooser(Intent().apply {
-                        type = "image/*"
-                        action = Intent.ACTION_GET_CONTENT
-                    }, "Select Picture"), PICK_IMAGE_REQUEST_CODE)
-                }
-            })
-        viewModel.getImageUri()
-            .observe(this, Observer {
-                showDialog(it, binding.snapsTabLayout.selectedTabPosition)
-            })
-        viewModel.getUploadResult()
-            .observe(this, Observer {
-                if (it) {
-
-                }
-            })
-        viewModel.getAskForStoragePermission()
-            .observe(this, Observer {
-                if(it) {
-                    askForStoragePermission()
-                }
-            })
-        viewModel.getSnackbarMessage()
-            .observe(this, Observer {
-                Snackbar.make(binding.snapsCoordinatorLayout, it, Snackbar.LENGTH_SHORT)
-                    .show()
-            })
+        setupObservers()
         binding.snapsViewPager.adapter = SnapsFragmentPagerAdapter(childFragmentManager)
         binding.snapsTabLayout
             .setupWithViewPager(binding.snapsViewPager)
@@ -106,6 +77,40 @@ class SnapsFragment : Fragment() {
         } else {
             requestPermissions(permissions, STORAGE_REQUEST_CODE)
         }
+    }
+
+    private fun setupObservers() {
+        viewModel.getStartCameraActivity()
+            .observe(this, Observer {
+                if (it) {
+                    startActivityForResult(Intent.createChooser(Intent().apply {
+                        type = "image/*"
+                        action = Intent.ACTION_GET_CONTENT
+                    }, "Select Picture"), PICK_IMAGE_REQUEST_CODE)
+                }
+            })
+        viewModel.getImageUri()
+            .observe(this, Observer {
+                showDialog(it, binding.snapsTabLayout.selectedTabPosition)
+            })
+        viewModel.getUploadResult()
+            .observe(this, Observer {
+                if (it) {
+                    (binding.snapsViewPager.adapter as SnapsFragmentPagerAdapter)
+                        .updateTab(binding.snapsTabLayout.selectedTabPosition)
+                }
+            })
+        viewModel.getAskForStoragePermission()
+            .observe(this, Observer {
+                if(it) {
+                    askForStoragePermission()
+                }
+            })
+        viewModel.getSnackbarMessage()
+            .observe(this, Observer {
+                Snackbar.make(binding.snapsCoordinatorLayout, it, Snackbar.LENGTH_SHORT)
+                    .show()
+            })
     }
 
     companion object {

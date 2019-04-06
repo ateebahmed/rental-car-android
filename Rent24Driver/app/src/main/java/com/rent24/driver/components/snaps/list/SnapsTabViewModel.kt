@@ -19,4 +19,12 @@ class SnapsTabViewModel(application: Application) : AndroidViewModel(application
         "receipt" -> receiptSnaps
         else -> MutableLiveData<List<String>>()
     }
+
+    fun updateSnaps(key: String) {
+        when (key) {
+            "pickup" -> snapsRepository.getPickupSnaps()
+            "dropoff" -> snapsRepository.getDropoffSnaps()
+            "receipt" -> snapsRepository.getReceiptSnaps()
+        }
+    }
 }

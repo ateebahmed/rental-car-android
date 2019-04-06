@@ -18,9 +18,13 @@ class SnapsFragmentPagerAdapter(fragmentManager: FragmentManager) : FragmentPage
         return tabFragments[position]
     }
 
-    override fun getCount(): Int = 3
+    override fun getCount() = 3
 
     override fun getPageTitle(position: Int): CharSequence? = tabTitles[position]
+
+    fun updateTab(position: Int) {
+        (getItem(position) as SnapsTabFragment).updateSnaps()
+    }
 
     private fun getFragment(key: String): Fragment {
         val fragment = SnapsTabFragment.newInstance()
