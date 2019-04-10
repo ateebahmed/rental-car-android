@@ -63,19 +63,16 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun startCameraActivity() {
+    fun startCameraActivity() {
+        if (ContextCompat.checkSelfPermission(getApplication<Application>().applicationContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            startCameraActivity.value = true
+            startCameraActivity.postValue(false)
+        } else {
+            askForStoragePermission.value = true
+            askForStoragePermission.postValue(false)
+        }
         if (activeJobId != 0) {
-            if (ContextCompat.checkSelfPermission(
-                    getApplication<Application>().applicationContext,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                startCameraActivity.value = true
-                startCameraActivity.postValue(false)
-            } else {
-                askForStoragePermission.value = true
-                askForStoragePermission.postValue(false)
-            }
         } else {
             snackbarMessage.value = "You currently have no active job"
         }

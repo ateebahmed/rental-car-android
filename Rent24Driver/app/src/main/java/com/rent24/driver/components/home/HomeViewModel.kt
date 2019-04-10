@@ -29,6 +29,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val showLoadingProgressBar by lazy { MutableLiveData<Boolean>() }
     private val pickupLocation by lazy { MutableLiveData<LatLng>() }
     private val activeJobId by lazy { MutableLiveData<Int>() }
+    private val driverStatus by lazy { MutableLiveData<Int>() }
 
     fun status(response: StatusResponse) {
         status.value = response.success > 0
@@ -60,6 +61,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getActiveJobId(): LiveData<Int> = activeJobId
+
+    fun updateDriverStatus(status: Int) {
+        driverStatus.value = status
+    }
+
+    fun getDriverStatus(): LiveData<Int> = driverStatus
 
     private fun manageBackgroundService(value: Boolean) {
         startBackgroundService.value = value && switchState

@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatButton
+import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,6 +22,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.components.home.HomeViewModel
+import com.rent24.driver.components.home.STATUS_DROP_OFF
+import com.rent24.driver.components.home.STATUS_PICKUP
+import com.rent24.driver.databinding.MapFragmentBinding
 import com.rent24.driver.databinding.ParentFragmentBinding
 
 private const val LOCATION_REQUEST_CODE = 2
@@ -40,9 +43,14 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         ViewModelProviders.of(activity!!)
             .get(HomeViewModel::class.java)
     }
+    private lateinit var mapBinding: MapFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = inflater.inflate(R.layout.parent_fragment, container, false)
+        val mapLayout = inflater.inflate(R.layout.map_fragment, container, false)
+        mapBinding = MapFragmentBinding.bind(mapLayout)
+        layout.findViewById<FrameLayout>(R.id.frame_layout)
+            .addView(mapLayout)
         binding = ParentFragmentBinding.bind(layout)
         return layout
     }
@@ -52,9 +60,15 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         setupModelObservers(viewModel)
         val map = SupportMapFragment()
         childFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, map)
+            .replace(R.id.map_frame, map)
             .commitNow()
         map.getMapAsync(this)
+        mapBinding.pickupButton
+            .setOnClickListener(viewModel.onButtonClickListener)
+        mapBinding.dropoffButton
+            .setOnClickListener(viewModel.onButtonClickListener)
+        mapBinding.tripStopButton
+            .setOnClickListener(viewModel.onButtonClickListener)
     }
 
     /**
@@ -123,6 +137,12 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         model.locationSettingsRequest()
             .observe(this, Observer {
                 requestLocationSettings(it)
+            })
+        model.getDriverStatus()
+            .observe(this, Observer {
+                if (it in STATUS_PICKUP..STATUS_DROP_OFF) {
+                    homeViewModel.updateDriverStatus(it)
+                }
             })
     }
 

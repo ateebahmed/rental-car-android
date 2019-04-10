@@ -4,9 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -21,6 +21,9 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnCompleteListener
+import com.rent24.driver.R
+import com.rent24.driver.components.home.STATUS_DROP_OFF
+import com.rent24.driver.components.home.STATUS_PICKUP
 
 private val TAG = ParentMapViewModel::class.java.name
 
@@ -75,6 +78,21 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
     private var detectLocation = false
+    private val driverStatus by lazy { MutableLiveData<Int>() }
+    val onButtonClickListener by lazy {
+        View.OnClickListener {
+            when (it.id) {
+                R.id.pickup_button -> {
+                    driverStatus.value = STATUS_PICKUP
+                }
+                R.id.dropoff_button -> {
+                    driverStatus.value = STATUS_DROP_OFF
+                }
+                R.id.trip_stop_button -> {}
+            }
+            driverStatus.postValue(-1)
+        }
+    }
 
     fun getLastLocationMarker(): LiveData<MarkerOptions> = lastLocationMarker
 
@@ -151,6 +169,8 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     fun stopLocationUpdates() {
         locationClient.removeLocationUpdates(locationCallback)
     }
+
+    fun getDriverStatus(): LiveData<Int> = driverStatus
 
     private fun updateMarker(latLng: LatLng) {
         lastLocationMarker.value = MarkerOptions().position(latLng)

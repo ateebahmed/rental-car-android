@@ -16,6 +16,17 @@ class ParentSnapsFragment : Fragment() {
             .get(ParentSnapsViewModel::class.java)
     }
     private lateinit var binding: ParentFragmentBinding
+    private val snapsFragment by lazy { SnapsFragment.newInstance() }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val status = arguments?.getInt("status")
+        if (null != status) {
+            val bundle = Bundle()
+            bundle.putInt("status", status)
+            snapsFragment.arguments = bundle
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = inflater.inflate(R.layout.parent_fragment, container, false)
@@ -27,7 +38,7 @@ class ParentSnapsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         childFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, SnapsFragment.newInstance())
+            .replace(R.id.frame_layout, snapsFragment)
             .commitNow()
     }
 

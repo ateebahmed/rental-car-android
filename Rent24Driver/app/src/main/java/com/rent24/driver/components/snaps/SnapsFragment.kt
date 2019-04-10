@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.components.home.HomeViewModel
+import com.rent24.driver.components.home.STATUS_DROP_OFF
+import com.rent24.driver.components.home.STATUS_PICKUP
 import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
 import com.rent24.driver.components.snaps.dialog.SnapUploadDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
@@ -30,6 +32,13 @@ class SnapsFragment : Fragment() {
     private val homeViewModel by lazy {
         ViewModelProviders.of(activity!!)
             .get(HomeViewModel::class.java)
+    }
+    private var status: Int? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        status = arguments?.getInt("status")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -49,6 +58,14 @@ class SnapsFragment : Fragment() {
             .setupWithViewPager(binding.snapsViewPager)
         binding.snapsAddButton
             .setOnClickListener(viewModel.onFabClickListener)
+        if (null != status) {
+            binding.snapsViewPager.currentItem = when(status) {
+                STATUS_PICKUP -> 0
+                STATUS_DROP_OFF -> 1
+                else -> 0
+            }
+            viewModel.startCameraActivity()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

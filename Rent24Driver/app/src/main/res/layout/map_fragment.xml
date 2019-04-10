@@ -1,31 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/map_constraint_layout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/map_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <fragment
-                android:id="@+id/map"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                class="com.google.android.gms.maps.SupportMapFragment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-            </fragment>
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/pickup_button"
+            <FrameLayout
+                android:id="@+id/map_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pickup"
-                android:layout_margin="32dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </FrameLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pickup_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pickup"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            app:layout_anchor="@id/map_fragment_container"
+            app:layout_anchorGravity="bottom" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/trip_stop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="trip stop"
+            android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            app:layout_anchor="@id/map_fragment_container"
+            app:layout_anchorGravity="bottom|center" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dropoff_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="drop off"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            app:layout_anchor="@id/map_fragment_container"
+            app:layout_anchorGravity="bottom|end" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

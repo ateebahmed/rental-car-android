@@ -17,6 +17,10 @@ import okhttp3.RequestBody
 import java.io.File
 import java.io.FileOutputStream
 
+private const val PICKUP = "pickup"
+private const val DROP_OFF = "dropoff"
+private const val RECEIPT = "receipt"
+
 class SnapUploadViewModel(application: Application) : AndroidViewModel(application) {
 
     val entry by lazy { MutableLiveData<String>() }
@@ -94,9 +98,9 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun getStatus(tab: Int): String {
         return when (tab) {
-            0 -> "pickup"
-            1 -> "dropoff"
-            2 -> "receipt"
+            0 -> PICKUP
+            1 -> DROP_OFF
+            2 -> RECEIPT
             else -> ""
         }
     }

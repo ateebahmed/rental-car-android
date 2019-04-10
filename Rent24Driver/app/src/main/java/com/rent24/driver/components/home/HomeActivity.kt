@@ -29,6 +29,9 @@ import com.rent24.driver.service.LocationDetectionService
 
 private val TAG = HomeActivity::class.java.name
 const val ACTIVE_JOB_MAP_REQUEST = 10
+const val STATUS_PICKUP = 20
+const val STATUS_DROP_OFF = 21
+const val STATUS_TRIP_STOP = 22
 
 class HomeActivity : AppCompatActivity() {
 
@@ -193,6 +196,15 @@ class HomeActivity : AppCompatActivity() {
                 } else {
                     binding.apiProgress
                         .hide()
+                }
+            })
+        model.getDriverStatus()
+            .observe(this, Observer {
+                if (it in STATUS_PICKUP..STATUS_DROP_OFF) {
+                    val bundle = Bundle()
+                    bundle.putInt("status", it)
+                    snapsFragment.arguments = bundle
+                    binding.navigation.selectedItemId = R.id.snaps
                 }
             })
     }
