@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.rent24.driver.R
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.databinding.JobItemFragmentBinding
 
 class JobItemFragment : Fragment() {
@@ -16,9 +17,14 @@ class JobItemFragment : Fragment() {
     private lateinit var viewModel: JobItemViewModel
     private var data = 0
     private lateinit var binding: JobItemFragmentBinding
+    private val homeViewModel by lazy {
+        ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        homeViewModel.showLoadingProgressBar(true)
         data = arguments?.getInt("id")!!
     }
 
@@ -36,7 +42,10 @@ class JobItemFragment : Fragment() {
         viewModel.updateModel(data)
 
         viewModel.getModel()
-            .observe(this, Observer { binding.model = it })
+            .observe(this, Observer {
+                homeViewModel.showLoadingProgressBar(false)
+                binding.model = it
+            })
     }
 
     companion object {

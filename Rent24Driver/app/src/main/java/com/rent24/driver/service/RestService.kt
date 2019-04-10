@@ -51,7 +51,10 @@ interface RestService {
                 Call<StatusBooleanResponse>
 
         @GET("job/snaps")
-        fun snaps(): Call<SnapsResponse>
+        fun snaps(@Query("jobid") jobId: Int): Call<SnapsResponse>
+
+        @POST("job/status")
+        fun jobStatus(@Body status: Map<String, String>): Call<StatusBooleanResponse>
     }
 
     interface NonAuthApis {

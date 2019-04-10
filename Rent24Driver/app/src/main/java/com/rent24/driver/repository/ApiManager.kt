@@ -8,7 +8,8 @@ import com.rent24.driver.api.login.request.PositionRequest
 import com.rent24.driver.api.login.response.*
 import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.invoice.InvoiceViewModel
-import com.rent24.driver.components.job.list.JobListViewModel
+import com.rent24.driver.components.job.list.CompletedJobListViewModel
+import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
 import com.rent24.driver.components.snaps.dialog.SnapUploadViewModel
@@ -62,16 +63,16 @@ class ApiManager private constructor(context: Context) {
             .enqueue(statusCallback(viewModel))
     }
 
-    fun scheduledTrips(viewModel: JobListViewModel) {
+    fun scheduledTrips(viewModel: ScheduledJobListViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
             .schedule()
-            .enqueue(jobListCallback(viewModel, 0))
+            .enqueue(jobListCallback(viewModel))
     }
 
-    fun completedTrips(viewModel: JobListViewModel) {
+    fun completedTrips(viewModel: CompletedJobListViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
             .history()
-            .enqueue(jobListCallback(viewModel, 1))
+            .enqueue(jobListCallback(viewModel))
     }
 
     fun getJobDetail(viewModel: JobItemViewModel, id: Int) {
@@ -111,10 +112,16 @@ class ApiManager private constructor(context: Context) {
             .enqueue(uploadInvoiceEntryCallback(viewModel))
     }
 
-    fun getSnaps(repository: SnapsRepository) {
+    fun getSnaps(repository: SnapsRepository, jobId: Int) {
         retrofit.create(RestService.AuthApis::class.java)
-            .snaps()
+            .snaps(jobId)
             .enqueue(snapsCallback(repository))
+    }
+
+    fun updateJobStatus(status: Map<String, String>, viewModel: ScheduledJobListViewModel) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .jobStatus(status)
+            .enqueue(jobStatusCallback(viewModel))
     }
 
     private fun getToken(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
@@ -122,11 +129,12 @@ class ApiManager private constructor(context: Context) {
 
     private fun loginCallback(viewModel: LoginViewModel) = object: Callback<LoginResponse> {
         override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "loginCallback ${t.message}", t)
             viewModel.saveToken(LoginResponse(LoginSuccess(""), LoginError("No network available")))
         }
 
         override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            Log.d(TAG, "loginCallback ${response.code()} ${response.message()}")
             viewModel.saveToken(response.body() ?: LoginResponse(LoginSuccess(""),
                 LoginError("Invalid credentials")))
         }
@@ -134,89 +142,100 @@ class ApiManager private constructor(context: Context) {
 
     private fun statusCallback(viewModel: HomeViewModel) = object: Callback<StatusResponse> {
         override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "statusCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "statusCallback ${response.code()} ${response.message()}")
             viewModel.status(response.body() ?: StatusResponse(-1))
         }
     }
 
-    private fun jobListCallback(viewModel: JobListViewModel, api: Int) = object: Callback<JobResponse> {
+    private fun jobListCallback(viewModel: CompletedJobListViewModel) = object: Callback<JobResponse> {
         override fun onFailure(call: Call<JobResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "jobListCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "jobListCallback ${response.code()} ${response.message()}")
             val data = response.body() ?: JobResponse(Collections.emptyList())
-            if (api == 0) viewModel.updateScheduledTrips(data) else viewModel.updateCompletedTrips(data)
+            viewModel.updateTrips(data)
         }
     }
 
     private fun jobDetailCallback(viewModel: JobItemViewModel) = object: Callback<JobResponse> {
         override fun onFailure(call: Call<JobResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "jobDetailCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "jobDetailCallback ${response.code()} ${response.message()}")
             viewModel.updateModel(response.body() ?: JobResponse(Collections.emptyList()))
         }
     }
 
     private fun invoiceCallback(viewModel: InvoiceViewModel) = object: Callback<InvoiceResponse> {
         override fun onFailure(call: Call<InvoiceResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "invoiceCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<InvoiceResponse>, response: Response<InvoiceResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "invoiceCallback ${response.code()} ${response.message()}")
             viewModel.updateInvoice(response.body() ?: InvoiceResponse(Collections.emptyList()))
         }
     }
 
     private fun tokenCallback() = object: Callback<StatusResponse> {
         override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "tokenCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "tokenCallback ${response.code()} ${response.message()}")
         }
     }
 
     private fun positionCallback() = object: Callback<StatusResponse> {
         override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "positionCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "positionCallback ${response.code()} ${response.message()}")
         }
     }
 
     private fun uploadInvoiceEntryCallback(viewModel: SnapUploadViewModel) = object: Callback<StatusBooleanResponse> {
         override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "uploadInvoiceEntryCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "uploadInvoiceEntryCallback ${response.code()} ${response.message()}")
             viewModel.snapUploadResult(response.body() ?: StatusBooleanResponse(false))
         }
     }
 
     private fun snapsCallback(repository: SnapsRepository) = object: Callback<SnapsResponse> {
         override fun onFailure(call: Call<SnapsResponse>, t: Throwable) {
-            Log.e(TAG, t.message, t)
+            Log.e(TAG, "snapsCallback ${t.message}", t)
         }
 
         override fun onResponse(call: Call<SnapsResponse>, response: Response<SnapsResponse>) {
-            Log.d(TAG, "${response.code()} ${response.message()}")
+            Log.d(TAG, "snapsCallback ${response.code()} ${response.message()}")
             repository.updateSnaps(response.body() ?: SnapsResponse(SnapsSucess(Collections.emptyList(),
                 Collections.emptyList(), Collections.emptyList())))
+        }
+    }
+
+    private fun jobStatusCallback(viewModel: ScheduledJobListViewModel) = object: Callback<StatusBooleanResponse> {
+        override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
+            Log.e(TAG, "jobStatusCallback ${t.message}", t)
+        }
+
+        override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
+            Log.d(TAG, "jobStatusCallback ${response.code()} ${response.message()}")
+            viewModel.updateTrips(response.body() ?: StatusBooleanResponse(false))
         }
     }
 

@@ -11,7 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import com.rent24.driver.R
-import com.rent24.driver.components.job.list.JobListFragment
+import com.rent24.driver.components.job.list.CompletedJobListFragment
+import com.rent24.driver.components.job.list.ScheduledJobListFragment
 import com.rent24.driver.databinding.JobFragmentBinding
 
 private val TAG = JobFragment::class.java.name
@@ -39,9 +40,9 @@ class JobFragment : Fragment() {
 
         }
     }
-    private val scheduledFragment by lazy { createFragment(0) }
-    private val completedFragment by lazy { createFragment(1) }
-    private lateinit var onClickListener: JobListFragment.OnClickListener
+    private val scheduledFragment by lazy { ScheduledJobListFragment.newInstance(onClickListener) }
+    private val completedFragment by lazy { CompletedJobListFragment.newInstance(onClickListener) }
+    private lateinit var onClickListener: CompletedJobListFragment.OnClickListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val tabLayout = inflater.inflate(R.layout.job_fragment, container, false) as ConstraintLayout
@@ -56,25 +57,16 @@ class JobFragment : Fragment() {
             .addOnTabSelectedListener(onTabSelectedListener)
     }
 
-    private fun replaceFragment(tab: Int): Boolean {
+    private fun replaceFragment(tab: Int) {
         val fragment = if (tab == 0) scheduledFragment else completedFragment
 
         childFragmentManager.beginTransaction()
             .replace(R.id.job_tab_content, fragment)
             .commitNow()
-        return true
-    }
-
-    private fun createFragment(tab: Int): Fragment {
-        val fragment = JobListFragment.newInstance(onClickListener)
-        val bundle = Bundle()
-        bundle.putInt("tab", tab)
-        fragment.arguments = bundle
-        return fragment
     }
 
     companion object {
-        fun newInstance(listener: JobListFragment.OnClickListener): JobFragment {
+        fun newInstance(listener: CompletedJobListFragment.OnClickListener): JobFragment {
             val fragment = JobFragment()
             fragment.onClickListener = listener
             return fragment

@@ -9,22 +9,19 @@ import com.rent24.driver.repository.SnapsRepository
 class SnapsTabViewModel(application: Application) : AndroidViewModel(application) {
 
     private val snapsRepository by lazy { SnapsRepository.getInstance(application) }
-    private val pickupSnaps by lazy { snapsRepository.getPickupSnaps() }
-    private val dropoffSnaps by lazy { snapsRepository.getDropoffSnaps() }
-    private val receiptSnaps by lazy { snapsRepository.getReceiptSnaps() }
 
-    fun getSnaps(key: String): LiveData<List<String>> = when (key) {
-        "pickup" -> pickupSnaps
-        "dropoff" -> dropoffSnaps
-        "receipt" -> receiptSnaps
+    fun getSnaps(key: String, jobId: Int): LiveData<List<String>> = when (key) {
+        "pickup" -> snapsRepository.getPickupSnaps(jobId)
+        "dropoff" -> snapsRepository.getDropoffSnaps(jobId)
+        "receipt" -> snapsRepository.getReceiptSnaps(jobId)
         else -> MutableLiveData<List<String>>()
     }
 
-    fun updateSnaps(key: String) {
+    fun updateSnaps(key: String, jobId: Int) {
         when (key) {
-            "pickup" -> snapsRepository.getPickupSnaps()
-            "dropoff" -> snapsRepository.getDropoffSnaps()
-            "receipt" -> snapsRepository.getReceiptSnaps()
+            "pickup" -> snapsRepository.getPickupSnaps(jobId)
+            "dropoff" -> snapsRepository.getDropoffSnaps(jobId)
+            "receipt" -> snapsRepository.getReceiptSnaps(jobId)
         }
     }
 }

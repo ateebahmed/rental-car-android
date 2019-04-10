@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -68,7 +69,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                 for (location in p0.locations) {
                     latLng = LatLng(location.latitude, location.longitude)
                     updateMarker(latLng)
-                    updateCamera(latLng)
+//                    updateCamera(latLng)
                 }
             }
         }

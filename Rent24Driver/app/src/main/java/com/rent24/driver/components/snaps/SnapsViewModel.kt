@@ -24,6 +24,7 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
     private val uploadResult by lazy { MutableLiveData<Boolean>() }
     private val askForStoragePermission by lazy { MutableLiveData<Boolean>() }
     private val snackbarMessage by lazy { MutableLiveData<String>() }
+    var activeJobId = 0
 
     fun getStartCameraActivity(): LiveData<Boolean> = startCameraActivity
 
@@ -63,13 +64,20 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun startCameraActivity() {
-        if (ContextCompat.checkSelfPermission(getApplication<Application>().applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            startCameraActivity.value = true
-            startCameraActivity.postValue(false)
+        if (activeJobId != 0) {
+            if (ContextCompat.checkSelfPermission(
+                    getApplication<Application>().applicationContext,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                startCameraActivity.value = true
+                startCameraActivity.postValue(false)
+            } else {
+                askForStoragePermission.value = true
+                askForStoragePermission.postValue(false)
+            }
         } else {
-            askForStoragePermission.value = true
-            askForStoragePermission.postValue(false)
+            snackbarMessage.value = "You currently have no active job"
         }
     }
 }

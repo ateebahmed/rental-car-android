@@ -2,23 +2,26 @@ package com.rent24.driver.components.map
 
 import android.Manifest
 import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.databinding.ParentFragmentBinding
 
 private const val LOCATION_REQUEST_CODE = 2
@@ -27,9 +30,16 @@ private const val LOCATION_SETTINGS_REQUEST_CODE = 3
 
 class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private lateinit var viewModel: ParentMapViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this)
+            .get(ParentMapViewModel::class.java)
+    }
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ParentFragmentBinding
+    private val homeViewModel by lazy {
+        ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = inflater.inflate(R.layout.parent_fragment, container, false)
@@ -39,7 +49,6 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ParentMapViewModel::class.java)
         setupModelObservers(viewModel)
         val map = SupportMapFragment()
         childFragmentManager.beginTransaction()
@@ -59,6 +68,12 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        homeViewModel.getPickupLocation()
+            .observe(this, Observer {
+                if (::mMap.isInitialized) {
+                    mMap.addMarker(MarkerOptions().position(it))
+                }
+            })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -84,7 +99,7 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         model.getLastLocationMarker()
             .observe(this, Observer {
                 if (::mMap.isInitialized) {
-                    mMap.clear()
+//                    mMap.clear()
                     mMap.addMarker(it)
                 }
             })

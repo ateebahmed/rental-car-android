@@ -5,6 +5,7 @@ import android.widget.CompoundButton
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
 import com.rent24.driver.api.login.response.StatusResponse
 import com.rent24.driver.repository.ApiManager
 
@@ -26,6 +27,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val snackbarMessage by lazy { MutableLiveData<String>() }
     private val startBackgroundService by lazy { MutableLiveData<Boolean>() }
     private val showLoadingProgressBar by lazy { MutableLiveData<Boolean>() }
+    private val pickupLocation by lazy { MutableLiveData<LatLng>() }
+    private val activeJobId by lazy { MutableLiveData<Int>() }
 
     fun status(response: StatusResponse) {
         status.value = response.success > 0
@@ -41,6 +44,22 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getStartBackgroundService(): LiveData<Boolean> = startBackgroundService
 
     fun getShowLoadingProgressBar(): LiveData<Boolean> = showLoadingProgressBar
+
+    fun showLoadingProgressBar(status: Boolean) {
+        showLoadingProgressBar.value = status
+    }
+
+    fun setPickupLocation(location: LatLng) {
+        pickupLocation.value = location
+    }
+
+    fun getPickupLocation(): LiveData<LatLng> = pickupLocation
+
+    fun setActiveJobId(id: Int) {
+        activeJobId.value = id
+    }
+
+    fun getActiveJobId(): LiveData<Int> = activeJobId
 
     private fun manageBackgroundService(value: Boolean) {
         startBackgroundService.value = value && switchState

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.rent24.driver.R
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.invoice.adapter.InvoiceAdapter
 import com.rent24.driver.databinding.InvoiceFragmentBinding
 
@@ -21,12 +22,14 @@ class InvoiceFragment : Fragment() {
         ViewModelProviders.of(this)
             .get(InvoiceViewModel::class.java)
     }
-    private var jobId: Int = 0
+    private val homeViewModel by lazy {
+        ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        jobId = arguments?.getInt("jobId") ?: jobId
+        homeViewModel.showLoadingProgressBar(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,7 +48,10 @@ class InvoiceFragment : Fragment() {
         binding.invoiceRecyclerView
             .layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        viewModel.callInvoiceApi(jobId)
+        homeViewModel.getActiveJobId()
+            .observe(this, Observer {
+                viewModel.callInvoiceApi(it)
+            })
 
         viewModel.getTotalAmount()
             .observe(this, Observer { binding.totalAmount.text = it.toString() })
@@ -55,6 +61,7 @@ class InvoiceFragment : Fragment() {
                 (binding.invoiceRecyclerView
                     .adapter as InvoiceAdapter)
                     .setEntries(it)
+                homeViewModel.showLoadingProgressBar(false)
             })
     }
 

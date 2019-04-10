@@ -26,9 +26,9 @@ class SnapsRepository private constructor(context: Context) {
         }
     }
 
-    fun getPickupSnaps(): LiveData<List<String>> {
+    fun getPickupSnaps(jobId: Int): LiveData<List<String>> {
         if (null == snapsResponseLiveData.value || (pickupSnapsLiveData.value?.isEmpty() == true)) {
-            apiManager.getSnaps(this)
+            apiManager.getSnaps(this, jobId)
         }
         return pickupSnapsLiveData
     }
@@ -37,16 +37,16 @@ class SnapsRepository private constructor(context: Context) {
         snapsResponseLiveData.value = response
     }
 
-    fun getDropoffSnaps(): LiveData<List<String>> {
+    fun getDropoffSnaps(jobId: Int): LiveData<List<String>> {
         if (null == snapsResponseLiveData.value || (dropoffSnapsLiveData.value?.isEmpty() == true)) {
-            apiManager.getSnaps(this)
+            apiManager.getSnaps(this, jobId)
         }
         return dropoffSnapsLiveData
     }
 
-    fun getReceiptSnaps(): LiveData<List<String>> {
+    fun getReceiptSnaps(jobId: Int): LiveData<List<String>> {
         if (null == snapsResponseLiveData.value || (receiptSnapsLiveData.value?.isEmpty() == true)) {
-            apiManager.getSnaps(this)
+            apiManager.getSnaps(this, jobId)
         }
         return receiptSnapsLiveData
     }

@@ -1,50 +1,53 @@
 package com.rent24.driver.components.job.list
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.rent24.driver.R
 import com.rent24.driver.api.login.response.JobTrip
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.job.list.adapter.JobListAdapter
 import com.rent24.driver.databinding.JobListTabFragmentBinding
 
-class JobListFragment : Fragment() {
+open class CompletedJobListFragment : Fragment() {
 
-    private lateinit var binding: JobListTabFragmentBinding
-    private var tab: Int = 0
-    private val viewModel: JobListViewModel by lazy {
-        ViewModelProviders.of(this)
-            .get(JobListViewModel::class.java)
+    protected lateinit var binding: JobListTabFragmentBinding
+    protected val homeViewModel by lazy {
+        ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
     }
-    private val observer: Observer<List<JobTrip>> by lazy {
+    protected val observer: Observer<List<JobTrip>> by lazy {
         Observer<List<JobTrip>> {
             (binding.jobList
                 .adapter as JobListAdapter)
                 .setTrips(it)
+            homeViewModel.showLoadingProgressBar(false)
         }
     }
-    private lateinit var listener: OnClickListener
-    private val onClickListener: JobListAdapter.OnClickListener by lazy {
+    protected lateinit var listener: OnClickListener
+    protected val onClickListener: JobListAdapter.OnClickListener by lazy {
         object: JobListAdapter.OnClickListener {
             override fun onClick(view: View, position: Int) {
                 openDetailFragment(position)
             }
         }
     }
+    protected open val viewModel by lazy {
+        ViewModelProviders.of(this)
+            .get(CompletedJobListViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tab = arguments?.getInt("tab")!!
+        homeViewModel.showLoadingProgressBar(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,28 +64,19 @@ class JobListFragment : Fragment() {
             .adapter = JobListAdapter(onClickListener)
         binding.jobList
             .layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        performTabOperation(tab)
-    }
-
-    private fun performTabOperation(tab: Int) {
-        val data = getObservableData(tab)
-        if (tab == 0) viewModel.updateScheduledTrips() else viewModel.updateCompletedTrips()
-        data.observe(this, observer)
-    }
-
-    private fun getObservableData(tab: Int): LiveData<List<JobTrip>> {
-        return if (tab == 0) viewModel.getScheduledTrips() else viewModel.getCompletedTrips()
+        viewModel.getTrips()
+            .observe(this, observer)
     }
 
     private fun openDetailFragment(position: Int) {
-        val data = getObservableData(tab).value!![position].id
+        val data = viewModel.getTrips()
+            .value!![position].id
         listener.showDetailFragment(data)
     }
 
     companion object {
-        fun newInstance(listener: OnClickListener): JobListFragment {
-            val f = JobListFragment()
+        fun newInstance(listener: OnClickListener): CompletedJobListFragment {
+            val f = CompletedJobListFragment()
             f.listener = listener
             return f
         }

@@ -24,7 +24,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateInvoice(response: InvoiceResponse) {
-        entries.value = if (response.success.isNotEmpty()) response.success else entries.value
+        entries.value = response.success
         totalAmount.value = 0.0
         entries.value
             ?.forEach { totalAmount.value = totalAmount.value?.plus(it.amount) }

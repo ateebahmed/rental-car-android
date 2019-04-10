@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rent24 Driver</string>
+    <string name="app_name">Rent24</string>
     <string name="app_short_name">Driver</string>
 
     <string name="title_activity_splash">SplashActivity</string>

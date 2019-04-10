@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
 import com.rent24.driver.components.snaps.dialog.SnapUploadDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
@@ -26,6 +27,10 @@ class SnapsFragment : Fragment() {
             .get(SnapsViewModel::class.java)
     }
     private lateinit var binding: SnapsFragmentBinding
+    private val homeViewModel by lazy {
+        ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.snaps_fragment, container, false)
@@ -37,6 +42,8 @@ class SnapsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupObservers()
+        homeViewModel.getActiveJobId()
+            .observe(this, Observer { viewModel.activeJobId = it })
         binding.snapsViewPager.adapter = SnapsFragmentPagerAdapter(childFragmentManager)
         binding.snapsTabLayout
             .setupWithViewPager(binding.snapsViewPager)

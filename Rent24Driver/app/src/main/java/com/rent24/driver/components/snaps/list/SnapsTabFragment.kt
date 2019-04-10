@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rent24.driver.R
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.snaps.adapter.SnapsListAdapter
 import com.rent24.driver.databinding.SnapLayoutBinding
 
@@ -21,10 +22,15 @@ class SnapsTabFragment : Fragment() {
         ViewModelProviders.of(this)
             .get(SnapsTabViewModel::class.java)
     }
+    private val homeViewModel by lazy {
+        ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
+    }
+    private var jobId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        homeViewModel.showLoadingProgressBar(true)
         key = arguments?.getString("key", "")!!
     }
 
@@ -38,16 +44,22 @@ class SnapsTabFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         binding.snapRecyclerview.adapter = SnapsListAdapter()
-        viewModel.getSnaps(key)
-            .observe(this, Observer {
-                (binding.snapRecyclerview.adapter as SnapsListAdapter).setImages(it)
+        homeViewModel.getActiveJobId()
+            .observe(this, Observer { id ->
+                jobId = id
+                viewModel.getSnaps(key, id)
+                    .observe(this, Observer {
+                        (binding.snapRecyclerview.adapter as SnapsListAdapter).setImages(it)
+                        homeViewModel.showLoadingProgressBar(false)
+                    })
             })
         binding.snapRecyclerview.layoutManager =
             GridLayoutManager(activity, 2, RecyclerView.VERTICAL, false)
     }
 
     fun updateSnaps() {
-        viewModel.updateSnaps(key)
+        homeViewModel.showLoadingProgressBar(true)
+        viewModel.updateSnaps(key, jobId)
     }
 
     companion object {

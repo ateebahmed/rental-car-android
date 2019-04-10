@@ -13,20 +13,22 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.rent24.driver.service.LocationDetectionService
 import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
-import com.rent24.driver.components.job.list.JobListFragment
+import com.rent24.driver.components.job.list.CompletedJobListFragment
 import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.components.map.ParentMapFragment
 import com.rent24.driver.components.profile.ProfileFragment
 import com.rent24.driver.components.snaps.ParentSnapsFragment
 import com.rent24.driver.databinding.ActivityHomeBinding
+import com.rent24.driver.service.LocationDetectionService
 
 private val TAG = HomeActivity::class.java.name
+const val ACTIVE_JOB_MAP_REQUEST = 10
 
 class HomeActivity : AppCompatActivity() {
 
@@ -35,34 +37,35 @@ class HomeActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener by lazy {
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             if (currentItem == item.itemId) {
-                return@OnNavigationItemSelectedListener false
+                false
+            } else {
+                currentItem = item.itemId
+                val fragment: Fragment
+                when (item.itemId) {
+                    R.id.job_map -> {
+                        fragment = mapFragment
+                        replaceFragment(fragment)
+                    }
+                    R.id.snaps -> {
+                        fragment = snapsFragment
+                        replaceFragment(fragment)
+                    }
+                    R.id.invoice -> {
+                        fragment = invoiceFragment
+                        replaceFragment(fragment)
+                    }
+                    R.id.job -> {
+                        fragment = jobFragment
+                        replaceFragment(fragment)
+                    }
+                }
+                false
             }
-            currentItem = item.itemId
-            val fragment: Fragment
-            when (item.itemId) {
-                R.id.job_map -> {
-                    fragment = onMapFragmentSelection()
-                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
-                }
-                R.id.snaps -> {
-                    fragment = onSnapsFragmentSelection()
-                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
-                }
-                R.id.invoice -> {
-                    fragment = onInvoiceFragmentSelection()
-                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
-                }
-                R.id.job -> {
-                    fragment = onJobFragmentSelection()
-                    return@OnNavigationItemSelectedListener replaceFragment(fragment)
-                }
-            }
-            false
         }
     }
     private lateinit var switch: SwitchCompat
     private val onClickListener by lazy {
-        object: JobListFragment.OnClickListener {
+        object: CompletedJobListFragment.OnClickListener {
             override fun showDetailFragment(id: Int) {
                 val fragment = JobItemFragment.newInstance()
                 val bundle = Bundle()
@@ -80,6 +83,10 @@ class HomeActivity : AppCompatActivity() {
         ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory(application))
             .get(HomeViewModel::class.java)
     }
+    private val jobFragment by lazy { JobFragment.newInstance(onClickListener) }
+    private val mapFragment by lazy { ParentMapFragment.newInstance() }
+    private val snapsFragment by lazy { ParentSnapsFragment.newInstance() }
+    private val invoiceFragment by lazy { InvoiceFragment.newInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +98,9 @@ class HomeActivity : AppCompatActivity() {
             .setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupModel(viewModel)
-        replaceFragment(onJobFragmentSelection())
+        replaceFragment(jobFragment)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -123,6 +129,23 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        this.intent = intent
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (null != intent) {
+            if (ACTIVE_JOB_MAP_REQUEST == intent.getIntExtra("type", -1)) {
+                replaceFragment(mapFragment)
+                viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let {
+                    LatLng(it[0], it[1])
+                })
+            }
+        }
+    }
+
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0 &&
             supportFragmentManager.fragments
@@ -131,30 +154,8 @@ class HomeActivity : AppCompatActivity() {
         } else super.onBackPressed()
     }
 
-    private fun onMapFragmentSelection(): ParentMapFragment {
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        return ParentMapFragment.newInstance()
-    }
-
-    private fun onSnapsFragmentSelection(): Fragment {
-        return ParentSnapsFragment.newInstance()
-    }
-
-    private fun onInvoiceFragmentSelection(): Fragment {
-        val fragment = InvoiceFragment.newInstance()
-        // TODO: send scheduled job id
-        val bundle = Bundle()
-        bundle.putInt("jobId", 6)
-        fragment.arguments = bundle
-        return fragment
-    }
-
     private fun onProfileFragmentSelection(): Fragment {
         return ProfileFragment.newInstance()
-    }
-
-    private fun onJobFragmentSelection(): Fragment {
-        return JobFragment.newInstance(onClickListener)
     }
 
     private fun replaceFragment(fragment: Fragment): Boolean {
@@ -186,15 +187,14 @@ class HomeActivity : AppCompatActivity() {
             })
         model.getShowLoadingProgressBar()
             .observe(this, Observer {
-                if (!binding.apiProgress
-                        .isShown) {
+                if (it) {
                     binding.apiProgress
                         .show()
-                } else if (binding.apiProgress
-                        .isShown) {
+                } else {
                     binding.apiProgress
                         .hide()
                 }
             })
     }
+
 }
