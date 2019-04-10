@@ -37,11 +37,11 @@ class HomeActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener by lazy {
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             if (currentItem == item.itemId) {
-                false
+                return@OnNavigationItemSelectedListener false
             } else {
                 currentItem = item.itemId
                 val fragment: Fragment
-                when (item.itemId) {
+                return@OnNavigationItemSelectedListener when (item.itemId) {
                     R.id.job_map -> {
                         fragment = mapFragment
                         replaceFragment(fragment)
@@ -58,8 +58,8 @@ class HomeActivity : AppCompatActivity() {
                         fragment = jobFragment
                         replaceFragment(fragment)
                     }
+                    else -> false
                 }
-                false
             }
         }
     }
