@@ -55,6 +55,9 @@ interface RestService {
 
         @POST("job/status")
         fun jobStatus(@Body status: Map<String, String>): Call<StatusBooleanResponse>
+
+        @GET("details")
+        fun userProfile(): Call<ProfileResponse>
     }
 
     interface NonAuthApis {

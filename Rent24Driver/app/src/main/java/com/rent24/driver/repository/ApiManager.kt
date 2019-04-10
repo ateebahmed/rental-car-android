@@ -12,6 +12,7 @@ import com.rent24.driver.components.job.list.CompletedJobListViewModel
 import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
+import com.rent24.driver.components.profile.ProfileViewModel
 import com.rent24.driver.components.snaps.dialog.SnapUploadViewModel
 import com.rent24.driver.service.RestService
 import okhttp3.Interceptor
@@ -122,6 +123,12 @@ class ApiManager private constructor(context: Context) {
         retrofit.create(RestService.AuthApis::class.java)
             .jobStatus(status)
             .enqueue(jobStatusCallback(viewModel))
+    }
+
+    fun userProfile(viewModel: ProfileViewModel) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .userProfile()
+            .enqueue(profileCallback(viewModel))
     }
 
     private fun getToken(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
@@ -236,6 +243,18 @@ class ApiManager private constructor(context: Context) {
         override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
             Log.d(TAG, "jobStatusCallback ${response.code()} ${response.message()}")
             viewModel.updateTrips(response.body() ?: StatusBooleanResponse(false))
+        }
+    }
+
+    private fun profileCallback(viewModel: ProfileViewModel) = object: Callback<ProfileResponse> {
+        override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+            Log.e(TAG, "profileCallback ${t.message}", t)
+        }
+
+        override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+            Log.d(TAG, "profileCallback ${response.code()} ${response.message()}")
+            viewModel.updateProfile(response.body() ?:
+            ProfileResponse(UserInformation(0, "", "", "")))
         }
     }
 

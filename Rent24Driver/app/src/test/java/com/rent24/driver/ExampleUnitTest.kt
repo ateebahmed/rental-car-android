@@ -14,4 +14,12 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun isFindIndexed() {
+        listOf(1, 2, 10, 3, 5, 9).find {
+            print("value $it")
+            it == 4
+        }
+    }
 }
