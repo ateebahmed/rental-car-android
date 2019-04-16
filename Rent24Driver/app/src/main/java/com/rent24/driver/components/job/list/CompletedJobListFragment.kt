@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +15,10 @@ import com.rent24.driver.R
 import com.rent24.driver.api.login.response.JobTrip
 import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.job.list.adapter.JobListAdapter
+import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.databinding.JobListTabFragmentBinding
+
+private const val JOB_DETAIL_FRAGMENT = "detail"
 
 open class CompletedJobListFragment : Fragment() {
 
@@ -71,7 +75,16 @@ open class CompletedJobListFragment : Fragment() {
     private fun openDetailFragment(position: Int) {
         val data = viewModel.getTrips()
             .value!![position].id
-        listener.showDetailFragment(data)
+        val fragment = childFragmentManager.findFragmentByTag(JOB_DETAIL_FRAGMENT) ?: JobItemFragment.newInstance()
+        val bundle = Bundle()
+        bundle.putInt("id", data)
+        fragment.arguments = bundle
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment, JOB_DETAIL_FRAGMENT)
+            .setPrimaryNavigationFragment(fragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .addToBackStack(JOB_DETAIL_FRAGMENT)
+            .commit()
     }
 
     companion object {

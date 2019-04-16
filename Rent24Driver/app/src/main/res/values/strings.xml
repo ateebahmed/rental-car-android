@@ -54,4 +54,7 @@
     <string name="notes">Notes</string>
     <string name="upload_pictures">upload pictures</string>
     <string name="car_details">Car Details</string>
+    <string name="pickup">pickup</string>
+    <string name="mid_stop">mid-stop</string>
+    <string name="drop_off">drop off</string>
 </resources>

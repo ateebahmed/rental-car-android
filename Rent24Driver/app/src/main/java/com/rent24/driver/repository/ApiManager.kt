@@ -153,6 +153,7 @@ class ApiManager private constructor(context: Context) {
     private fun statusCallback(viewModel: HomeViewModel) = object: Callback<StatusResponse> {
         override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
             Log.e(TAG, "statusCallback ${t.message}", t)
+            viewModel.status(StatusResponse(-1))
         }
 
         override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
@@ -164,12 +165,12 @@ class ApiManager private constructor(context: Context) {
     private fun jobListCallback(viewModel: CompletedJobListViewModel) = object: Callback<JobResponse> {
         override fun onFailure(call: Call<JobResponse>, t: Throwable) {
             Log.e(TAG, "jobListCallback ${t.message}", t)
-            viewModel.updateTrips(JobResponse(Collections.emptyList()))
+            viewModel.updateTrips(JobResponse(emptyList()))
         }
 
         override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
             Log.d(TAG, "jobListCallback ${response.code()} ${response.message()}")
-            val data = response.body() ?: JobResponse(Collections.emptyList())
+            val data = response.body() ?: JobResponse(emptyList())
             viewModel.updateTrips(data)
         }
     }
@@ -177,22 +178,24 @@ class ApiManager private constructor(context: Context) {
     private fun jobDetailCallback(viewModel: JobItemViewModel) = object: Callback<JobResponse> {
         override fun onFailure(call: Call<JobResponse>, t: Throwable) {
             Log.e(TAG, "jobDetailCallback ${t.message}", t)
+            viewModel.updateModel(JobResponse(emptyList()))
         }
 
         override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
             Log.d(TAG, "jobDetailCallback ${response.code()} ${response.message()}")
-            viewModel.updateModel(response.body() ?: JobResponse(Collections.emptyList()))
+            viewModel.updateModel(response.body() ?: JobResponse(emptyList()))
         }
     }
 
     private fun invoiceCallback(viewModel: InvoiceViewModel) = object: Callback<InvoiceResponse> {
         override fun onFailure(call: Call<InvoiceResponse>, t: Throwable) {
             Log.e(TAG, "invoiceCallback ${t.message}", t)
+            viewModel.updateInvoice(InvoiceResponse(emptyList()))
         }
 
         override fun onResponse(call: Call<InvoiceResponse>, response: Response<InvoiceResponse>) {
             Log.d(TAG, "invoiceCallback ${response.code()} ${response.message()}")
-            viewModel.updateInvoice(response.body() ?: InvoiceResponse(Collections.emptyList()))
+            viewModel.updateInvoice(response.body() ?: InvoiceResponse(emptyList()))
         }
     }
 
@@ -219,6 +222,7 @@ class ApiManager private constructor(context: Context) {
     private fun uploadInvoiceEntryCallback(viewModel: SnapUploadViewModel) = object: Callback<StatusBooleanResponse> {
         override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
             Log.e(TAG, "uploadInvoiceEntryCallback ${t.message}", t)
+            viewModel.snapUploadResult(StatusBooleanResponse(false))
         }
 
         override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
@@ -230,18 +234,20 @@ class ApiManager private constructor(context: Context) {
     private fun snapsCallback(repository: SnapsRepository) = object: Callback<SnapsResponse> {
         override fun onFailure(call: Call<SnapsResponse>, t: Throwable) {
             Log.e(TAG, "snapsCallback ${t.message}", t)
+            repository.updateSnaps(SnapsResponse(SnapsSucess(emptyList(), emptyList(), emptyList())))
         }
 
         override fun onResponse(call: Call<SnapsResponse>, response: Response<SnapsResponse>) {
             Log.d(TAG, "snapsCallback ${response.code()} ${response.message()}")
-            repository.updateSnaps(response.body() ?: SnapsResponse(SnapsSucess(Collections.emptyList(),
-                Collections.emptyList(), Collections.emptyList())))
+            repository.updateSnaps(response.body() ?: SnapsResponse(SnapsSucess(emptyList(), emptyList(),
+                emptyList())))
         }
     }
 
     private fun jobStatusCallback(viewModel: ScheduledJobListViewModel) = object: Callback<StatusBooleanResponse> {
         override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
             Log.e(TAG, "jobStatusCallback ${t.message}", t)
+            viewModel.updateTrips(StatusBooleanResponse(false))
         }
 
         override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
@@ -253,6 +259,7 @@ class ApiManager private constructor(context: Context) {
     private fun profileCallback(viewModel: ProfileViewModel) = object: Callback<ProfileResponse> {
         override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
             Log.e(TAG, "profileCallback ${t.message}", t)
+            viewModel.updateProfile(ProfileResponse(UserInformation(0, "", "", "")))
         }
 
         override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
@@ -277,8 +284,6 @@ class ApiManager private constructor(context: Context) {
     companion object {
         @Volatile private var instance: ApiManager? = null
 
-        fun getInstance(context: Context) = instance ?: synchronized(this) {
-            instance ?: ApiManager(context)
-        }
+        fun getInstance(context: Context) = instance ?: synchronized(this) { instance ?: ApiManager(context) }
     }
 }

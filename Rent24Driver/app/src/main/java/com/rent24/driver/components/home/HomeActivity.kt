@@ -20,7 +20,6 @@ import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
 import com.rent24.driver.components.job.list.CompletedJobListFragment
-import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.components.map.ParentMapFragment
 import com.rent24.driver.components.profile.ProfileFragment
@@ -33,6 +32,11 @@ const val ACTIVE_JOB_MAP_REQUEST = 10
 const val STATUS_PICKUP = 20
 const val STATUS_DROP_OFF = 21
 const val STATUS_TRIP_STOP = 22
+private const val JOB_FRAGMENT_TAG = "job"
+private const val INVOICE_FRAGMENT_TAG = "invoice"
+private const val MAP_FRAGMENT_TAG = "map"
+private const val SNAPS_FRAGMENT_TAG = "snaps"
+private const val PROFILE_FRAGMENT_TAG = "profile"
 
 class HomeActivity : AppCompatActivity() {
 
@@ -44,23 +48,18 @@ class HomeActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener false
             } else {
                 currentItem = item.itemId
-                val fragment: Fragment
                 return@OnNavigationItemSelectedListener when (item.itemId) {
                     R.id.job_map -> {
-                        fragment = mapFragment
-                        replaceFragment(fragment)
+                        replaceFragment(MAP_FRAGMENT_TAG, null, false)
                     }
                     R.id.snaps -> {
-                        fragment = snapsFragment
-                        replaceFragment(fragment)
+                        replaceFragment(SNAPS_FRAGMENT_TAG, null, false)
                     }
                     R.id.invoice -> {
-                        fragment = invoiceFragment
-                        replaceFragment(fragment)
+                        replaceFragment(INVOICE_FRAGMENT_TAG, null, false)
                     }
                     R.id.job -> {
-                        fragment = jobFragment
-                        replaceFragment(fragment)
+                        replaceFragment(JOB_FRAGMENT_TAG, null, false)
                     }
                     else -> false
                 }
@@ -87,10 +86,6 @@ class HomeActivity : AppCompatActivity() {
         ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory(application))
             .get(HomeViewModel::class.java)
     }
-    private val jobFragment by lazy { JobFragment.newInstance(onClickListener) }
-    private val mapFragment by lazy { ParentMapFragment.newInstance() }
-    private val snapsFragment by lazy { ParentSnapsFragment.newInstance() }
-    private val invoiceFragment by lazy { InvoiceFragment.newInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +99,7 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setupModel(viewModel)
-        replaceFragment(jobFragment)
+        binding.navigation.selectedItemId = R.id.job
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -128,7 +123,10 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.profile -> replaceFragment(onProfileFragmentSelection())
+            R.id.profile -> {
+                currentItem = R.id.profile
+                replaceFragment(PROFILE_FRAGMENT_TAG, null, true)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -152,21 +150,23 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 0 &&
-            supportFragmentManager.fragments
-                .last() is JobItemFragment) {
+        if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else super.onBackPressed()
     }
 
-    private fun onProfileFragmentSelection(): Fragment {
-        return ProfileFragment.newInstance()
-    }
-
-    private fun replaceFragment(fragment: Fragment): Boolean {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commitNow()
+    private fun replaceFragment(fragmentTag: String, arguments: Bundle?, addToBackstack: Boolean): Boolean {
+        val fragment = supportFragmentManager.findFragmentByTag(fragmentTag) ?: createNewFragmentInstance(fragmentTag)
+        if (null != arguments) {
+            fragment.arguments = arguments
+        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment, fragmentTag)
+            .setPrimaryNavigationFragment(fragment)
+        if (addToBackstack) {
+            transaction.addToBackStack(fragmentTag)
+        }
+        transaction.commit()
         return true
     }
 
@@ -200,22 +200,16 @@ class HomeActivity : AppCompatActivity() {
                         .hide()
                 }
             })
-        model.getDriverStatus()
-            .observe(this, Observer {
-                if (it in STATUS_PICKUP..STATUS_DROP_OFF) {
-                    val bundle = Bundle()
-                    bundle.putInt("status", it)
-                    snapsFragment.arguments = bundle
-                    binding.navigation.selectedItemId = R.id.snaps
-                }
-            })
-        model.getTriggerNextJob()
-            .observe(this, Observer {
-                if (it) {
-                    ViewModelProviders.of(this)
-                        .get(ScheduledJobListViewModel::class.java)
-                        .triggerNextJob()
-                }
-            })
+    }
+
+    private fun createNewFragmentInstance(fragmentTag: String): Fragment {
+        return when (fragmentTag) {
+            JOB_FRAGMENT_TAG -> JobFragment.newInstance(onClickListener)
+            MAP_FRAGMENT_TAG -> ParentMapFragment.newInstance()
+            SNAPS_FRAGMENT_TAG -> ParentSnapsFragment.newInstance()
+            INVOICE_FRAGMENT_TAG -> InvoiceFragment.newInstance()
+            PROFILE_FRAGMENT_TAG -> ProfileFragment.newInstance()
+            else -> JobFragment.newInstance(onClickListener)
+        }
     }
 }
