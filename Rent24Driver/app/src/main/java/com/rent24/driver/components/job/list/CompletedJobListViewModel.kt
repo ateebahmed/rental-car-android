@@ -21,12 +21,14 @@ open class CompletedJobListViewModel(application: Application) : AndroidViewMode
     }
 
     protected open fun updateTrips() {
-        if (trips.value.isNullOrEmpty()) apiManager.completedTrips(this)
-        else trips.postValue(trips.value)
+        apiManager.completedTrips(this)
     }
 
     open fun updateTrips(response: JobResponse) {
-        trips.value = response.success
+        if (!response.success.isEmpty()) {
+            trips.value = response.success
+        } else {
+            trips.value = trips.value
+        }
     }
-
 }

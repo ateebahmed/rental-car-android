@@ -58,6 +58,11 @@ class JobActivateWorker(private val context: Context, params: WorkerParameters) 
                             this[0] = data[0] as Double
                             this[1] = data[1] as Double
                         })
+                        putExtra("dropoff", DoubleArray(2).apply {
+                            val data = inputData.keyValueMap["pickup"] as Array<*>
+                            this[0] = data[0] as Double
+                            this[1] = data[1] as Double
+                        })
                         action = Intent.ACTION_MAIN
                         addCategory(Intent.CATEGORY_LAUNCHER)
                     }, PendingIntent.FLAG_UPDATE_CURRENT)).build())

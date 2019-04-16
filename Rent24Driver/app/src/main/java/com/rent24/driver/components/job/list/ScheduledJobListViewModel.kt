@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit
 
 private const val TWO_HOURS = 2 * 60 * 60 * 1000
 private const val OFFSET = 5000L
-private const val STATUS_ASSIGNED = "assigned"
-private const val STATUS_ACTIVATED = "activated"
+private const val STATUS_ASSIGNED = "2"
+private const val STATUS_ACTIVATED = "3"
 
 class ScheduledJobListViewModel(application: Application) : CompletedJobListViewModel(application) {
 
@@ -34,17 +34,7 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
 
     override fun updateTrips(response: JobResponse) {
         super.updateTrips(response)
-        if (!trips.value.isNullOrEmpty()) {
-            if (trips.value?.any { STATUS_ACTIVATED == it.status } == false) {
-                val trip = trips.value!!.find {
-                    STATUS_ASSIGNED == it.status
-                }
-                if (null != trip) {
-                    setJobActivationAlarm(trip)
-                    trip.status = STATUS_ACTIVATED
-                }
-            }
-        }
+        triggerNextJob()
     }
 
     fun getActiveJobId(): LiveData<Int> = activeJobId
@@ -53,6 +43,28 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
         if (response.success) {
             trips.value = trips.value?.filter {
                 it.id == activeJobId.value
+            }
+        }
+    }
+
+    fun triggerNextJob() {
+        if (!trips.value.isNullOrEmpty()) {
+            if (trips.value?.any { STATUS_ACTIVATED == it.status } == false) {
+                val trip = trips.value!!.find { STATUS_ASSIGNED == it.status }
+                if (null != trip) {
+                    setJobActivationAlarm(trip)
+                    setActiveJobId(trip.id)
+                    updateJobStatus(trip.id)
+                    trip.status = STATUS_ACTIVATED
+                }
+            } else {
+                val trip = trips.value!!.find { STATUS_ACTIVATED == it.status }
+                if (null != trip) {
+                    setJobActivationAlarm(trip)
+                    setActiveJobId(trip.id)
+                    updateJobStatus(trip.id)
+                    trip.status = STATUS_ACTIVATED
+                }
             }
         }
     }
@@ -78,14 +90,15 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
                         this[0] = it.latitude
                         this[1] = it.longitude
                     }
+                }), Pair("dropoff", DoubleArray(2).apply {
+                    this[0] = trip.dropoffLatitude ?: 0.0
+                    this[1] = trip.pickupLongitude ?: 0.0
                 })))
             .addTag("Activation")
             .build()
         WorkManager.getInstance()
             .enqueue(work)
         activeJobWorkerId.value = work.id
-        setActiveJobId(trip.id)
-        updateJobStatus(trip.id)
     }
 
     private fun updateJobStatus(id: Int) {

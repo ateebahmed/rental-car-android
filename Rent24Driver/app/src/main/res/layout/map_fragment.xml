@@ -18,7 +18,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/drop_off_navigate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="100dp"
+            android:theme="@style/AppTheme.FloatingActionButton"
+            app:srcCompat="@drawable/ic_navigation_black_24dp"
+            app:layout_anchor="@id/dropoff_button"
+            app:layout_anchorGravity="end"/>
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/pickup_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,17 +37,23 @@
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            style="?android:textAppearanceButton"
+            android:theme="@style/AppTheme.MaterialButton"
+            android:textStyle="bold"
             app:layout_anchor="@id/map_fragment_container"
             app:layout_anchorGravity="bottom" />
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/trip_stop_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="trip stop"
+            android:text="mid-stop"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            style="?android:textAppearanceButton"
+            android:theme="@style/AppTheme.MaterialButton"
+            android:textStyle="bold"
             app:layout_anchor="@id/map_fragment_container"
             app:layout_anchorGravity="bottom|center" />
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/dropoff_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,6 +61,9 @@
             android:layout_marginRight="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            style="?android:textAppearanceButton"
+            android:theme="@style/AppTheme.MaterialButton"
+            android:textStyle="bold"
             app:layout_anchor="@id/map_fragment_container"
             app:layout_anchorGravity="bottom|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

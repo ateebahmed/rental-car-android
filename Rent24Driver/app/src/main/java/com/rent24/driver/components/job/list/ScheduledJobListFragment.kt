@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 class ScheduledJobListFragment : CompletedJobListFragment() {
 
     override val viewModel by lazy {
-        ViewModelProviders.of(this)
+        ViewModelProviders.of(activity!!)
             .get(ScheduledJobListViewModel::class.java)
     }
 

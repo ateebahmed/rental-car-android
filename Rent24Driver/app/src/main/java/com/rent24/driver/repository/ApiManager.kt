@@ -12,6 +12,7 @@ import com.rent24.driver.components.job.list.CompletedJobListViewModel
 import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemViewModel
 import com.rent24.driver.components.login.LoginViewModel
+import com.rent24.driver.components.map.dialog.CarDetailsViewModel
 import com.rent24.driver.components.profile.ProfileViewModel
 import com.rent24.driver.components.snaps.dialog.SnapUploadViewModel
 import com.rent24.driver.service.RestService
@@ -101,16 +102,18 @@ class ApiManager private constructor(context: Context) {
     }
 
     fun uploadInvoiceEntry(image: MultipartBody.Part, status: RequestBody, title: RequestBody, amount: RequestBody,
-                           viewModel: SnapUploadViewModel) {
+                           jobId: RequestBody, viewModel: SnapUploadViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
-            .uploadInvoiceEntry(image, status, title, amount)
+            .uploadInvoiceEntry(image, status, title, amount, jobId)
             .enqueue(uploadInvoiceEntryCallback(viewModel))
     }
 
-    fun uploadInvoiceEntry(image: MultipartBody.Part, status: RequestBody, viewModel: SnapUploadViewModel) {
+    fun updateJobStatus(image: MultipartBody.Part, status: RequestBody, fuelRange: RequestBody, odometer: RequestBody,
+                        damage: RequestBody, condition: RequestBody, notes: RequestBody, jobId: RequestBody,
+                        viewModel: CarDetailsViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
-            .uploadInvoiceEntry(image, status)
-            .enqueue(uploadInvoiceEntryCallback(viewModel))
+            .jobStatus(image, status, fuelRange, odometer, damage, condition, notes, jobId)
+            .enqueue(jobStatusCallback(viewModel))
     }
 
     fun getSnaps(repository: SnapsRepository, jobId: Int) {
@@ -161,6 +164,7 @@ class ApiManager private constructor(context: Context) {
     private fun jobListCallback(viewModel: CompletedJobListViewModel) = object: Callback<JobResponse> {
         override fun onFailure(call: Call<JobResponse>, t: Throwable) {
             Log.e(TAG, "jobListCallback ${t.message}", t)
+            viewModel.updateTrips(JobResponse(Collections.emptyList()))
         }
 
         override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
@@ -255,6 +259,18 @@ class ApiManager private constructor(context: Context) {
             Log.d(TAG, "profileCallback ${response.code()} ${response.message()}")
             viewModel.updateProfile(response.body() ?:
             ProfileResponse(UserInformation(0, "", "", "")))
+        }
+    }
+
+    private fun jobStatusCallback(viewModel: CarDetailsViewModel) = object: Callback<StatusBooleanResponse> {
+        override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
+            Log.e(TAG, "jobStatusCallback ${t.message}", t)
+            viewModel.updateStatus(StatusBooleanResponse(false))
+        }
+
+        override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
+            Log.d(TAG, "jobStatusCallback ${response.code()} ${response.message()}")
+            viewModel.updateStatus(response.body() ?: StatusBooleanResponse(false))
         }
     }
 

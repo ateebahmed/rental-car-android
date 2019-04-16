@@ -20,6 +20,7 @@ import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
 import com.rent24.driver.components.job.list.CompletedJobListFragment
+import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.components.map.ParentMapFragment
 import com.rent24.driver.components.profile.ProfileFragment
@@ -141,8 +142,9 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         if (null != intent) {
             if (ACTIVE_JOB_MAP_REQUEST == intent.getIntExtra("type", -1)) {
-                replaceFragment(mapFragment)
-                viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let {
+                binding.navigation.selectedItemId = R.id.job_map
+                viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let { LatLng(it[0], it[1]) })
+                viewModel.updateDropOffLocation(intent.getDoubleArrayExtra("dropoff").let {
                     LatLng(it[0], it[1])
                 })
             }
@@ -207,6 +209,13 @@ class HomeActivity : AppCompatActivity() {
                     binding.navigation.selectedItemId = R.id.snaps
                 }
             })
+        model.getTriggerNextJob()
+            .observe(this, Observer {
+                if (it) {
+                    ViewModelProviders.of(this)
+                        .get(ScheduledJobListViewModel::class.java)
+                        .triggerNextJob()
+                }
+            })
     }
-
 }

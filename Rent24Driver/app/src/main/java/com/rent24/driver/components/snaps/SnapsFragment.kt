@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.rent24.driver.R
 import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.home.STATUS_DROP_OFF
@@ -19,8 +20,8 @@ import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
 import com.rent24.driver.components.snaps.dialog.SnapUploadDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
 
-private const val PICK_IMAGE_REQUEST_CODE = 5
-private const val STORAGE_REQUEST_CODE = 6
+const val PICK_IMAGE_REQUEST_CODE = 5
+const val STORAGE_REQUEST_CODE = 6
 
 class SnapsFragment : Fragment() {
 
@@ -34,6 +35,20 @@ class SnapsFragment : Fragment() {
             .get(HomeViewModel::class.java)
     }
     private var status: Int? = null
+    private val onTabSelectedListener by lazy {
+        object: TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                when (p0?.position) {
+                    2 -> binding.snapsAddButton.visibility = View.VISIBLE
+                    else -> binding.snapsAddButton.visibility = View.GONE
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +71,7 @@ class SnapsFragment : Fragment() {
         binding.snapsViewPager.adapter = SnapsFragmentPagerAdapter(childFragmentManager)
         binding.snapsTabLayout
             .setupWithViewPager(binding.snapsViewPager)
+        binding.snapsTabLayout.addOnTabSelectedListener(onTabSelectedListener)
         binding.snapsAddButton
             .setOnClickListener(viewModel.onFabClickListener)
         if (null != status) {
@@ -65,6 +81,7 @@ class SnapsFragment : Fragment() {
                 else -> 0
             }
             viewModel.startCameraActivity()
+            status = null
         }
     }
 
@@ -115,7 +132,9 @@ class SnapsFragment : Fragment() {
             })
         viewModel.getImageUri()
             .observe(this, Observer {
-                showDialog(it, binding.snapsTabLayout.selectedTabPosition)
+                if (null != it) {
+                    showDialog(it, binding.snapsTabLayout.selectedTabPosition)
+                }
             })
         viewModel.getUploadResult()
             .observe(this, Observer {

@@ -20,7 +20,7 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     private val startCameraActivity by lazy { MutableLiveData<Boolean>() }
-    private val imageUri by lazy { MutableLiveData<Uri>() }
+    private val imageUri by lazy { MutableLiveData<Uri?>() }
     private val uploadResult by lazy { MutableLiveData<Boolean>() }
     private val askForStoragePermission by lazy { MutableLiveData<Boolean>() }
     private val snackbarMessage by lazy { MutableLiveData<String>() }
@@ -33,12 +33,13 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
             expectedRequestCode -> {
                 if (resultCode == Activity.RESULT_OK) {
                     imageUri.value = data?.data
+                    imageUri.postValue(null)
                 }
             }
         }
     }
 
-    fun getImageUri(): LiveData<Uri> = imageUri
+    fun getImageUri(): LiveData<Uri?> = imageUri
 
     fun setUploadResult(result: Boolean) {
         uploadResult.value = result
@@ -64,15 +65,15 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun startCameraActivity() {
-        if (ContextCompat.checkSelfPermission(getApplication<Application>().applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            startCameraActivity.value = true
-            startCameraActivity.postValue(false)
-        } else {
-            askForStoragePermission.value = true
-            askForStoragePermission.postValue(false)
-        }
         if (activeJobId != 0) {
+            if (ContextCompat.checkSelfPermission(getApplication<Application>().applicationContext,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                startCameraActivity.value = true
+                startCameraActivity.postValue(false)
+            } else {
+                askForStoragePermission.value = true
+                askForStoragePermission.postValue(false)
+            }
         } else {
             snackbarMessage.value = "You currently have no active job"
         }

@@ -244,11 +244,11 @@
             android:layout_marginTop="@dimen/one_line_list_item_margin_top"
             android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             app:layout_constraintTop_toBottomOf="@id/divider6"
-            app:layout_constraintBottom_toTopOf="@id/divider7"
+            app:layout_constraintEnd_toStartOf="@id/task"
             app:layout_constraintStart_toStartOf="parent" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/task"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/one_line_list_item_margin_top"
             android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
@@ -256,17 +256,16 @@
             android:layout_marginStart="8dp"
             android:text="@{model.task}"
             app:layout_constraintTop_toBottomOf="@id/divider6"
-            app:layout_constraintBottom_toTopOf="@id/divider7"
+            app:layout_constraintEnd_toEndOf="parent "
             app:layout_constraintStart_toEndOf="@id/task_textview" />
 
         <View
             android:id="@+id/divider7"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/task_textview"
-            app:layout_constraintBottom_toBottomOf="@id/task_textview" />
+            app:layout_constraintTop_toBottomOf="@id/task" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

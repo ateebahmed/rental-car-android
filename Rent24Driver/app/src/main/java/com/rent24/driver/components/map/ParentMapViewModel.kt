@@ -3,10 +3,13 @@ package com.rent24.driver.components.map
 import android.Manifest
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.util.Log
 import android.view.View
+import androidx.collection.SparseArrayCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -26,6 +29,9 @@ import com.rent24.driver.components.home.STATUS_DROP_OFF
 import com.rent24.driver.components.home.STATUS_PICKUP
 
 private val TAG = ParentMapViewModel::class.java.name
+private const val CURRENT_LOCATION = 0
+const val PICKUP_LOCATION = 1
+const val DROP_OFF_LOCATION = 2
 
 class ParentMapViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -33,7 +39,6 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
         LocationServices.getFusedLocationProviderClient(application.applicationContext)
     }
     private val lastLocation by lazy { MutableLiveData<Location>() }
-    private val lastLocationMarker by lazy { MutableLiveData<MarkerOptions>() }
     private val cameraUpdate by lazy { MutableLiveData<CameraUpdate>() }
     private val lastLocationOnCompleteListener by lazy {
         OnCompleteListener<Location> { t ->
@@ -42,7 +47,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                     Log.d(TAG, "location detected ${t.result?.latitude} : ${t.result?.longitude}")
                     lastLocation.value = t.result ?: Location("")
                     val latLng = LatLng(lastLocation.value?.latitude ?: 0.0, lastLocation.value?.longitude ?: 0.0)
-                    updateMarker(latLng)
+                    updateMarkerPosition(CURRENT_LOCATION, latLng)
                     updateCamera(latLng)
                 }
                 checkLocationSettings(locationSettingsRequest)
@@ -71,7 +76,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                 lateinit var latLng: LatLng
                 for (location in p0.locations) {
                     latLng = LatLng(location.latitude, location.longitude)
-                    updateMarker(latLng)
+                    updateMarkerPosition(CURRENT_LOCATION, latLng)
 //                    updateCamera(latLng)
                 }
             }
@@ -81,20 +86,27 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     private val driverStatus by lazy { MutableLiveData<Int>() }
     val onButtonClickListener by lazy {
         View.OnClickListener {
-            when (it.id) {
-                R.id.pickup_button -> {
-                    driverStatus.value = STATUS_PICKUP
+            if (0 != jobId) {
+                when (it.id) {
+                    R.id.pickup_button -> driverStatus.value = STATUS_PICKUP
+                    R.id.dropoff_button -> driverStatus.value = STATUS_DROP_OFF
+                    R.id.trip_stop_button -> {
+                    }
                 }
-                R.id.dropoff_button -> {
-                    driverStatus.value = STATUS_DROP_OFF
-                }
-                R.id.trip_stop_button -> {}
+            } else {
+                snackbarMessage.value = "You have no active job"
             }
-            driverStatus.postValue(-1)
         }
     }
-
-    fun getLastLocationMarker(): LiveData<MarkerOptions> = lastLocationMarker
+    private val askForStoragePermission by lazy { MutableLiveData<Boolean>() }
+    private val startCameraActivity by lazy { MutableLiveData<Boolean>() }
+    private val imageUri by lazy { MutableLiveData<Uri?>() }
+    private val route by lazy { MutableLiveData<String>() }
+    private val dropOffLocation by lazy { MutableLiveData<LatLng?>() }
+    var jobId = 0
+    private val markerPositions by lazy {
+        MutableLiveData<SparseArrayCompat<LatLng>>().also { it.value = SparseArrayCompat() }
+    }
 
     fun getCameraUpdate(): LiveData<CameraUpdate> = cameraUpdate
 
@@ -128,15 +140,23 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray, locationCode: Int) {
+    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray, expectedRequestCode: IntArray) {
         Log.d(TAG, "request code $requestCode")
         when (requestCode) {
-            locationCode -> {
+            expectedRequestCode[0] -> {
                 Log.d(TAG, "checking result for coarse location")
                 if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     updateLastLocation()
                 } else {
                     snackbarMessage.value = "Location detection permission denied"
+                }
+            }
+            expectedRequestCode[1] -> {
+                if (grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    startCameraActivity()
+                } else {
+                    snackbarMessage.value = "Storage access denied"
                 }
             }
         }
@@ -154,13 +174,22 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, expectedRequestCode: Int) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, expectedRequestCode: IntArray, data: Intent?) {
         when (requestCode) {
-            expectedRequestCode -> {
+            expectedRequestCode[0] -> {
                 if (resultCode == Activity.RESULT_OK) {
                     updateLocationRequest()
                 } else {
                     snackbarMessage.value = "Live location updates not allowed"
+                }
+            }
+            expectedRequestCode[1] -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    imageUri.value = data?.data
+                    driverStatus.postValue(-1)
+                    imageUri.postValue(null)
+                } else {
+                    snackbarMessage.value = "Storage access not allowed"
                 }
             }
         }
@@ -172,10 +201,35 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getDriverStatus(): LiveData<Int> = driverStatus
 
-    private fun updateMarker(latLng: LatLng) {
-        lastLocationMarker.value = MarkerOptions().position(latLng)
-            .title("Last Location")
+    fun startCameraActivity() {
+        if (ContextCompat.checkSelfPermission(getApplication<Application>().applicationContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            startCameraActivity.value = true
+            startCameraActivity.postValue(false)
+        } else {
+            askForStoragePermission.value = true
+            askForStoragePermission.postValue(false)
+        }
     }
+
+    fun getAskForStoragePermission(): LiveData<Boolean> = askForStoragePermission
+
+    fun getStartCameraActivity(): LiveData<Boolean> = startCameraActivity
+
+    fun getImageUri(): LiveData<Uri?> = imageUri
+
+    fun getDropOffLocation(): LiveData<LatLng?> = dropOffLocation
+
+    fun sendSnackbarMessage(message: String) {
+        snackbarMessage.postValue(message)
+    }
+
+    fun updateMarkerPosition(key: Int, position: LatLng) {
+        markerPositions.value?.append(key, position)
+        markerPositions.value = markerPositions.value
+    }
+
+    fun getMarkerPositions(): LiveData<SparseArrayCompat<LatLng>> = markerPositions
 
     private fun updateCamera(latLng: LatLng) {
         cameraUpdate.value = CameraUpdateFactory.newLatLngZoom(latLng, 18.0F)

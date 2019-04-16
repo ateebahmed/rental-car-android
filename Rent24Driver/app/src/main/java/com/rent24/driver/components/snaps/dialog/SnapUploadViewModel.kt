@@ -17,8 +17,8 @@ import okhttp3.RequestBody
 import java.io.File
 import java.io.FileOutputStream
 
-private const val PICKUP = "pickup"
-private const val DROP_OFF = "dropoff"
+const val PICKUP = "pickup"
+const val DROP_OFF = "dropoff"
 private const val RECEIPT = "receipt"
 
 class SnapUploadViewModel(application: Application) : AndroidViewModel(application) {
@@ -59,19 +59,20 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
                     uploadImage))
             val mediaType = MediaType.parse("multipart/form-data")
             val status = RequestBody.create(mediaType, getStatus(tab))
+            val jobId = RequestBody.create(mediaType, this.jobId.toString())
             when {
-                tab != 2 -> apiManager.uploadInvoiceEntry(image, status, this)
                 validateFields() -> {
                     val title = RequestBody.create(mediaType, entry.value!!)
                     val amount = RequestBody.create(mediaType, this.amount.value.toString())
 
-                    apiManager.uploadInvoiceEntry(image, status, title, amount, this)
+                    apiManager.uploadInvoiceEntry(image, status, title, amount, jobId, this)
                 }
                 else -> snackbarMessage.value = "One or more inputs are empty"
             }
         }
     }
     private var tab = 0
+    var jobId = 0
 
     fun getSnackbarMessage(): LiveData<String> = snackbarMessage
 

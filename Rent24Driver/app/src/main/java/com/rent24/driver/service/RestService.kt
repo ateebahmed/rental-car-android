@@ -42,12 +42,15 @@ interface RestService {
         @Multipart
         @POST("job/status")
         fun uploadInvoiceEntry(@Part image: MultipartBody.Part, @Part("status") status: RequestBody,
-                               @Part("title") title: RequestBody, @Part("amount") amount: RequestBody):
-                Call<StatusBooleanResponse>
+                               @Part("title") title: RequestBody, @Part("amount") amount: RequestBody,
+                               @Part("jobid") jobId: RequestBody): Call<StatusBooleanResponse>
 
         @Multipart
         @POST("job/status")
-        fun uploadInvoiceEntry(@Part image: MultipartBody.Part, @Part("status") status: RequestBody):
+        fun jobStatus(@Part image: MultipartBody.Part, @Part("status") status: RequestBody,
+                      @Part("fuelrange") fuelRange: RequestBody, @Part("odometer") odometer: RequestBody,
+                      @Part("damage") damage: RequestBody, @Part("condition") condition: RequestBody,
+                      @Part("notes") notes: RequestBody, @Part("jobid") jobId: RequestBody):
                 Call<StatusBooleanResponse>
 
         @GET("job/snaps")

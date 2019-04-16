@@ -45,4 +45,13 @@
     <string name="receipt">Receipt</string>
     <string name="amount">Amount</string>
     <string name="password">Password</string>
+    <string name="fuel_range">Fuel Range</string>
+    <string name="odometer">Odometer</string>
+    <string name="clean">Clean</string>
+    <string name="dirty">Dirty</string>
+    <string name="condition">Condition</string>
+    <string name="damage">Damage</string>
+    <string name="notes">Notes</string>
+    <string name="upload_pictures">upload pictures</string>
+    <string name="car_details">Car Details</string>
 </resources>

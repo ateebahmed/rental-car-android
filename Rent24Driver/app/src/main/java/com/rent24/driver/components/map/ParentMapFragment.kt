@@ -2,6 +2,7 @@ package com.rent24.driver.components.map
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,12 +19,16 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.home.STATUS_DROP_OFF
 import com.rent24.driver.components.home.STATUS_PICKUP
+import com.rent24.driver.components.map.dialog.CarDetailsDialogFragment
+import com.rent24.driver.components.snaps.PICK_IMAGE_REQUEST_CODE
+import com.rent24.driver.components.snaps.STORAGE_REQUEST_CODE
 import com.rent24.driver.databinding.MapFragmentBinding
 import com.rent24.driver.databinding.ParentFragmentBinding
 
@@ -34,7 +39,7 @@ private const val LOCATION_SETTINGS_REQUEST_CODE = 3
 class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private val viewModel by lazy {
-        ViewModelProviders.of(this)
+        ViewModelProviders.of(activity!!)
             .get(ParentMapViewModel::class.java)
     }
     private lateinit var mMap: GoogleMap
@@ -69,6 +74,29 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
             .setOnClickListener(viewModel.onButtonClickListener)
         mapBinding.tripStopButton
             .setOnClickListener(viewModel.onButtonClickListener)
+        homeViewModel.getPickupLocation()
+            .observe(this, Observer {
+                viewModel.updateMarkerPosition(PICKUP_LOCATION, it)
+            })
+        homeViewModel.getDropOffLocation()
+            .observe(this, Observer {
+                viewModel.updateMarkerPosition(DROP_OFF_LOCATION, it)
+            })
+        mapBinding.dropOffNavigate
+            .setOnClickListener {
+                val location = viewModel.getMarkerPositions().value
+                    ?.get(DROP_OFF_LOCATION)
+                if (null != location) {
+                    startMapsApplication(location)
+                } else {
+                    Snackbar.make(binding.container, "No dropoff point specified", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        homeViewModel.getActiveJobId()
+            .observe(this, Observer {
+                viewModel.jobId = it
+            })
     }
 
     /**
@@ -82,21 +110,27 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        homeViewModel.getPickupLocation()
+        viewModel.getMarkerPositions()
             .observe(this, Observer {
-                if (::mMap.isInitialized) {
-                    mMap.addMarker(MarkerOptions().position(it))
+                mMap.clear()
+                val size = it.size()
+                for (i in 0 until size) {
+                    if (it.containsKey(i) && it.containsValue(it.valueAt(i))) {
+                        mMap.addMarker(MarkerOptions().position(it[i]!!))
+                    }
                 }
             })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        viewModel.onRequestPermissionsResult(requestCode, grantResults, LOCATION_REQUEST_CODE)
+        viewModel.onRequestPermissionsResult(requestCode, grantResults, intArrayOf(LOCATION_REQUEST_CODE,
+            STORAGE_REQUEST_CODE))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "result code $resultCode, request code $requestCode")
-        viewModel.onActivityResult(requestCode, resultCode, LOCATION_SETTINGS_REQUEST_CODE)
+        viewModel.onActivityResult(requestCode, resultCode, intArrayOf(LOCATION_SETTINGS_REQUEST_CODE,
+                PICK_IMAGE_REQUEST_CODE), data)
     }
 
     override fun onResume() {
@@ -110,13 +144,6 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
     }
 
     private fun setupModelObservers(model: ParentMapViewModel) {
-        model.getLastLocationMarker()
-            .observe(this, Observer {
-                if (::mMap.isInitialized) {
-//                    mMap.clear()
-                    mMap.addMarker(it)
-                }
-            })
         model.getCameraUpdate()
             .observe(this, Observer {
                 if (::mMap.isInitialized) {
@@ -141,7 +168,34 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         model.getDriverStatus()
             .observe(this, Observer {
                 if (it in STATUS_PICKUP..STATUS_DROP_OFF) {
-                    homeViewModel.updateDriverStatus(it)
+                    model.startCameraActivity()
+                }
+            })
+        model.getStartCameraActivity()
+            .observe(this, Observer {
+                if (it) {
+                    startActivityForResult(Intent.createChooser(Intent().apply {
+                        type = "image/*"
+                        action = Intent.ACTION_GET_CONTENT
+                    }, "Select Picture"), PICK_IMAGE_REQUEST_CODE)
+                }
+            })
+        model.getImageUri()
+            .observe(this, Observer {
+                if (null != it) {
+                    val bundle = Bundle()
+                    bundle.putInt("status", model.getDriverStatus().value!!)
+                    bundle.putParcelable("uri", it)
+                    val dialog = CarDetailsDialogFragment()
+                    dialog.arguments = bundle
+                    dialog.show(childFragmentManager, dialog.tag)
+
+                }
+            })
+        model.getAskForStoragePermission()
+            .observe(this, Observer {
+                if (it) {
+                    askForStoragePermission()
                 }
             })
     }
@@ -182,6 +236,34 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
                     }
                 }
             }
+    }
+
+    private fun askForStoragePermission() {
+        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) ||
+            shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            val snackbar = Snackbar.make(binding.container, "Need to access storage to upload photo",
+                Snackbar.LENGTH_INDEFINITE)
+            snackbar.setAction("OK") {
+                requestPermissions(permissions, STORAGE_REQUEST_CODE)
+                snackbar.dismiss()
+            }
+            snackbar.show()
+        } else {
+            requestPermissions(permissions, STORAGE_REQUEST_CODE)
+        }
+    }
+
+    private fun startMapsApplication(dropOff: LatLng) {
+        val mapIntent = Intent(Intent.ACTION_VIEW,
+            Uri.parse("google.navigation:q=${dropOff.latitude},${dropOff.longitude}"))
+        mapIntent.`package` = "com.google.android.apps.maps"
+        if (null != mapIntent.resolveActivity(activity!!.packageManager)) {
+            startActivity(mapIntent)
+        } else {
+            Snackbar.make(binding.container, "Install Google Maps to perform this action", Snackbar.LENGTH_SHORT)
+                .show()
+        }
     }
 
     companion object {

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
+import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.snaps.SnapsViewModel
 import com.rent24.driver.databinding.SnapUploadDialogFragmentBinding
 
@@ -33,7 +34,7 @@ class SnapUploadDialogFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         imageUri = arguments?.getParcelable("uri") as Uri
-        tab = arguments?.getInt("tab", 0) ?: tab
+        tab = arguments?.getInt("tab", 0) as Int
     }
 
     override fun setupDialog(dialog: Dialog?, style: Int) {
@@ -48,6 +49,10 @@ class SnapUploadDialogFragment : BottomSheetDialogFragment() {
         model.updateTab(tab)
         binding.previewImage
             .setImageURI(imageUri)
+        model.jobId = ViewModelProviders.of(activity!!)
+            .get(HomeViewModel::class.java)
+            .getActiveJobId()
+            .value ?: 0
         if (tab == 2) {
             binding.entryAmountLayout.visibility = View.VISIBLE
             binding.invoiceEntryLayout.visibility = View.VISIBLE
