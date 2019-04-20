@@ -27,7 +27,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
         entries.value = response.success
         totalAmount.value = 0.0
         entries.value
-            ?.forEach { totalAmount.value = totalAmount.value?.plus(it.amount) }
+            ?.forEach { totalAmount.value = totalAmount.value?.plus(it.amount ?: 0F) }
     }
 
     fun getEntries(): LiveData<List<InvoiceEntry>> {

@@ -28,56 +28,20 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
     private val snackbarMessage by lazy { MutableLiveData<String>() }
     private val apiManager by lazy { ApiManager.getInstance(application) }
     private val uploadResult by lazy { MutableLiveData<Boolean>() }
-    val onEntryFocusChangeListener by lazy {
-        View.OnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                if (view is TextInputEditText) {
-                    if (view.text?.isNotBlank() == true) {
-                        entry.value = view.text.toString()
-                    }
-                }
-            }
-        }
-    }
-    val onAmountFocusChangeListener by lazy {
-        View.OnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                if (view is TextInputEditText) {
-                    if (view.text?.isNotBlank() == true) {
-                        amount.value = view.text.toString()
-                            .toDouble()
-                    }
-                }
-            }
-        }
-    }
     private lateinit var uploadImage: File
     val onSnapUploadClickListener by lazy {
         View.OnClickListener {
-            val image = MultipartBody.Part
-                .createFormData("snap[]", uploadImage.name, RequestBody.create(MediaType.parse("image/*"),
-                    uploadImage))
-            val mediaType = MediaType.parse("multipart/form-data")
-            val status = RequestBody.create(mediaType, getStatus(tab))
-            val jobId = RequestBody.create(mediaType, this.jobId.toString())
-            when {
-                validateFields() -> {
-                    val title = RequestBody.create(mediaType, entry.value!!)
-                    val amount = RequestBody.create(mediaType, this.amount.value.toString())
-
-                    apiManager.uploadInvoiceEntry(image, status, title, amount, jobId, this)
-                }
-                else -> snackbarMessage.value = "One or more inputs are empty"
-            }
+            setFields.value = true
+            setFields.postValue(false)
         }
     }
-    private var tab = 0
     var jobId = 0
+    private val setFields by lazy { MutableLiveData<Boolean>() }
 
     fun getSnackbarMessage(): LiveData<String> = snackbarMessage
 
     fun snapUploadResult(status: StatusBooleanResponse) {
-        if (status.success) {
+        if (status.success == true) {
             snackbarMessage.value = "Invoice created"
         } else {
             snackbarMessage.value = "Error occurred, try again!"
@@ -91,26 +55,29 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
         BytesConversionTask().execute(imageUri)
     }
 
-    fun updateTab(tab: Int) {
-        this.tab = tab
+    fun getSetFields(): LiveData<Boolean> = setFields
+
+    fun submit() {
+        when {
+            validateFields() -> {
+                val image = MultipartBody.Part
+                    .createFormData("snap[]", uploadImage.name,
+                        RequestBody.create(MediaType.parse("image/*"), uploadImage))
+                val mediaType = MediaType.parse("multipart/form-data")
+                val status = RequestBody.create(mediaType, RECEIPT)
+                val jobId = RequestBody.create(mediaType, this.jobId.toString())
+                val title = RequestBody.create(mediaType, entry.value!!)
+                val amount = RequestBody.create(mediaType, this.amount.value.toString())
+
+                apiManager.uploadInvoiceEntry(image, status, title, amount, jobId, this)
+            }
+            else -> snackbarMessage.value = "One or more inputs are empty"
+        }
     }
 
     private fun validateFields() = entry.value?.isNotBlank() ?: false && !(amount.value?.isNaN() ?: true)
 
-    private fun getStatus(tab: Int): String {
-        return when (tab) {
-            0 -> PICKUP
-            1 -> DROP_OFF
-            2 -> RECEIPT
-            else -> ""
-        }
-    }
-
     private inner class BytesConversionTask : AsyncTask<Uri, Void, File>() {
-        override fun onPreExecute() {
-            super.onPreExecute()
-        }
-
         override fun doInBackground(vararg params: Uri?): File {
             val imageUri = params[0]!!
             val imageName = if (imageUri.scheme == "content") {

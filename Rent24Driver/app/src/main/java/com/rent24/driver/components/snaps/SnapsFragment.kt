@@ -20,13 +20,13 @@ import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
 import com.rent24.driver.components.snaps.dialog.SnapUploadDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
 
-const val PICK_IMAGE_REQUEST_CODE = 5
-const val STORAGE_REQUEST_CODE = 6
+private const val PICK_IMAGE_REQUEST_CODE = 5
+private const val STORAGE_REQUEST_CODE = 6
 
 class SnapsFragment : Fragment() {
 
     private val viewModel by lazy {
-        ViewModelProviders.of(this)
+        ViewModelProviders.of(activity!!)
             .get(SnapsViewModel::class.java)
     }
     private lateinit var binding: SnapsFragmentBinding
@@ -94,11 +94,10 @@ class SnapsFragment : Fragment() {
         viewModel.onRequestPermissionsResult(requestCode, grantResults, STORAGE_REQUEST_CODE)
     }
 
-    private fun showDialog(uri: Uri, tab: Int) {
+    private fun showDialog(uri: Uri) {
         val bundle = Bundle()
 
         bundle.putParcelable("uri", uri)
-        bundle.putInt("tab", tab)
         val dialog = SnapUploadDialogFragment.newInstance()
         dialog.arguments = bundle
         dialog.show(childFragmentManager, dialog.tag)
@@ -133,7 +132,7 @@ class SnapsFragment : Fragment() {
         viewModel.getImageUri()
             .observe(this, Observer {
                 if (null != it) {
-                    showDialog(it, binding.snapsTabLayout.selectedTabPosition)
+                    showDialog(it)
                 }
             })
         viewModel.getUploadResult()
@@ -151,8 +150,10 @@ class SnapsFragment : Fragment() {
             })
         viewModel.getSnackbarMessage()
             .observe(this, Observer {
-                Snackbar.make(binding.snapsCoordinatorLayout, it, Snackbar.LENGTH_SHORT)
-                    .show()
+                if (it.isNotBlank()) {
+                    Snackbar.make(binding.snapsCoordinatorLayout, it, Snackbar.LENGTH_SHORT)
+                        .show()
+                }
             })
     }
 

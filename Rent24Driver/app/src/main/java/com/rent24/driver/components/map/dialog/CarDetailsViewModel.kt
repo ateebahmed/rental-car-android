@@ -75,7 +75,7 @@ class CarDetailsViewModel(application: Application) : AndroidViewModel(applicati
 
     fun updateStatus(status: StatusBooleanResponse) {
         showLoadingProgressBar.value = false
-        if (!status.success) {
+        if (null != status.success && !status.success) {
             snackbarMessage.value = "Error occured, Try again!"
         } else {
             uploadStatus.value = true

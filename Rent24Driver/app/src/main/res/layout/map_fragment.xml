@@ -18,17 +18,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/drop_off_navigate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="100dp"
-            android:theme="@style/AppTheme.FloatingActionButton"
-            app:srcCompat="@drawable/ic_navigation_black_24dp"
-            app:layout_anchor="@id/dropoff_button"
-            app:layout_anchorGravity="end"/>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pickup_button"
             android:layout_width="wrap_content"
@@ -48,11 +37,14 @@
             android:layout_height="wrap_content"
             android:text="@string/mid_stop"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
             style="?android:textAppearanceButton"
             android:theme="@style/AppTheme.MaterialButton"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_anchor="@id/map_fragment_container"
-            app:layout_anchorGravity="bottom|center" />
+            app:layout_anchorGravity="bottom" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/dropoff_button"
             android:layout_width="wrap_content"
@@ -64,7 +56,20 @@
             style="?android:textAppearanceButton"
             android:theme="@style/AppTheme.MaterialButton"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_anchor="@id/map_fragment_container"
-            app:layout_anchorGravity="bottom|end" />
+            app:layout_anchorGravity="bottom|center" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/drop_off_navigate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
+            android:theme="@style/AppTheme.FloatingActionButton"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_navigation_black_24dp"
+            app:layout_anchor="@id/map_fragment_container"
+            app:layout_anchorGravity="end|bottom"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

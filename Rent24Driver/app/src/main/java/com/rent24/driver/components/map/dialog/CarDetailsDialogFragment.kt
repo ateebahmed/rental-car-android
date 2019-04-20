@@ -75,11 +75,13 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
             .observe(this, Observer {
                 if (it) {
                     if (STATUS_PICKUP == status) {
+                        parentMapViewModel.switchButtons(false)
                         parentMapViewModel.sendSnackbarMessage("Tap on Navigate to get navigation to drop off")
                     } else if (STATUS_DROP_OFF == status) {
                         ViewModelProviders.of(activity!!)
                             .get(ScheduledJobListViewModel::class.java)
                             .triggerNextJob()
+                        parentMapViewModel.switchButtons(true)
                         parentMapViewModel.sendSnackbarMessage("You have completed this job")
                     }
                     dismiss()

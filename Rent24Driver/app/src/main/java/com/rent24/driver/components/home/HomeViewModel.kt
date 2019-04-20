@@ -32,7 +32,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val dropOffLocation by lazy { MutableLiveData<LatLng>() }
 
     fun status(response: StatusResponse) {
-        status.value = response.success > 0
+        status.value = if (null != response.success) response.success > 0 else false
         showLoadingProgressBar.value = false
         updateSnackbarMessage(status.value ?: false)
         manageBackgroundService(status.value ?: false)

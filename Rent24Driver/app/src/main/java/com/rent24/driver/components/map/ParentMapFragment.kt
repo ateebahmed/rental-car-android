@@ -27,14 +27,14 @@ import com.rent24.driver.components.home.HomeViewModel
 import com.rent24.driver.components.home.STATUS_DROP_OFF
 import com.rent24.driver.components.home.STATUS_PICKUP
 import com.rent24.driver.components.map.dialog.CarDetailsDialogFragment
-import com.rent24.driver.components.snaps.PICK_IMAGE_REQUEST_CODE
-import com.rent24.driver.components.snaps.STORAGE_REQUEST_CODE
 import com.rent24.driver.databinding.MapFragmentBinding
 import com.rent24.driver.databinding.ParentFragmentBinding
 
 private const val LOCATION_REQUEST_CODE = 2
 private val TAG = ParentMapFragment::class.java.name
 private const val LOCATION_SETTINGS_REQUEST_CODE = 3
+private const val PICK_IMAGE_REQUEST_CODE = 7
+private const val STORAGE_REQUEST_CODE = 8
 
 class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -120,6 +120,10 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
                     }
                 }
             })
+        viewModel.getCameraUpdate()
+            .observe(this, Observer {
+                mMap.animateCamera(it)
+            })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -144,12 +148,6 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
     }
 
     private fun setupModelObservers(model: ParentMapViewModel) {
-        model.getCameraUpdate()
-            .observe(this, Observer {
-                if (::mMap.isInitialized) {
-                    mMap.animateCamera(it)
-                }
-            })
         model.askForLocationPermission()
             .observe(this, Observer {
                 if (it) {
@@ -189,13 +187,24 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
                     val dialog = CarDetailsDialogFragment()
                     dialog.arguments = bundle
                     dialog.show(childFragmentManager, dialog.tag)
-
                 }
             })
         model.getAskForStoragePermission()
             .observe(this, Observer {
                 if (it) {
                     askForStoragePermission()
+                }
+            })
+        model.getSwitchButtons()
+            .observe(this, Observer {
+                if (it) {
+                    mapBinding.dropoffButton.visibility = View.GONE
+                    mapBinding.tripStopButton.visibility = View.GONE
+                    mapBinding.pickupButton.visibility = View.VISIBLE
+                } else {
+                    mapBinding.pickupButton.visibility = View.GONE
+                    mapBinding.dropoffButton.visibility = View.VISIBLE
+                    mapBinding.tripStopButton.visibility = View.VISIBLE
                 }
             })
     }

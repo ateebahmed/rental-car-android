@@ -40,7 +40,7 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
     fun getActiveJobId(): LiveData<Int> = activeJobId
 
     fun updateTrips(response: StatusBooleanResponse) {
-        if (response.success) {
+        if (response.success == true) {
             trips.value = trips.value?.filter {
                 it.id == activeJobId.value
             }
@@ -52,18 +52,13 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
             if (trips.value?.any { STATUS_ACTIVATED == it.status } == false) {
                 val trip = trips.value!!.find { STATUS_ASSIGNED == it.status }
                 if (null != trip) {
-                    setJobActivationAlarm(trip)
-                    setActiveJobId(trip.id)
-                    updateJobStatus(trip.id)
+                    createJob(trip)
                     trip.status = STATUS_ACTIVATED
                 }
             } else {
                 val trip = trips.value!!.find { STATUS_ACTIVATED == it.status }
                 if (null != trip) {
-                    setJobActivationAlarm(trip)
-                    setActiveJobId(trip.id)
-                    updateJobStatus(trip.id)
-                    trip.status = STATUS_ACTIVATED
+                    createJob(trip)
                 }
             }
         }
@@ -107,5 +102,11 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
 
     private fun setActiveJobId(id: Int) {
         activeJobId.value = id
+    }
+
+    private fun createJob(trip: JobTrip) {
+        setJobActivationAlarm(trip)
+        setActiveJobId(trip.id ?: 0)
+        updateJobStatus(trip.id ?: 0)
     }
 }

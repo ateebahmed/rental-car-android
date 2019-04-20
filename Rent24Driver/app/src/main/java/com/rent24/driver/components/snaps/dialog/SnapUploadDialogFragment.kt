@@ -29,12 +29,10 @@ class SnapUploadDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: SnapUploadDialogFragmentBinding
     private lateinit var imageUri: Uri
-    private var tab = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         imageUri = arguments?.getParcelable("uri") as Uri
-        tab = arguments?.getInt("tab", 0) as Int
     }
 
     override fun setupDialog(dialog: Dialog?, style: Int) {
@@ -46,32 +44,35 @@ class SnapUploadDialogFragment : BottomSheetDialogFragment() {
         val model = ViewModelProviders.of(this)
             .get(SnapUploadViewModel::class.java)
         model.createUploadFile(imageUri)
-        model.updateTab(tab)
         binding.previewImage
             .setImageURI(imageUri)
+
         model.jobId = ViewModelProviders.of(activity!!)
             .get(HomeViewModel::class.java)
             .getActiveJobId()
             .value ?: 0
-        if (tab == 2) {
-            binding.entryAmountLayout.visibility = View.VISIBLE
-            binding.invoiceEntryLayout.visibility = View.VISIBLE
-        }
+
         model.getSnackbarMessage()
             .observe(this, Observer {
                 Snackbar.make(binding.dialogContainer, it, Snackbar.LENGTH_SHORT)
                     .show()
             })
-        binding.entry.onFocusChangeListener = model.onEntryFocusChangeListener
-        binding.amount.onFocusChangeListener = model.onAmountFocusChangeListener
+        model.getSetFields()
+            .observe(this, Observer {
+                if (it) {
+                    model.entry.value = binding.entry.text.toString()
+                    model.amount.value = binding.amount.text.toString().toDouble()
+                    model.submit()
+                }
+            })
         binding.snapsUploadButton.setOnClickListener(model.onSnapUploadClickListener)
 
-        val viewModel = ViewModelProviders.of(this)
-            .get(SnapsViewModel::class.java)
         model.getUploadResult()
             .observe(this, Observer {
                 if (it) {
-                    viewModel.setUploadResult(it)
+                    ViewModelProviders.of(activity!!)
+                        .get(SnapsViewModel::class.java)
+                        .setUploadResult(it)
                 }
                 dialog?.dismiss()
             })

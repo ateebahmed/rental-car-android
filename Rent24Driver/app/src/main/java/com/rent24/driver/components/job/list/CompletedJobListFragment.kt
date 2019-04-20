@@ -48,12 +48,6 @@ open class CompletedJobListFragment : Fragment() {
             .get(CompletedJobListViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        homeViewModel.showLoadingProgressBar(true)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = inflater.inflate(R.layout.job_list_tab_fragment, container, false) as ConstraintLayout
         binding = JobListTabFragmentBinding.bind(layout)
@@ -64,6 +58,7 @@ open class CompletedJobListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        homeViewModel.showLoadingProgressBar(true)
         binding.jobList
             .adapter = JobListAdapter(onClickListener)
         binding.jobList
@@ -75,16 +70,7 @@ open class CompletedJobListFragment : Fragment() {
     private fun openDetailFragment(position: Int) {
         val data = viewModel.getTrips()
             .value!![position].id
-        val fragment = childFragmentManager.findFragmentByTag(JOB_DETAIL_FRAGMENT) ?: JobItemFragment.newInstance()
-        val bundle = Bundle()
-        bundle.putInt("id", data)
-        fragment.arguments = bundle
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment, JOB_DETAIL_FRAGMENT)
-            .setPrimaryNavigationFragment(fragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .addToBackStack(JOB_DETAIL_FRAGMENT)
-            .commit()
+        listener.showDetailFragment(data ?: 0)
     }
 
     companion object {

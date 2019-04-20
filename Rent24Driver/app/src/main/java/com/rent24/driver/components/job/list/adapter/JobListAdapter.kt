@@ -11,7 +11,7 @@ import com.rent24.driver.databinding.JobListItemBinding
 
 class JobListAdapter(private val listener: OnClickListener) : RecyclerView.Adapter<JobListAdapter.ViewHolder>() {
 
-    private var trips: List<JobTrip>? = null
+    private var trips: List<JobTrip> = emptyList()
     private lateinit var binding: JobListItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,11 +21,11 @@ class JobListAdapter(private val listener: OnClickListener) : RecyclerView.Adapt
     }
 
     override fun getItemCount(): Int {
-        return trips?.size ?: 0
+        return trips.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(trips?.get(position)!!)
+        holder.bind(trips[position])
         holder.itemView
             .setOnClickListener {
                 listener.onClick(it, position)

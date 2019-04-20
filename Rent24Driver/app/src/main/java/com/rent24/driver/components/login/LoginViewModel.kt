@@ -56,15 +56,13 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun saveToken(response: LoginResponse) {
         val sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(getApplication<Application>().applicationContext)
-        if (response.success
-                .token
-                .isNotBlank()) {
+        if ((null != response.success) && !(response.success.token.isNullOrBlank())) {
             with(sharedPreferences.edit()) {
                 putString("token", response.success
                     .token)
                 apply()
             }
-        } else {
+        } else if ((null != response.error) && !(response.error.error.isNullOrBlank())) {
             with(sharedPreferences.edit()) {
                 putString("error", response.error
                     .error)

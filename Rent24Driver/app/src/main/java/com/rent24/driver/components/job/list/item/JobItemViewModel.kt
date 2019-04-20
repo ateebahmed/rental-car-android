@@ -19,7 +19,7 @@ class JobItemViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateModel(response: JobResponse) {
-        liveModel.value = if (response.success.isNotEmpty()) response.success[0] else liveModel.value
+        liveModel.value = if (!(response.success.isNullOrEmpty())) response.success[0] else liveModel.value
     }
 
     fun getModel(): LiveData<JobTrip> {

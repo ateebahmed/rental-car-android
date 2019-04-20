@@ -16,6 +16,8 @@ import com.rent24.driver.components.map.dialog.CarDetailsViewModel
 import com.rent24.driver.components.profile.ProfileViewModel
 import com.rent24.driver.components.snaps.dialog.SnapUploadViewModel
 import com.rent24.driver.service.RestService
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient

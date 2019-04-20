@@ -22,7 +22,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnCompleteListener
 import com.rent24.driver.R
 import com.rent24.driver.components.home.STATUS_DROP_OFF
@@ -90,8 +89,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                 when (it.id) {
                     R.id.pickup_button -> driverStatus.value = STATUS_PICKUP
                     R.id.dropoff_button -> driverStatus.value = STATUS_DROP_OFF
-                    R.id.trip_stop_button -> {
-                    }
+                    R.id.trip_stop_button -> {}
                 }
             } else {
                 snackbarMessage.value = "You have no active job"
@@ -107,6 +105,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     private val markerPositions by lazy {
         MutableLiveData<SparseArrayCompat<LatLng>>().also { it.value = SparseArrayCompat() }
     }
+    private val switchButtons by lazy { MutableLiveData<Boolean>() }
 
     fun getCameraUpdate(): LiveData<CameraUpdate> = cameraUpdate
 
@@ -230,6 +229,12 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getMarkerPositions(): LiveData<SparseArrayCompat<LatLng>> = markerPositions
+
+    fun switchButtons(switch: Boolean) {
+        switchButtons.value = switch
+    }
+
+    fun getSwitchButtons(): LiveData<Boolean> = switchButtons
 
     private fun updateCamera(latLng: LatLng) {
         cameraUpdate.value = CameraUpdateFactory.newLatLngZoom(latLng, 18.0F)

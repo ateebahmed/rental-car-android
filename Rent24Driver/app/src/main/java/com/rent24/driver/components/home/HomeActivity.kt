@@ -3,6 +3,8 @@ package com.rent24.driver.components.home
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +22,7 @@ import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
 import com.rent24.driver.components.job.list.CompletedJobListFragment
+import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemFragment
 import com.rent24.driver.components.map.ParentMapFragment
 import com.rent24.driver.components.profile.ProfileFragment
@@ -90,6 +93,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        currentItem = savedInstanceState?.getInt("currentMenuSelection") ?: currentItem
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         binding.lifecycleOwner = this
 
@@ -99,13 +103,27 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setupModel(viewModel)
-        binding.navigation.selectedItemId = R.id.job
+        binding.navigation.selectedItemId = if (0 != currentItem) currentItem else R.id.job
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
 
         supportActionBar?.hide()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        outState?.putInt("currentMenuSelection", binding.navigation.selectedItemId)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        binding.navigation.selectedItemId = savedInstanceState?.getInt("currentMenuSelection") ?: PreferenceManager
+            .getDefaultSharedPreferences(this)
+            .getInt("currentMenuSelection", R.id.job)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -138,14 +156,10 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        binding.navigation.selectedItemId = PreferenceManager.getDefaultSharedPreferences(this)
+            .getInt("currentMenuSelection", R.id.job)
         if (null != intent) {
-            if (ACTIVE_JOB_MAP_REQUEST == intent.getIntExtra("type", -1)) {
-                binding.navigation.selectedItemId = R.id.job_map
-                viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let { LatLng(it[0], it[1]) })
-                viewModel.updateDropOffLocation(intent.getDoubleArrayExtra("dropoff").let {
-                    LatLng(it[0], it[1])
-                })
-            }
+            handleIntents(intent)
         }
     }
 
@@ -153,6 +167,16 @@ class HomeActivity : AppCompatActivity() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else super.onBackPressed()
+    }
+
+    override fun onPause() {
+
+        with(PreferenceManager.getDefaultSharedPreferences(this)
+            .edit()) {
+            putInt("currentMenuSelection", binding.navigation.selectedItemId)
+            apply()
+        }
+        super.onPause()
     }
 
     private fun replaceFragment(fragmentTag: String, arguments: Bundle?, addToBackstack: Boolean): Boolean {
@@ -210,6 +234,28 @@ class HomeActivity : AppCompatActivity() {
             INVOICE_FRAGMENT_TAG -> InvoiceFragment.newInstance()
             PROFILE_FRAGMENT_TAG -> ProfileFragment.newInstance()
             else -> JobFragment.newInstance(onClickListener)
+        }
+    }
+
+    private fun handleIntents(intent: Intent) {
+        when (intent.getIntExtra("type", -1)) {
+            ACTIVE_JOB_MAP_REQUEST -> {
+                intent.removeExtra("type")
+                val id = viewModel.getActiveJobId().value
+                if (null == id || id == 0) {
+                    ViewModelProviders.of(this)
+                        .get(ScheduledJobListViewModel::class.java)
+                        .getActiveJobId()
+                        .observe(this, Observer {
+                            viewModel.setActiveJobId(it)
+                        })
+                    binding.navigation.selectedItemId = R.id.job_map
+                    viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let { LatLng(it[0], it[1]) })
+                    viewModel.updateDropOffLocation(intent.getDoubleArrayExtra("dropoff").let {
+                        LatLng(it[0], it[1])
+                    })
+                }
+            }
         }
     }
 }

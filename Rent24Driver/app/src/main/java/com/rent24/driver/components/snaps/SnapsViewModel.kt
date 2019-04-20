@@ -58,7 +58,7 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     startCameraActivity()
                 } else {
-                    snackbarMessage.value = "Storage access denied"
+                    updateSnackbarMessage("Storage access denied")
                 }
             }
         }
@@ -75,7 +75,12 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
                 askForStoragePermission.postValue(false)
             }
         } else {
-            snackbarMessage.value = "You currently have no active job"
+            updateSnackbarMessage("You currently have no active job")
         }
+    }
+
+    private fun updateSnackbarMessage(message: String?) {
+        snackbarMessage.value = message
+        snackbarMessage.postValue("")
     }
 }
