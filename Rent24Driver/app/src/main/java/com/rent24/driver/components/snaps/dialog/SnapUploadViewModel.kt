@@ -8,7 +8,6 @@ import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.textfield.TextInputEditText
 import com.rent24.driver.api.login.response.StatusBooleanResponse
 import com.rent24.driver.repository.ApiManager
 import okhttp3.MediaType
@@ -57,7 +56,7 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getSetFields(): LiveData<Boolean> = setFields
 
-    fun submit() {
+    fun submit(latitude: Double, longitude: Double) {
         when {
             validateFields() -> {
                 val image = MultipartBody.Part
@@ -68,8 +67,11 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
                 val jobId = RequestBody.create(mediaType, this.jobId.toString())
                 val title = RequestBody.create(mediaType, entry.value!!)
                 val amount = RequestBody.create(mediaType, this.amount.value.toString())
+                val latitudeBody = RequestBody.create(mediaType, latitude.toString())
+                val longitudeBody = RequestBody.create(mediaType, longitude.toString())
 
-                apiManager.uploadInvoiceEntry(image, status, title, amount, jobId, this)
+                apiManager.uploadInvoiceEntry(image, status, title, amount, jobId, latitudeBody, longitudeBody,
+                    this)
             }
             else -> snackbarMessage.value = "One or more inputs are empty"
         }

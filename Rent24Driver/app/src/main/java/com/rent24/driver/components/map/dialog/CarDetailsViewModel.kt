@@ -47,7 +47,7 @@ class CarDetailsViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getSetFields(): LiveData<Boolean> = setFields
 
-    fun submit() {
+    fun submit(latitude: Double, longitude: Double) {
         if (validate() && jobId != 0) {
             showLoadingProgressBar.value = true
             val image = MultipartBody.Part
@@ -61,7 +61,10 @@ class CarDetailsViewModel(application: Application) : AndroidViewModel(applicati
             val condition = RequestBody.create(mediaType, this.condition.value!!)
             val notes = RequestBody.create(mediaType, this.notes.value!!)
             val jobId = RequestBody.create(mediaType, this.jobId.toString())
-            apiManager.updateJobStatus(image, status, fuelRange, odometer, damage, condition, notes, jobId, this)
+            val latitudeBody = RequestBody.create(mediaType, latitude.toString())
+            val longitudeBody = RequestBody.create(mediaType, longitude.toString())
+            apiManager.updateJobStatus(image, status, fuelRange, odometer, damage, condition, notes, jobId,
+                latitudeBody, longitudeBody, this)
         } else {
             snackbarMessage.value = "One or more inputs are empty or not selected!"
         }
@@ -78,6 +81,7 @@ class CarDetailsViewModel(application: Application) : AndroidViewModel(applicati
         if (null != status.success && !status.success) {
             snackbarMessage.value = "Error occured, Try again!"
         } else {
+            apiManager.updateJobStatus(mapOf(Pair("jobid", jobId.toString()), Pair("status", "finish")))
             uploadStatus.value = true
         }
         uploadStatus.postValue(false)

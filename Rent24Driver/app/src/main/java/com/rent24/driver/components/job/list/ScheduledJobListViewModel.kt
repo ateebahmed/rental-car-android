@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.google.android.gms.maps.model.LatLng
 import com.rent24.driver.api.login.response.JobResponse
 import com.rent24.driver.api.login.response.JobTrip
 import com.rent24.driver.api.login.response.StatusBooleanResponse
@@ -47,7 +46,11 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
         }
     }
 
-    fun triggerNextJob() {
+    fun refreshTrips() {
+        apiManager.scheduledTrips(this)
+    }
+
+    private fun triggerNextJob() {
         if (!trips.value.isNullOrEmpty()) {
             if (trips.value?.any { STATUS_ACTIVATED == it.status } == false) {
                 val trip = trips.value!!.find { STATUS_ASSIGNED == it.status }
@@ -64,11 +67,6 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
         }
     }
 
-    private fun getPickupLocation(): LatLng {
-        val trip = (trips.value as List<JobTrip>)[0]
-        return LatLng(trip.pickupLatitude ?: 0.0, trip.pickupLongitude ?: 0.0)
-    }
-
     private fun setJobActivationAlarm(trip: JobTrip) {
         var duration = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(trip.startTime).time -
                 TWO_HOURS
@@ -80,15 +78,13 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
         val work = OneTimeWorkRequestBuilder<JobActivateWorker>()
             .setInitialDelay(duration, TimeUnit.MILLISECONDS)
             .setInputData(workDataOf(Pair("message", "Tap to see details"), Pair("type", ACTIVE_JOB_MAP_REQUEST),
-                Pair("pickup", getPickupLocation().let {
-                    DoubleArray(2).apply {
-                        this[0] = it.latitude
-                        this[1] = it.longitude
-                    }
+                Pair("pickup", DoubleArray(2).apply {
+                    this[0] = trip.pickupLatitude ?: 0.0
+                    this[1] = trip.pickupLongitude ?: 0.0
                 }), Pair("dropoff", DoubleArray(2).apply {
                     this[0] = trip.dropoffLatitude ?: 0.0
-                    this[1] = trip.pickupLongitude ?: 0.0
-                })))
+                    this[1] = trip.dropoffLongitude ?: 0.0
+                }), Pair("jobId", trip.id.toString())))
             .addTag("Activation")
             .build()
         WorkManager.getInstance()

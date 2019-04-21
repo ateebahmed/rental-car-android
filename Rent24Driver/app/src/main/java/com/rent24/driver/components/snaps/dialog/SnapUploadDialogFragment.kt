@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.components.home.HomeViewModel
+import com.rent24.driver.components.map.ParentMapViewModel
 import com.rent24.driver.components.snaps.SnapsViewModel
 import com.rent24.driver.databinding.SnapUploadDialogFragmentBinding
 
@@ -62,7 +63,10 @@ class SnapUploadDialogFragment : BottomSheetDialogFragment() {
                 if (it) {
                     model.entry.value = binding.entry.text.toString()
                     model.amount.value = binding.amount.text.toString().toDouble()
-                    model.submit()
+                    val location = ViewModelProviders.of(activity!!)
+                        .get(ParentMapViewModel::class.java)
+                        .getCurrentLocation()
+                    model.submit(location.latitude, location.longitude)
                 }
             })
         binding.snapsUploadButton.setOnClickListener(model.onSnapUploadClickListener)

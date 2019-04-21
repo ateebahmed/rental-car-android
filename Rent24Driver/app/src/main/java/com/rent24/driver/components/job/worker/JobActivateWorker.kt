@@ -14,6 +14,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rent24.driver.R
 import com.rent24.driver.components.home.HomeActivity
+import com.rent24.driver.repository.ApiManager
 
 private val TAG = JobActivateWorker::class.java.name
 private const val CHANNEL_ID = "Job Notification"
@@ -51,7 +52,7 @@ class JobActivateWorker(private val context: Context, params: WorkerParameters) 
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                     Intent(context, HomeActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        putExtra("notification", 12312)
+                        putExtra("notification", 12312) // what is it for?
                         putExtra("type", inputData.getInt("type", -1))
                         putExtra("pickup", DoubleArray(2).apply {
                             val data = inputData.keyValueMap["pickup"] as Array<*>
@@ -67,5 +68,9 @@ class JobActivateWorker(private val context: Context, params: WorkerParameters) 
                         addCategory(Intent.CATEGORY_LAUNCHER)
                     }, PendingIntent.FLAG_UPDATE_CURRENT)).build())
         }
+
+        ApiManager.getInstance(context)
+            .updateJobStatus(mapOf(Pair("status", "in-progress"), Pair("jobid",
+                inputData.keyValueMap["jobId"].toString())))
     }
 }

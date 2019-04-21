@@ -30,11 +30,7 @@ import com.rent24.driver.components.map.dialog.CarDetailsDialogFragment
 import com.rent24.driver.databinding.MapFragmentBinding
 import com.rent24.driver.databinding.ParentFragmentBinding
 
-private const val LOCATION_REQUEST_CODE = 2
 private val TAG = ParentMapFragment::class.java.name
-private const val LOCATION_SETTINGS_REQUEST_CODE = 3
-private const val PICK_IMAGE_REQUEST_CODE = 7
-private const val STORAGE_REQUEST_CODE = 8
 
 class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -68,12 +64,9 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
             .replace(R.id.map_frame, map)
             .commitNow()
         map.getMapAsync(this)
-        mapBinding.pickupButton
-            .setOnClickListener(viewModel.onButtonClickListener)
-        mapBinding.dropoffButton
-            .setOnClickListener(viewModel.onButtonClickListener)
-        mapBinding.tripStopButton
-            .setOnClickListener(viewModel.onButtonClickListener)
+        mapBinding.pickupButton.setOnClickListener(viewModel.onButtonClickListener)
+        mapBinding.dropoffButton.setOnClickListener(viewModel.onButtonClickListener)
+        mapBinding.tripStopButton.setOnClickListener(viewModel.onButtonClickListener)
         homeViewModel.getPickupLocation()
             .observe(this, Observer {
                 viewModel.updateMarkerPosition(PICKUP_LOCATION, it)
@@ -82,17 +75,16 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
             .observe(this, Observer {
                 viewModel.updateMarkerPosition(DROP_OFF_LOCATION, it)
             })
-        mapBinding.dropOffNavigate
-            .setOnClickListener {
-                val location = viewModel.getMarkerPositions().value
-                    ?.get(DROP_OFF_LOCATION)
-                if (null != location) {
-                    startMapsApplication(location)
-                } else {
-                    Snackbar.make(binding.container, "No dropoff point specified", Snackbar.LENGTH_SHORT)
-                        .show()
-                }
+        mapBinding.dropOffNavigate.setOnClickListener {
+            val location = viewModel.getMarkerPositions().value
+                ?.get(DROP_OFF_LOCATION)
+            if (null != location) {
+                startMapsApplication(location)
+            } else {
+                Snackbar.make(binding.container, "No dropoff point specified", Snackbar.LENGTH_SHORT)
+                    .show()
             }
+        }
         homeViewModel.getActiveJobId()
             .observe(this, Observer {
                 viewModel.jobId = it
@@ -166,7 +158,9 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         model.getDriverStatus()
             .observe(this, Observer {
                 if (it in STATUS_PICKUP..STATUS_DROP_OFF) {
-                    model.startCameraActivity()
+                    if (viewModel.validatePosition(it)) {
+                        model.startCameraActivity()
+                    }
                 }
             })
         model.getStartCameraActivity()
@@ -276,6 +270,11 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
     }
 
     companion object {
+        private const val LOCATION_REQUEST_CODE = 2
+        private const val LOCATION_SETTINGS_REQUEST_CODE = 3
+        private const val PICK_IMAGE_REQUEST_CODE = 7
+        private const val STORAGE_REQUEST_CODE = 8
+
         fun newInstance() = ParentMapFragment()
     }
 }

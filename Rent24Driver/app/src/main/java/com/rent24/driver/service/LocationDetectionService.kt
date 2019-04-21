@@ -14,7 +14,6 @@ import android.os.Message
 import android.os.Process
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
@@ -105,8 +104,6 @@ class LocationDetectionService : LifecycleService() {
 
         override fun handleMessage(msg: Message) {
             Log.d(TAG, "Message Handler")
-            Toast.makeText(this@LocationDetectionService,
-                "Stopping service with id ${msg.arg1}", Toast.LENGTH_SHORT).show()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Log.d(TAG, "creating notification channel")
@@ -114,14 +111,12 @@ class LocationDetectionService : LifecycleService() {
                     .createNotificationChannel(NotificationChannel(
                         CHANNEL_ID, "LocatonDetectionService",
                         NotificationManager.IMPORTANCE_LOW).apply {
-                        description = "Rent24 Background Service Notification"
+                        description = "Rent24 Location Service Notification"
                     })
             }
 
-            Log.d(TAG, "Notification creating")
-
             val builder = NotificationCompat.Builder(this@LocationDetectionService, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_toolbar_logo)
                 .setContentTitle("Location Detection Service")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build()
@@ -134,6 +129,7 @@ class LocationDetectionService : LifecycleService() {
                 Log.d(TAG, "fine location permission granted, updating location request")
                 locationClient.requestLocationUpdates(locationRequest,locationCallback, looper)
             } else {
+                Log.d(TAG, "fine location permission not allowed, stopping service")
                 stopForeground(true)
                 stopSelfResult(msg.arg1)
             }

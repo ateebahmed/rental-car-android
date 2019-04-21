@@ -59,7 +59,10 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
                     model.fuelRange.value = binding.fuelRange.text.toString().toDouble()
                     model.notes.value = binding.notes.text.toString()
                     model.odometer.value = binding.odometer.text.toString().toDouble()
-                    model.submit()
+                    val location = ViewModelProviders.of(activity!!)
+                        .get(ParentMapViewModel::class.java)
+                        .getCurrentLocation()
+                    model.submit(location.latitude, location.longitude)
                 }
             })
         model.getSnackbarMessage()
@@ -80,7 +83,7 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
                     } else if (STATUS_DROP_OFF == status) {
                         ViewModelProviders.of(activity!!)
                             .get(ScheduledJobListViewModel::class.java)
-                            .triggerNextJob()
+                            .refreshTrips()
                         parentMapViewModel.switchButtons(true)
                         parentMapViewModel.sendSnackbarMessage("You have completed this job")
                     }

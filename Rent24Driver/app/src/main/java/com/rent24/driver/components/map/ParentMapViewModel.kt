@@ -31,6 +31,7 @@ private val TAG = ParentMapViewModel::class.java.name
 private const val CURRENT_LOCATION = 0
 const val PICKUP_LOCATION = 1
 const val DROP_OFF_LOCATION = 2
+private const val CAR_DISTANCE = 11
 
 class ParentMapViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -235,6 +236,23 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getSwitchButtons(): LiveData<Boolean> = switchButtons
+
+    fun validatePosition(driverStatus: Int): Boolean {
+        val positions = markerPositions.value
+        val currentPosition = positions?.get(CURRENT_LOCATION) ?: return false
+        val results = FloatArray(1)
+        val sourceLocation: LatLng
+        sourceLocation = if (STATUS_PICKUP == driverStatus) {
+            positions.get(PICKUP_LOCATION) ?: return false
+        } else {
+            positions.get(DROP_OFF_LOCATION) ?: return false
+        }
+        Location.distanceBetween(sourceLocation.latitude, sourceLocation.longitude, currentPosition.latitude,
+            currentPosition.longitude, results)
+        return results[0] < CAR_DISTANCE
+    }
+
+    fun getCurrentLocation() = markerPositions.value?.get(CURRENT_LOCATION) ?: LatLng(0.0, 0.0)
 
     private fun updateCamera(latLng: LatLng) {
         cameraUpdate.value = CameraUpdateFactory.newLatLngZoom(latLng, 18.0F)

@@ -16,8 +16,6 @@ import com.rent24.driver.components.map.dialog.CarDetailsViewModel
 import com.rent24.driver.components.profile.ProfileViewModel
 import com.rent24.driver.components.snaps.dialog.SnapUploadViewModel
 import com.rent24.driver.service.RestService
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -27,7 +25,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.Collections
 
 private const val BASE_URL = "http://www.technidersolutions.com/sandbox/rmc/public/api/"
 private var TAG = ApiManager::class.java.name
@@ -104,17 +101,18 @@ class ApiManager private constructor(context: Context) {
     }
 
     fun uploadInvoiceEntry(image: MultipartBody.Part, status: RequestBody, title: RequestBody, amount: RequestBody,
-                           jobId: RequestBody, viewModel: SnapUploadViewModel) {
+                           jobId: RequestBody, latitude: RequestBody, longitude: RequestBody,
+                           viewModel: SnapUploadViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
-            .uploadInvoiceEntry(image, status, title, amount, jobId)
+            .uploadInvoiceEntry(image, status, title, amount, jobId, latitude, longitude)
             .enqueue(uploadInvoiceEntryCallback(viewModel))
     }
 
     fun updateJobStatus(image: MultipartBody.Part, status: RequestBody, fuelRange: RequestBody, odometer: RequestBody,
                         damage: RequestBody, condition: RequestBody, notes: RequestBody, jobId: RequestBody,
-                        viewModel: CarDetailsViewModel) {
+                        latitude: RequestBody, longitude: RequestBody, viewModel: CarDetailsViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
-            .jobStatus(image, status, fuelRange, odometer, damage, condition, notes, jobId)
+            .jobStatus(image, status, fuelRange, odometer, damage, condition, notes, jobId, latitude, longitude)
             .enqueue(jobStatusCallback(viewModel))
     }
 
@@ -134,6 +132,12 @@ class ApiManager private constructor(context: Context) {
         retrofit.create(RestService.AuthApis::class.java)
             .userProfile()
             .enqueue(profileCallback(viewModel))
+    }
+
+    fun updateJobStatus(status: Map<String, String>) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .jobStatus(status)
+            .enqueue(jobStatusCallback())
     }
 
     private fun getToken(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
@@ -280,6 +284,16 @@ class ApiManager private constructor(context: Context) {
         override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
             Log.d(TAG, "jobStatusCallback ${response.code()} ${response.message()}")
             viewModel.updateStatus(response.body() ?: StatusBooleanResponse(false))
+        }
+    }
+
+    private fun jobStatusCallback() = object: Callback<StatusBooleanResponse> {
+        override fun onFailure(call: Call<StatusBooleanResponse>, t: Throwable) {
+            Log.e(TAG, "jobStatusCallback ${t.message}", t)
+        }
+
+        override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
+            Log.d(TAG, "jobStatusCallback ${response.code()} ${response.message()}")
         }
     }
 
