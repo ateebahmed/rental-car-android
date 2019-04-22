@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:minHeight="?attr/listPreferredItemHeight"
         android:paddingLeft="?attr/listPreferredItemPaddingLeft"
         android:paddingStart="?attr/listPreferredItemPaddingLeft"
         android:paddingRight="?attr/listPreferredItemPaddingRight"
@@ -22,8 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rcm_id"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintStart_toStartOf="parent" />
@@ -31,11 +28,10 @@
             android:id="@+id/rcm_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.rcmId}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintStart_toEndOf="@id/rcm_id_textview" />
@@ -47,54 +43,54 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rcm_id_textview"
-            app:layout_constraintBottom_toBottomOf="@id/rcm_id_textview" />
+            app:layout_constraintTop_toBottomOf="@id/rcm_id"
+            app:layout_constraintBottom_toBottomOf="@id/rcm_id" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pickup_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/from"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:layout_constraintBottom_toTopOf="@id/divider1"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/pickup" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pickup"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.pickupLocation}"
-            app:layout_constraintBottom_toTopOf="@id/divider1"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintStart_toEndOf="@id/pickup_textview" />
+            app:layout_constraintBottom_toTopOf="@id/divider1"
+            app:layout_constraintStart_toEndOf="@id/pickup_textview"
+            app:layout_constraintEnd_toStartOf="@id/dropoff_textview" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dropoff_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:layout_constraintBottom_toTopOf="@id/divider1"
-            app:layout_constraintEnd_toStartOf="@id/dropoff" />
+            app:layout_constraintEnd_toStartOf="@id/dropoff"
+            app:layout_constraintStart_toEndOf="@id/pickup" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dropoff"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:text="@{model.dropoffLocation}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:layout_constraintBottom_toTopOf="@id/divider1"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dropoff_textview" />
 
         <View
             android:id="@+id/divider1"
@@ -103,31 +99,31 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pickup_textview"
-            app:layout_constraintBottom_toBottomOf="@id/pickup_textview" />
+            app:layout_constraintTop_toBottomOf="@id/pickup"
+            app:layout_constraintBottom_toBottomOf="@id/pickup" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/start_time_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/when"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider1"
             app:layout_constraintBottom_toTopOf="@id/divider3"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/start_time" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/start_time"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.startTimeConverted}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider1"
             app:layout_constraintBottom_toTopOf="@id/divider3"
-            app:layout_constraintStart_toEndOf="@id/start_time_textview" />
+            app:layout_constraintStart_toEndOf="@id/start_time_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/divider3"
@@ -136,30 +132,30 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/start_time_textview"
-            app:layout_constraintBottom_toBottomOf="@id/start_time_textview" />
+            app:layout_constraintTop_toBottomOf="@id/start_time"
+            app:layout_constraintBottom_toBottomOf="@id/start_time" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/client_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/client"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider3"
             app:layout_constraintBottom_toTopOf="@id/divider4"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/client_name" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/client_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider3"
             app:layout_constraintBottom_toTopOf="@id/divider4"
-            app:layout_constraintStart_toEndOf="@id/client_name_textview" />
+            app:layout_constraintStart_toEndOf="@id/client_name_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/divider4"
@@ -168,30 +164,30 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/client_name_textview"
-            app:layout_constraintBottom_toBottomOf="@id/client_name_textview" />
+            app:layout_constraintTop_toBottomOf="@id/client_name"
+            app:layout_constraintBottom_toBottomOf="@id/client_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/client_number_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/contact"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider4"
             app:layout_constraintBottom_toTopOf="@id/divider5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/client_number" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/client_number"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider4"
             app:layout_constraintBottom_toTopOf="@id/divider5"
-            app:layout_constraintStart_toEndOf="@id/client_number_textview" />
+            app:layout_constraintStart_toEndOf="@id/client_number_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/divider5"
@@ -200,31 +196,29 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/client_number_textview"
-            app:layout_constraintBottom_toBottomOf="@id/client_number_textview" />
+            app:layout_constraintTop_toBottomOf="@id/client_number"
+            app:layout_constraintBottom_toBottomOf="@id/client_number" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/job_type_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/type"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider5"
-            app:layout_constraintBottom_toTopOf="@id/divider6"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/job_type" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/job_type"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.jobType}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider5"
-            app:layout_constraintBottom_toTopOf="@id/divider6"
-            app:layout_constraintStart_toEndOf="@id/job_type_textview" />
+            app:layout_constraintStart_toEndOf="@id/job_type_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/divider6"
@@ -233,31 +227,31 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/job_type_textview"
-            app:layout_constraintBottom_toBottomOf="@id/job_type_textview" />
+            app:layout_constraintTop_toBottomOf="@id/job_type"
+            app:layout_constraintBottom_toBottomOf="@id/job_type" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/task_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/task"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider6"
+            app:layout_constraintBottom_toTopOf="@id/divider7"
             app:layout_constraintEnd_toStartOf="@id/task"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/task"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/one_line_list_item_margin_top"
-            android:layout_marginBottom="@dimen/one_line_list_item_margin_top"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.task}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider6"
-            app:layout_constraintEnd_toEndOf="parent "
-            app:layout_constraintStart_toEndOf="@id/task_textview" />
+            app:layout_constraintBottom_toTopOf="@id/divider7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/task_textview"/>
 
         <View
             android:id="@+id/divider7"

@@ -31,7 +31,7 @@ private val TAG = ParentMapViewModel::class.java.name
 private const val CURRENT_LOCATION = 0
 const val PICKUP_LOCATION = 1
 const val DROP_OFF_LOCATION = 2
-private const val CAR_DISTANCE = 11
+private const val CAR_DISTANCE = 25
 
 class ParentMapViewModel(application: Application) : AndroidViewModel(application) {
 

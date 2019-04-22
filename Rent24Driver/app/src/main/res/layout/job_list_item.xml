@@ -29,20 +29,24 @@
             android:textColor="@color/colorAccent"
             android:textAppearance="?attr/textAppearanceListItem"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/start_time_textview"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@+id/start_time_when"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/pickup_textview" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pickup_textview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{model.pickupLocation}"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:textColor="@color/colorAccent"
             android:textAppearance="?attr/textAppearanceListItem"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/start_time_textview"
-            app:layout_constraintStart_toEndOf="@id/pickup_from"/>
+            app:layout_constraintStart_toEndOf="@id/pickup_from"
+            app:layout_constraintEnd_toStartOf="@id/dropoff_to" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dropoff_to"
@@ -54,11 +58,12 @@
             android:textColor="@color/colorAccent"
             android:textAppearance="?attr/textAppearanceListItem"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/start_time_textview"
-            app:layout_constraintEnd_toStartOf="@id/dropoff_textview"/>
+            app:layout_constraintBottom_toTopOf="@+id/job_type"
+            app:layout_constraintEnd_toStartOf="@id/dropoff_textview"
+            app:layout_constraintStart_toEndOf="@id/pickup_textview" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dropoff_textview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{model.dropoffLocation}"
             android:paddingLeft="?attr/listPreferredItemPaddingLeft"
@@ -67,9 +72,12 @@
             android:paddingEnd="?attr/listPreferredItemPaddingRight"
             android:textColor="@color/colorAccent"
             android:textAppearance="?attr/textAppearanceListItem"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/start_time_textview"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/job_type_textview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dropoff_to" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/start_time_when"
@@ -84,19 +92,23 @@
             android:textAppearance="?attr/textAppearanceListItemSecondary"
             app:layout_constraintTop_toBottomOf="@+id/dropoff_textview"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/start_time_textview" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/start_time_textview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{model.startTimeConverted}"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:textColor="@color/colorAccent"
+            android:ellipsize="end"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
+            android:maxLines="1"
             app:layout_constraintTop_toBottomOf="@+id/dropoff_textview"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/start_time_when" />
+            app:layout_constraintStart_toEndOf="@id/start_time_when"
+            app:layout_constraintEnd_toStartOf="@id/job_type" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/job_type"
@@ -109,21 +121,25 @@
             android:textAppearance="?attr/textAppearanceListItemSecondary"
             app:layout_constraintTop_toBottomOf="@+id/dropoff_textview"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/job_type_textview" />
+            app:layout_constraintEnd_toStartOf="@id/job_type_textview"
+            app:layout_constraintStart_toEndOf="@id/start_time_textview" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/job_type_textview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{model.jobType}"
             android:paddingLeft="?attr/listPreferredItemPaddingLeft"
             android:paddingStart="?attr/listPreferredItemPaddingLeft"
             android:paddingRight="?attr/listPreferredItemPaddingRight"
             android:paddingEnd="?attr/listPreferredItemPaddingRight"
-            app:layout_constraintTop_toBottomOf="@+id/dropoff_textview"
             android:textColor="@color/colorAccent"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@+id/dropoff_textview"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/job_type" />
 
         <View
             android:id="@+id/divider"
