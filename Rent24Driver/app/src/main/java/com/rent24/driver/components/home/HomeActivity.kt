@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.rent24.driver.R
 import com.rent24.driver.components.invoice.InvoiceFragment
 import com.rent24.driver.components.job.JobFragment
+import com.rent24.driver.components.job.event.JobUpdateEvent
 import com.rent24.driver.components.job.list.CompletedJobListFragment
 import com.rent24.driver.components.job.list.ScheduledJobListViewModel
 import com.rent24.driver.components.job.list.item.JobItemFragment
@@ -29,6 +30,8 @@ import com.rent24.driver.components.profile.ProfileFragment
 import com.rent24.driver.components.snaps.ParentSnapsFragment
 import com.rent24.driver.databinding.ActivityHomeBinding
 import com.rent24.driver.service.LocationDetectionService
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 private val TAG = HomeActivity::class.java.name
 const val ACTIVE_JOB_MAP_REQUEST = 10
@@ -40,6 +43,7 @@ private const val INVOICE_FRAGMENT_TAG = "invoice"
 private const val MAP_FRAGMENT_TAG = "map"
 private const val SNAPS_FRAGMENT_TAG = "snaps"
 private const val PROFILE_FRAGMENT_TAG = "profile"
+const val UPDATE_JOB_REQUEST = 30
 
 class HomeActivity : AppCompatActivity() {
 
@@ -149,6 +153,12 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault()
+            .register(this)
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         this.intent = intent
@@ -177,6 +187,17 @@ class HomeActivity : AppCompatActivity() {
             apply()
         }
         super.onPause()
+    }
+
+    override fun onStop() {
+        EventBus.getDefault()
+            .unregister(this)
+        super.onStop()
+    }
+
+    @Subscribe
+    fun onJobUpdateEvent(event: JobUpdateEvent) {
+        handleJobUpdate(event.id, event.action)
     }
 
     private fun replaceFragment(fragmentTag: String, arguments: Bundle?, addToBackstack: Boolean): Boolean {
@@ -255,6 +276,26 @@ class HomeActivity : AppCompatActivity() {
                         LatLng(it[0], it[1])
                     })
                 }
+            }
+            UPDATE_JOB_REQUEST -> {
+                intent.removeExtra(("type"))
+                val action = intent.getStringExtra("action")
+                val jobId = intent.getIntExtra("jobId", -1)
+                handleJobUpdate(jobId, action)
+            }
+        }
+    }
+
+    private fun handleJobUpdate(id: Int, action: String) {
+        if ("add" == action) {
+            ViewModelProviders.of(this)
+                .get(ScheduledJobListViewModel::class.java)
+                .refreshTrips()
+        } else if ("edit" == action) {
+            if (-1 != id) {
+                ViewModelProviders.of(this)
+                    .get(ScheduledJobListViewModel::class.java)
+                    .updateTrip(id)
             }
         }
     }

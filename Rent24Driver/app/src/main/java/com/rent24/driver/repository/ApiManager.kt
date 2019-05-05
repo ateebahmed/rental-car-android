@@ -140,6 +140,12 @@ class ApiManager private constructor(context: Context) {
             .enqueue(jobStatusCallback())
     }
 
+    fun getJobDetail(viewModel: ScheduledJobListViewModel, id: Int) {
+        retrofit.create(RestService.AuthApis::class.java)
+            .detail(id)
+            .enqueue(jobDetailCallback(viewModel))
+    }
+
     private fun getToken(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
         ?.getString("token", "") ?: ""
 
@@ -294,6 +300,18 @@ class ApiManager private constructor(context: Context) {
 
         override fun onResponse(call: Call<StatusBooleanResponse>, response: Response<StatusBooleanResponse>) {
             Log.d(TAG, "jobStatusCallback ${response.code()} ${response.message()}")
+        }
+    }
+
+    private fun jobDetailCallback(viewModel: ScheduledJobListViewModel) = object: Callback<JobResponse> {
+        override fun onFailure(call: Call<JobResponse>, t: Throwable) {
+            Log.e(TAG, "jobDetailCallback ${t.message}", t)
+            viewModel.updateTrip(JobResponse(emptyList()))
+        }
+
+        override fun onResponse(call: Call<JobResponse>, response: Response<JobResponse>) {
+            Log.d(TAG, "jobDetailCallback ${response.code()} ${response.message()}")
+            viewModel.updateTrip(response.body() ?: JobResponse(emptyList()))
         }
     }
 

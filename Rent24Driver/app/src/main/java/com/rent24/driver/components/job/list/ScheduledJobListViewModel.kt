@@ -50,6 +50,22 @@ class ScheduledJobListViewModel(application: Application) : CompletedJobListView
         apiManager.scheduledTrips(this)
     }
 
+    fun updateTrip(id: Int) {
+        apiManager.getJobDetail(this, id)
+    }
+
+    fun updateTrip(response: JobResponse) {
+        if (true == response.success?.isNotEmpty()) {
+            val trip = response.success[0]
+            val index = trips.value?.indexOfFirst { trip.id == it.id } ?: -1
+            if (-1 != index) {
+                val mutableList = trips.value?.toMutableList() ?: mutableListOf()
+                mutableList[index] = trip
+                trips.value = mutableList
+            }
+        }
+    }
+
     private fun triggerNextJob() {
         if (!trips.value.isNullOrEmpty()) {
             if (trips.value?.any { STATUS_ACTIVATED == it.status } == false) {

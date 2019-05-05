@@ -48,7 +48,6 @@ class JobActivateWorker(private val context: Context, params: WorkerParameters) 
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_STATUS)
-                .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                     Intent(context, HomeActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP

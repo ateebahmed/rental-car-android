@@ -1,7 +1,6 @@
 package com.rent24.driver.components.job.list.item
 
 import android.app.Application
-import android.preference.PreferenceManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
