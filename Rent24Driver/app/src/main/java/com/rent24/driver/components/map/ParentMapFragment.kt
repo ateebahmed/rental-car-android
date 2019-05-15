@@ -169,15 +169,16 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
                     startActivityForResult(Intent.createChooser(Intent().apply {
                         type = "image/*"
                         action = Intent.ACTION_GET_CONTENT
+                        putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                     }, "Select Picture"), PICK_IMAGE_REQUEST_CODE)
                 }
             })
-        model.getImageUri()
+        model.getImageUris()
             .observe(this, Observer {
                 if (null != it) {
                     val bundle = Bundle()
                     bundle.putInt("status", model.getDriverStatus().value!!)
-                    bundle.putParcelable("uri", it)
+                    bundle.putParcelableArrayList("uris", ArrayList(it))
                     val dialog = CarDetailsDialogFragment()
                     dialog.arguments = bundle
                     dialog.show(childFragmentManager, dialog.tag)

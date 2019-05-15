@@ -108,11 +108,9 @@ class ApiManager private constructor(context: Context) {
             .enqueue(uploadInvoiceEntryCallback(viewModel))
     }
 
-    fun updateJobStatus(image: MultipartBody.Part, status: RequestBody, fuelRange: RequestBody, odometer: RequestBody,
-                        damage: RequestBody, condition: RequestBody, notes: RequestBody, jobId: RequestBody,
-                        latitude: RequestBody, longitude: RequestBody, viewModel: CarDetailsViewModel) {
+    fun updateJobStatus(body: MultipartBody.Builder, viewModel: CarDetailsViewModel) {
         retrofit.create(RestService.AuthApis::class.java)
-            .jobStatus(image, status, fuelRange, odometer, damage, condition, notes, jobId, latitude, longitude)
+            .jobStatus(body.build())
             .enqueue(jobStatusCallback(viewModel))
     }
 

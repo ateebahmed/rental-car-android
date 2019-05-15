@@ -21,13 +21,13 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: CarDetailsDialogFragmentBinding
     private var status = -1
-    private var imageUri: Uri? = null
+    private lateinit var imageUris: ArrayList<Uri?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         status = arguments?.getInt("status") ?: -1
-        imageUri = arguments?.getParcelable("uri")
+        imageUris = arguments?.getParcelableArrayList("uris") ?: ArrayList(0)
     }
 
     override fun setupDialog(dialog: Dialog?, style: Int) {
@@ -38,9 +38,9 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
         binding.model = ViewModelProviders.of(this)
             .get(CarDetailsViewModel::class.java)
         val model = binding.model as CarDetailsViewModel
-        model.createUploadFile(imageUri)
+        model.createUploadFile(imageUris)
         binding.previewImage
-            .setImageURI(imageUri)
+            .setImageURI(imageUris[0])
         val homeViewModel = ViewModelProviders.of(activity!!)
             .get(HomeViewModel::class.java)
         homeViewModel.getActiveJobId()
@@ -48,8 +48,8 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
                 model.jobId = it
             })
         model.status = when (status) {
-            0 -> PICKUP
-            1 -> DROP_OFF
+            STATUS_PICKUP -> PICKUP
+            STATUS_DROP_OFF -> DROP_OFF
             else -> ""
         }
         model.getSetFields()
@@ -84,6 +84,7 @@ class CarDetailsDialogFragment : BottomSheetDialogFragment() {
                         ViewModelProviders.of(activity!!)
                             .get(ScheduledJobListViewModel::class.java)
                             .refreshTrips()
+                        parentMapViewModel.removePlacesMarker()
                         parentMapViewModel.switchButtons(true)
                         parentMapViewModel.sendSnackbarMessage("You have completed this job")
                     }

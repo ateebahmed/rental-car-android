@@ -46,14 +46,8 @@ interface RestService {
                                @Part("jobid") jobId: RequestBody, @Part("latitude") latitude: RequestBody,
                                @Part("longitude") longitude: RequestBody): Call<StatusBooleanResponse>
 
-        @Multipart
         @POST("job/status")
-        fun jobStatus(@Part image: MultipartBody.Part, @Part("status") status: RequestBody,
-                      @Part("fuelrange") fuelRange: RequestBody, @Part("odometer") odometer: RequestBody,
-                      @Part("damage") damage: RequestBody, @Part("condition") condition: RequestBody,
-                      @Part("notes") notes: RequestBody, @Part("jobid") jobId: RequestBody,
-                      @Part("latitude") latitude: RequestBody, @Part("longitude") longitude: RequestBody):
-                Call<StatusBooleanResponse>
+        fun jobStatus(@Body body: RequestBody): Call<StatusBooleanResponse>
 
         @GET("job/snaps")
         fun snaps(@Query("jobid") jobId: Int): Call<SnapsResponse>

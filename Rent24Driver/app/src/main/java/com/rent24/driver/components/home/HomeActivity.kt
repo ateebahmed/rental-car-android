@@ -97,7 +97,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        currentItem = savedInstanceState?.getInt("currentMenuSelection") ?: currentItem
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         binding.lifecycleOwner = this
 
@@ -107,27 +106,13 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         setupModel(viewModel)
-        binding.navigation.selectedItemId = if (0 != currentItem) currentItem else R.id.job
+        binding.navigation.selectedItemId = R.id.job
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
 
         supportActionBar?.hide()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-
-        outState?.putInt("currentMenuSelection", binding.navigation.selectedItemId)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        binding.navigation.selectedItemId = savedInstanceState?.getInt("currentMenuSelection") ?: PreferenceManager
-            .getDefaultSharedPreferences(this)
-            .getInt("currentMenuSelection", R.id.job)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -147,7 +132,7 @@ class HomeActivity : AppCompatActivity() {
         when(item?.itemId) {
             R.id.profile -> {
                 currentItem = R.id.profile
-                replaceFragment(PROFILE_FRAGMENT_TAG, null, true)
+                replaceFragment(PROFILE_FRAGMENT_TAG, null, false)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -166,8 +151,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding.navigation.selectedItemId = PreferenceManager.getDefaultSharedPreferences(this)
-            .getInt("currentMenuSelection", R.id.job)
         if (null != intent) {
             handleIntents(intent)
         }
@@ -176,17 +159,9 @@ class HomeActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
-        } else super.onBackPressed()
-    }
-
-    override fun onPause() {
-
-        with(PreferenceManager.getDefaultSharedPreferences(this)
-            .edit()) {
-            putInt("currentMenuSelection", binding.navigation.selectedItemId)
-            apply()
+        } else {
+            super.onBackPressed()
         }
-        super.onPause()
     }
 
     override fun onStop() {
@@ -267,15 +242,13 @@ class HomeActivity : AppCompatActivity() {
                     ViewModelProviders.of(this)
                         .get(ScheduledJobListViewModel::class.java)
                         .getActiveJobId()
-                        .observe(this, Observer {
-                            viewModel.setActiveJobId(it)
-                        })
+                        .observe(this, Observer { viewModel.setActiveJobId(it) })
                     binding.navigation.selectedItemId = R.id.job_map
-                    viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let { LatLng(it[0], it[1]) })
-                    viewModel.updateDropOffLocation(intent.getDoubleArrayExtra("dropoff").let {
-                        LatLng(it[0], it[1])
-                    })
                 }
+                viewModel.setPickupLocation(intent.getDoubleArrayExtra("pickup").let { LatLng(it[0], it[1]) })
+                viewModel.updateDropOffLocation(intent.getDoubleArrayExtra("dropoff").let {
+                    LatLng(it[0], it[1])
+                })
             }
             UPDATE_JOB_REQUEST -> {
                 intent.removeExtra(("type"))

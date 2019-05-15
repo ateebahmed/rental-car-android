@@ -99,7 +99,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     }
     private val askForStoragePermission by lazy { MutableLiveData<Boolean>() }
     private val startCameraActivity by lazy { MutableLiveData<Boolean>() }
-    private val imageUri by lazy { MutableLiveData<Uri?>() }
+    private val imageUris by lazy { MutableLiveData<List<Uri?>>() }
     private val route by lazy { MutableLiveData<String>() }
     private val dropOffLocation by lazy { MutableLiveData<LatLng?>() }
     var jobId = 0
@@ -185,9 +185,18 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
             }
             expectedRequestCode[1] -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    imageUri.value = data?.data
+                    if (null != data?.data) {
+                        imageUris.value = mutableListOf(data.data)
+                    } else if (null != data?.clipData) {
+                        val uris = mutableListOf<Uri?>()
+                        val count = data.clipData!!.itemCount
+                        for (i in 0 until count) {
+                            uris.add(i, data.clipData!!.getItemAt(i).uri)
+                        }
+                        imageUris.value = uris
+                    }
                     driverStatus.postValue(-1)
-                    imageUri.postValue(null)
+                    imageUris.postValue(null)
                 } else {
                     snackbarMessage.value = "Storage access not allowed"
                 }
@@ -216,7 +225,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getStartCameraActivity(): LiveData<Boolean> = startCameraActivity
 
-    fun getImageUri(): LiveData<Uri?> = imageUri
+    fun getImageUris(): LiveData<List<Uri?>> = imageUris
 
     fun getDropOffLocation(): LiveData<LatLng?> = dropOffLocation
 
@@ -253,6 +262,11 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getCurrentLocation() = markerPositions.value?.get(CURRENT_LOCATION) ?: LatLng(0.0, 0.0)
+
+    fun removePlacesMarker() {
+        markerPositions.value?.removeAtRange(PICKUP_LOCATION, 2)
+        markerPositions.value = markerPositions.value
+    }
 
     private fun updateCamera(latLng: LatLng) {
         cameraUpdate.value = CameraUpdateFactory.newLatLngZoom(latLng, 18.0F)

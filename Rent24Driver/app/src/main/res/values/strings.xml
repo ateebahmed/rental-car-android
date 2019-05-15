@@ -57,4 +57,5 @@
     <string name="pickup">pickup</string>
     <string name="mid_stop">mid-stop</string>
     <string name="drop_off">drop off</string>
+    <string name="sign_out">sign out</string>
 </resources>
