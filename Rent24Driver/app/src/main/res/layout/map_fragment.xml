@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pickup"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
             style="?android:textAppearanceButton"
@@ -37,7 +36,6 @@
             android:layout_height="wrap_content"
             android:text="@string/mid_stop"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginStart="@dimen/activity_vertical_margin"
             style="?android:textAppearanceButton"
             android:theme="@style/AppTheme.MaterialButton"
@@ -50,7 +48,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/drop_off"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/button_over_map_margin_bottom"
             style="?android:textAppearanceButton"
@@ -69,6 +66,18 @@
             android:theme="@style/AppTheme.FloatingActionButton"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_navigation_black_24dp"
+            app:layout_anchor="@id/map_fragment_container"
+            app:layout_anchorGravity="end|bottom"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/center_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="88dp"
+            android:theme="@style/AppTheme.FloatingActionButton"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_gps_fixed_black_24dp"
             app:layout_anchor="@id/map_fragment_container"
             app:layout_anchorGravity="end|bottom"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

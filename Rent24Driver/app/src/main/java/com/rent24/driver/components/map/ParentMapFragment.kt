@@ -67,6 +67,9 @@ class ParentMapFragment : Fragment(), OnMapReadyCallback, ActivityCompat.OnReque
         mapBinding.pickupButton.setOnClickListener(viewModel.onButtonClickListener)
         mapBinding.dropoffButton.setOnClickListener(viewModel.onButtonClickListener)
         mapBinding.tripStopButton.setOnClickListener(viewModel.onButtonClickListener)
+        mapBinding.centerPosition.setOnClickListener {
+            viewModel.centerCamera = true
+        }
         homeViewModel.getPickupLocation()
             .observe(this, Observer {
                 viewModel.updateMarkerPosition(PICKUP_LOCATION, it)

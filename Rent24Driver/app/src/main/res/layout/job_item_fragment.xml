@@ -11,9 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
         android:paddingStart="?attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?attr/listPreferredItemPaddingRight"
         android:paddingEnd="?attr/listPreferredItemPaddingRight">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -28,7 +26,6 @@
             android:id="@+id/rcm_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.rcmId}"
             android:minHeight="?attr/listPreferredItemHeightSmall"
@@ -60,7 +57,6 @@
             android:id="@+id/pickup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.pickupLocation}"
             android:minHeight="?attr/listPreferredItemHeightSmall"
@@ -74,7 +70,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to"
-            android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
             android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider"
@@ -116,7 +111,6 @@
             android:id="@+id/start_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.startTimeConverted}"
             android:minHeight="?attr/listPreferredItemHeightSmall"
@@ -149,9 +143,9 @@
             android:id="@+id/client_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:text="@{model.customerName}"
             app:layout_constraintTop_toBottomOf="@id/divider3"
             app:layout_constraintBottom_toTopOf="@id/divider4"
             app:layout_constraintStart_toEndOf="@id/client_name_textview"
@@ -181,8 +175,8 @@
             android:id="@+id/client_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:text="@{model.customerEmail}"
             android:minHeight="?attr/listPreferredItemHeightSmall"
             app:layout_constraintTop_toBottomOf="@id/divider4"
             app:layout_constraintBottom_toTopOf="@id/divider5"
@@ -212,7 +206,6 @@
             android:id="@+id/job_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.jobType}"
             android:minHeight="?attr/listPreferredItemHeightSmall"
@@ -244,7 +237,6 @@
             android:id="@+id/task"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@{model.task}"
             android:minHeight="?attr/listPreferredItemHeightSmall"
@@ -261,5 +253,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/task" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/finished_at_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/finished"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider7"
+            app:layout_constraintBottom_toTopOf="@id/divider8"
+            app:layout_constraintEnd_toStartOf="@id/finished_at"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/finished_at"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.finishedAt}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider7"
+            app:layout_constraintBottom_toTopOf="@id/divider8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/finished_at_textview"/>
+
+        <View
+            android:id="@+id/divider8"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/finished_at" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

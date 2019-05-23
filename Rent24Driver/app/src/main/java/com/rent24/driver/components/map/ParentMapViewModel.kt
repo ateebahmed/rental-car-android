@@ -77,7 +77,10 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
                 for (location in p0.locations) {
                     latLng = LatLng(location.latitude, location.longitude)
                     updateMarkerPosition(CURRENT_LOCATION, latLng)
-//                    updateCamera(latLng)
+                    if (centerCamera) {
+                        updateCamera(latLng)
+                        centerCamera = false
+                    }
                 }
             }
         }
@@ -107,6 +110,7 @@ class ParentMapViewModel(application: Application) : AndroidViewModel(applicatio
         MutableLiveData<SparseArrayCompat<LatLng>>().also { it.value = SparseArrayCompat() }
     }
     private val switchButtons by lazy { MutableLiveData<Boolean>() }
+    var centerCamera = false
 
     fun getCameraUpdate(): LiveData<CameraUpdate> = cameraUpdate
 

@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @JsonClass(generateAdapter = true)
-data class JobTrip(val id: Int?, @Json(name = "rmc_id") val rcmId: String?,
+data class JobTrip(val id: Int?, @Json(name = "rcm_id") val rcmId: String?,
                    @Json(name = "pickup_location") val pickupLocation: String?,
                    @Json(name = "dropoff_location") val dropoffLocation: String?,
                    @Json(name = "start_time") val startTime: String?,
@@ -14,7 +14,11 @@ data class JobTrip(val id: Int?, @Json(name = "rmc_id") val rcmId: String?,
                    @Json(name = "pickup_lat") val pickupLatitude: Double?,
                    @Json(name = "pickup_long") val pickupLongitude: Double?,
                    @Json(name = "dropoff_lat") val dropoffLatitude: Double?,
-                   @Json(name = "dropoff_long") val dropoffLongitude: Double?, var status: String?, val route: String?) {
+                   @Json(name = "dropoff_long") val dropoffLongitude: Double?, var status: String?, val route: String?,
+                   @Json(name = "started_at") val startedAt: String?,
+                   @Json(name = "finished_at") val finishedAt: String?,
+                   @Json(name = "customer_name") val customerName: String?,
+                   @Json(name = "customer_email") val customerEmail: String?) {
     val startTimeConverted: String
             get() {
                 return if (startTime.isNullOrBlank()) "" else SimpleDateFormat("dd-MM-yy hh:mm aa",
