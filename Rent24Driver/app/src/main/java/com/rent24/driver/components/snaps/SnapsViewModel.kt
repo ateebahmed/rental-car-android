@@ -32,7 +32,7 @@ class SnapsViewModel(application: Application) : AndroidViewModel(application) {
         when (requestCode) {
             expectedRequestCode -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    imageUri.value = data?.data
+                    imageUri.value = Uri.parse("")
                     imageUri.postValue(null)
                 }
             }

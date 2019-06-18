@@ -3,7 +3,6 @@ package com.rent24.driver.components.snaps.dialog
 import android.app.Application
 import android.net.Uri
 import android.os.AsyncTask
-import android.provider.OpenableColumns
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -82,21 +81,22 @@ class SnapUploadViewModel(application: Application) : AndroidViewModel(applicati
     private inner class BytesConversionTask : AsyncTask<Uri, Void, File>() {
         override fun doInBackground(vararg params: Uri?): File {
             val imageUri = params[0]!!
-            val imageName = if (imageUri.scheme == "content") {
-                getApplication<Application>().contentResolver?.query(imageUri, null, null,
-                    null, null)
-                    .use {
-                        return@use if (it?.moveToFirst() == true) {
-                            it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                        } else {
-                            getFilename(imageUri)
-                        }
-                    }
-            } else {
-                getFilename(imageUri)
-            }
-            val uploadFile = File.createTempFile("upload-image-tmp", imageName?.substring(imageName
-                .lastIndexOf('.')))
+//            getting picked image name
+//            val imageName = if (imageUri.scheme == "content") {
+//                getApplication<Application>().contentResolver?.query(imageUri, null, null,
+//                    null, null)
+//                    .use {
+//                        return@use if (it?.moveToFirst() == true) {
+//                            it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+//                        } else {
+//                            getFilename(imageUri)
+//                        }
+//                    }
+//            } else {
+//                getFilename(imageUri)
+//            }
+            val suffix = imageUri.lastPathSegment!!.split('.')
+            val uploadFile = File.createTempFile(suffix[0], ".${suffix[1]}")
             uploadFile.deleteOnExit()
             getApplication<Application>().contentResolver?.openInputStream(imageUri)
                 .use {input ->

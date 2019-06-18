@@ -4,9 +4,12 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,6 +22,10 @@ import com.rent24.driver.components.home.STATUS_PICKUP
 import com.rent24.driver.components.snaps.adapter.SnapsFragmentPagerAdapter
 import com.rent24.driver.components.snaps.dialog.SnapUploadDialogFragment
 import com.rent24.driver.databinding.SnapsFragmentBinding
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 private const val PICK_IMAGE_REQUEST_CODE = 5
 private const val STORAGE_REQUEST_CODE = 6
@@ -49,6 +56,8 @@ class SnapsFragment : Fragment() {
             }
         }
     }
+    private lateinit var photoPath: String
+    private lateinit var photoUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +95,13 @@ class SnapsFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (this::photoPath.isInitialized) {
+            Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+                val f = File(photoPath)
+                mediaScanIntent.data = Uri.fromFile(f)
+                activity!!.sendBroadcast(mediaScanIntent)
+            }
+        }
         viewModel.onActivityResult(requestCode, resultCode, PICK_IMAGE_REQUEST_CODE, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -123,16 +139,39 @@ class SnapsFragment : Fragment() {
         viewModel.getStartCameraActivity()
             .observe(this, Observer {
                 if (it) {
-                    startActivityForResult(Intent.createChooser(Intent().apply {
-                        type = "image/*"
-                        action = Intent.ACTION_GET_CONTENT
-                    }, "Select Picture"), PICK_IMAGE_REQUEST_CODE)
+                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { pictureIntent ->
+                        pictureIntent.resolveActivity(activity!!.packageManager)?.also {
+                            val photo: File? = try {
+                                File.createTempFile("Rent24_${SimpleDateFormat("yyyyMMdddd_HHmmss",
+                                    Locale.getDefault()).format(Date())}_", ".png",
+                                    activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)).apply {
+                                    photoPath = absolutePath
+                                }
+                            } catch (e: IOException) {
+                                Snackbar.make(binding.snapsCoordinatorLayout, "Error occurred when saving file",
+                                    Snackbar.LENGTH_SHORT).show()
+                                null
+                            }
+                            photo?.also {
+                                photoUri = FileProvider.getUriForFile(activity!!,
+                                    "com.rent24.driver.fileprovider", it)
+                                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                            }
+                            startActivityForResult(pictureIntent, PICK_IMAGE_REQUEST_CODE)
+                        }
+                    }
+//                    for picking an image
+//                    startActivityForResult(Intent.createChooser(Intent().apply {
+//                        type = "image/*"
+//                        action = Intent.ACTION_GET_CONTENT
+//                    }, "Select Picture"), PICK_IMAGE_REQUEST_CODE)
+
                 }
             })
         viewModel.getImageUri()
             .observe(this, Observer {
                 if (null != it) {
-                    showDialog(it)
+                    showDialog(photoUri)
                 }
             })
         viewModel.getUploadResult()
