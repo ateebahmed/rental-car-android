@@ -1,51 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1D1D1D</color>
-    <color name="colorPrimaryDark">#1D1D1D</color>
-    <color name="colorAccent">#7e7e7e</color>
+    <color name="colorPrimary">#FDD835</color>
+    <color name="colorPrimaryDark">#B09313</color>
+    <color name="colorAccent">#000</color>
 
-    <!-- App customization -->
-    <color name="theme">#9374D1</color>
-
-    <!-- Button Customization -->
-    <color name="button_text_color">#ffffff</color>
-    <color name="transparent">#00000000</color>
-
-    <!-- Navigation drawer Customization-->
-    <color name="nav_header">#9374D1</color>
-    <color name="nav_body">#ffffff</color>
-    <color name="content_background">#ffffff</color>
-    <color name="view">#9374D1</color>
-    <color name="menu_color">#9374D1</color>
-    <color name="timer_text_color">#ffffff</color>
-    <color name="view_light">#808080</color>
-    <color name="black_text_color">#df000000</color>
-    <color name="light_black">#2F2F2F</color>
-    <color name="text_color_white">#ffffff</color>
-    <color name="cancel_ride_color">#B0B0B0</color>
-    <color name="rippel_color">#6DCFF6</color>
-    <color name="progress_bg">#efefef</color>
-    <color name="red">#f44236</color>
-    <color name="blue">#3e70c9</color>
-    <color name="green">#43b968</color>
-    <color name="orange">#f59345</color>
-    <color name="status_bg">#F1EEF7</color>
-    <color name="view_bg">#D8D7D8</color>
-    <color name="transparent_black">#7f000000</color>
-    <color name="background_color">#f5f5f5</color>
-    <color name="grey">#a4a4a4</color>
-    <color name="light_grey">#dcdcdc</color>
-
-    <array name="array_dot_active">
-        <item>@color/grey</item>
-        <item>@color/grey</item>
-        <item>@color/grey</item>
-    </array>
-
-    <array name="array_dot_inactive">
-        <item>@color/light_grey</item>
-        <item>@color/light_grey</item>
-        <item>@color/light_grey</item>
-    </array>
-
+    <color name="black_overlay">#66000000</color>
+    <color name="colorAshWhite">#E0E0E0</color>
 </resources>

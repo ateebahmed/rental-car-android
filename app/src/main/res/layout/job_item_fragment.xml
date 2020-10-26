@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.rent24.driver.api.login.response.JobTrip" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/rcm_id_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rcm_id"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/rcm_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.rcmId}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintStart_toEndOf="@id/rcm_id_textview" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rcm_id"
+            app:layout_constraintBottom_toBottomOf="@id/rcm_id" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pickup_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toTopOf="@id/divider1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/pickup" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pickup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.pickupLocation}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toTopOf="@id/divider1"
+            app:layout_constraintStart_toEndOf="@id/pickup_textview"
+            app:layout_constraintEnd_toStartOf="@id/dropoff_textview" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dropoff_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/to"
+            android:layout_marginEnd="8dp"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toTopOf="@id/divider1"
+            app:layout_constraintEnd_toStartOf="@id/dropoff"
+            app:layout_constraintStart_toEndOf="@id/pickup" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dropoff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{model.dropoffLocation}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toTopOf="@id/divider1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dropoff_textview" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pickup"
+            app:layout_constraintBottom_toBottomOf="@id/pickup" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/start_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/when"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
+            app:layout_constraintBottom_toTopOf="@id/divider3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/start_time" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/start_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.startTimeConverted}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
+            app:layout_constraintBottom_toTopOf="@id/divider3"
+            app:layout_constraintStart_toEndOf="@id/start_time_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/start_time"
+            app:layout_constraintBottom_toBottomOf="@id/start_time" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/client_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/client"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider3"
+            app:layout_constraintBottom_toTopOf="@id/divider4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/client_name" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/client_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:text="@{model.customerName}"
+            app:layout_constraintTop_toBottomOf="@id/divider3"
+            app:layout_constraintBottom_toTopOf="@id/divider4"
+            app:layout_constraintStart_toEndOf="@id/client_name_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/client_name"
+            app:layout_constraintBottom_toBottomOf="@id/client_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/client_number_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contact"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider4"
+            app:layout_constraintBottom_toTopOf="@id/divider5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/client_number" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/client_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.customerEmail}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider4"
+            app:layout_constraintBottom_toTopOf="@id/divider5"
+            app:layout_constraintStart_toEndOf="@id/client_number_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/client_number"
+            app:layout_constraintBottom_toBottomOf="@id/client_number" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/job_type_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/type"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/job_type" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/job_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.jobType}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider5"
+            app:layout_constraintStart_toEndOf="@id/job_type_textview"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/job_type"
+            app:layout_constraintBottom_toBottomOf="@id/job_type" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/task_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider6"
+            app:layout_constraintBottom_toTopOf="@id/divider7"
+            app:layout_constraintEnd_toStartOf="@id/task"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.task}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider6"
+            app:layout_constraintBottom_toTopOf="@id/divider7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/task_textview"/>
+
+        <View
+            android:id="@+id/divider7"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/task" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/finished_at_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/finished"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider7"
+            app:layout_constraintBottom_toTopOf="@id/divider8"
+            app:layout_constraintEnd_toStartOf="@id/finished_at"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/finished_at"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.finishedAt}"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            app:layout_constraintTop_toBottomOf="@id/divider7"
+            app:layout_constraintBottom_toTopOf="@id/divider8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/finished_at_textview"/>
+
+        <View
+            android:id="@+id/divider8"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/finished_at" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

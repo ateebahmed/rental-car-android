@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="model"
+            type="com.rent24.driver.components.profile.ProfileViewModel" />
+    </data>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/profile_coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/profile_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_profile_icon"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.07"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/profile_icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:srcCompat="@drawable/ic_profile_circle_black_24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline_profile_icon"
+                app:layout_constraintBottom_toTopOf="@id/guideline_icon_username" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_icon_username"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.3"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                app:layout_constraintTop_toBottomOf="@id/guideline_icon_username"
+                app:layout_constraintBottom_toTopOf="@id/guideline_username_details"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_username_details"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.38"/>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_icon_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.3"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/email_icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:srcCompat="@drawable/ic_email_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline_icon_text"
+                app:layout_constraintTop_toBottomOf="@id/guideline_username_details"
+                app:layout_constraintBottom_toTopOf="@id/guideline_email_mobile" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/email"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/guideline_username_details"
+                app:layout_constraintBottom_toTopOf="@id/guideline_email_mobile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline_icon_text" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_email_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.42"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/mobile_icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:srcCompat="@drawable/ic_mobile_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/email_icon"
+                app:layout_constraintTop_toBottomOf="@id/guideline_email_mobile"
+                app:layout_constraintBottom_toTopOf="@id/guideline_mobile_trip" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/mobile"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/guideline_email_mobile"
+                app:layout_constraintBottom_toTopOf="@id/guideline_mobile_trip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/email" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_mobile_trip"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.47"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/trip_icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:srcCompat="@drawable/ic_trip_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/email_icon"
+                app:layout_constraintTop_toBottomOf="@id/guideline_mobile_trip"
+                app:layout_constraintBottom_toTopOf="@id/guideline_trip" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/trip"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="0"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/guideline_mobile_trip"
+                app:layout_constraintBottom_toTopOf="@id/guideline_trip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/email" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_trip"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.52"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/logout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:text="@string/sign_out"
+                app:layout_constraintTop_toBottomOf="@id/guideline_trip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/profile_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:theme="@style/AppTheme.FloatingActionButton"
+            app:srcCompat="@drawable/ic_edit_white_24dp"
+            app:layout_anchor="@id/profile_constraint_layout"
+            app:layout_anchorGravity="bottom|right|end" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
