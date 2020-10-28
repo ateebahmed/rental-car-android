@@ -18,6 +18,16 @@ After a driver is available they are assigned tasks in app, like
 
 Based on work they can mark whether they are near a car to pickup, or snap photos if a car needs refuelling or servicing.
 
+## **Stack**
+* [Kotlin](https://kotlinlang.org/)
+* [Google Maps](https://developers.google.com/maps/documentation/android-sdk/overview)
+* [Material UI](https://material.io/)
+* [Retrofit](https://square.github.io/retrofit/)
+* [Glide](https://bumptech.github.io/glide/)
+* [Moshi](https://github.com/square/moshi)
+* [EventBus](https://greenrobot.org/eventbus/)
 
-This project is not maintained and is here only for demo purposes. Please look at the code but don't consider submitting
+****
+
+**NOTE**: This project is not maintained and is here only for demo purposes. Please look at the code but don't consider submitting
 issues.
