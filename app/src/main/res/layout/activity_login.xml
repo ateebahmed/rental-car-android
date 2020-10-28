@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="com.rent24.driver.components.login.LoginViewModel"/>
+            type="com.ateebahmed.freelance.driver.components.login.LoginViewModel"/>
     </data>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

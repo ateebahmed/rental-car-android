@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="com.rent24.driver.components.map.dialog.CarDetailsViewModel" />
+            type="com.ateebahmed.freelance.driver.components.map.dialog.CarDetailsViewModel" />
     </data>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

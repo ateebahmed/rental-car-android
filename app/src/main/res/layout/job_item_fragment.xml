@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="com.rent24.driver.api.login.response.JobTrip" />
+            type="com.ateebahmed.freelance.ateebahmed.driver.api.login.response.JobTrip" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rent24.driver">
+    package="com.ateebahmed.freelance.driver">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -29,11 +29,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".service.LocationDetectionService"
+            android:name="com.ateebahmed.freelance.driver.service.LocationDetectionService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
         <service
-            android:name=".service.JobNotificationService"
+            android:name="com.ateebahmed.freelance.driver.service.JobNotificationService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -42,13 +42,13 @@
         </service>
 
         <activity
-            android:name=".components.home.HomeActivity"
+            android:name="com.ateebahmed.freelance.driver.components.home.HomeActivity"
             android:icon="@drawable/ic_toolbar_logo"
             android:roundIcon="@drawable/ic_toolbar_logo"
-            android:parentActivityName=".SplashActivity">
+            android:parentActivityName="com.ateebahmed.freelance.driver.SplashActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rent24.driver.SplashActivity" />
+                android:value="com.ateebahmed.freelance.driver.SplashActivity" />
         </activity>
 
         <meta-data
@@ -56,7 +56,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SplashActivity"
+            android:name="com.ateebahmed.freelance.driver.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.Fullscreen">
             <intent-filter>
@@ -66,9 +66,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".components.login.LoginActivity"
+            android:name="com.ateebahmed.freelance.driver.components.login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".SplashActivity" />
+            android:parentActivityName="com.ateebahmed.freelance.driver.SplashActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -82,12 +82,12 @@
             android:value="@string/google_maps_key" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.rent24.driver.fileprovider"
+            android:authorities="com.ateebahmed.freelance.driver.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>

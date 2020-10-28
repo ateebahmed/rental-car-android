@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="com.rent24.driver.api.login.response.JobTrip" />
+            type="com.ateebahmed.freelance.driver.api.login.response.JobTrip" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/job_item_container"

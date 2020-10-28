@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="com.rent24.driver.api.login.response.InvoiceEntry" />
+            type="com.ateebahmed.freelance.driver.api.login.response.InvoiceEntry" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
