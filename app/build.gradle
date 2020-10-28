@@ -1,12 +1,9 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
 apply plugin: 'org.jetbrains.kotlin.android.extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -38,13 +35,19 @@ android {
 }
 
 dependencies {
+    // app dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // google maps
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    // google material UI
     implementation 'com.google.android.material:material:1.0.0'
+    // firebase messaging for notifications
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    // android jetpack components
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core:1.0.1'
     implementation 'androidx.core:core-ktx:1.0.1'
@@ -54,15 +57,20 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.work:work-runtime:2.0.1'
     implementation 'androidx.work:work-runtime-ktx:2.0.1'
+    // squareup API integration
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.5.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    implementation 'org.greenrobot:eventbus:3.1.1'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
+    // glide image loading library
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    // eventbus for message passing
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+    // test dependencies
     testImplementation 'junit:junit:4.12'
+
+    // UI test dependencies
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
-
-apply plugin: 'com.google.gms.google-services'
