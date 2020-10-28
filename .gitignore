@@ -4,3 +4,4 @@
 local.properties
 build/
 captures/
+app/src/main/res/*/bg_splash.png
